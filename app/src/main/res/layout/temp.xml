@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:id="@+id/fragment_who_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:background="#e2e8e9"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.fintech.ternaku.InsTernakToKandangActivity"
+        tools:showIn="@layout/activity_ins_ternak_to_kandang"
+        android:weightSum="1"
+        android:clickable="true">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#FFFFFF"
+            android:elevation="5dp"
+            android:id="@+id/relativeLayout3"
+            android:layout_below="@+id/layoutKalender"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edtAlamat"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_below="@+id/textView44"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Alamat"
+                android:id="@+id/textView44"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/edtAlamat" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#FFFFFF"
+            android:elevation="5dp"
+            android:id="@+id/layoutKalender"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp">
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edtNama"
+                android:hint="Nama Peternak"
+                android:textSize="18dp"
+                android:layout_below="@+id/txtTgl"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/imageView14"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignStart="@+id/txtTgl" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Nama Peternak"
+                android:id="@+id/txtTgl"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#FFFFFF"
+            android:elevation="5dp"
+            android:id="@+id/layoutDurasi"
+            android:layout_below="@+id/relativeLayout3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="No Telepon"
+                android:id="@+id/textView59"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/edtTelepon"
+                android:layout_below="@+id/textView59"
+                android:layout_alignStart="@+id/textView59"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="5dp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#FFFFFF"
+            android:elevation="5dp"
+            android:id="@+id/layoutRole"
+            android:layout_below="@+id/layoutDurasi"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Jabatan"
+                android:id="@+id/textView60"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinJabatan"
+                android:layout_below="@+id/textView60"
+                android:layout_alignStart="@+id/textView60"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="5dp" />
+
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/btnSimpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/colorPrimary"
+            android:elevation="10dp"
+            android:layout_below="@+id/layoutRole"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="31dp"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+</ScrollView>

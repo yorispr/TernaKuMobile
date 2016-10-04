@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <RelativeLayout
+        android:id="@+id/rl_title_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="5dp">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/judul"
+            android:text="tessss"
+            android:padding="16dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:src="@drawable/ic_keyboard_arrow_down"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/wrapper"
+        android:layout_below="@+id/rl_title_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:elevation="5dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/deskripsi"
+            android:text="tes"
+            android:padding="16dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+</RelativeLayout>

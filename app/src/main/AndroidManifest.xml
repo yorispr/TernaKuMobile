@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fintech.ternaku">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginAndRegister.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginAndRegister.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.TambahData.Produksi.UpdateWeightActivity"
+            android:label="@string/title_activity_update_weight"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".DetailTernak.DetailTernakMain"
+            android:label="@string/title_activity_detail_ternak_main"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ListDetailTernak.ListDetailTernakMain"
+            android:label="@string/title_activity_list_detail_ternak_main"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.NavBar.Pakan.AddPakanTernak"
+            android:label="@string/title_activity_add_pakan_ternak"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.NavBar.Keuangan.AddKeuangan"
+            android:label="@string/title_activity_add_keuangan"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.NavBar.BatasProduksiSusu.AddBatasProduksi"
+            android:label="@string/title_activity_add_batas_produksi"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan"
+            android:label="@string/title_activity_laporan_penggunaan_pakan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik"
+            android:label="@string/title_activity_laporan_produksi_susu_grafik"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.PindahTernak.PindahTernak"
+            android:label="@string/title_activity_pindah_ternak"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddMengandung"
+            android:label="@string/title_activity_add_mengandung"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddInseminasi"
+            android:label="@string/title_activity_add_inseminasi"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddPemeriksaanReproduksi"
+            android:label="@string/title_activity_add_pemeriksaan_subur"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddMasaSubur"
+            android:label="@string/title_activity_add_masa_subur"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddMelahirkan"
+            android:label="@string/title_activity_add_melahirkan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.AddMenyusui"
+            android:label="@string/title_activity_add_menyusui"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Produksi.UpdateCulling"
+            android:label="@string/title_activity_update_culling"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Produksi.UpdateMasaKering"
+            android:label="@string/title_activity_update_masa_kering"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.AddVaksinasi"
+            android:label="@string/title_activity_add_vaksinasi"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.AddKarantina"
+            android:label="@string/title_activity_add_karantina"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.AddCekPenyakit"
+            android:label="@string/title_activity_add_cek_penyakit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.AddCekKesehatan"
+            android:label="@string/title_activity_add_cek_kesehatan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
+            android:label="@string/title_activity_add_injeksi_hormon"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon"
+            android:label="@string/title_activity_show_injeksi_hormon"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan"
+            android:label="@string/title_activity_show_protokol_kesehatan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.AddProtokolKesehatan"
+            android:label="@string/title_activity_add_protokol_kesehatan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.NavBar.AddProduksiSusu"
+            android:label="@string/title_activity_add_produksi_susu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.Laporan.LaporanKeuangan"
+            android:label="@string/title_activity_laporan_keuangan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.NavBar.Peternak.AddPeternak"
+            android:label="@string/title_activity_add_peternak"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

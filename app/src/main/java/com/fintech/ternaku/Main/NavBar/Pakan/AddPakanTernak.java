@@ -1,0 +1,283 @@
+package com.fintech.ternaku.Main.NavBar.Pakan;
+
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetKandangAddPakan;
+import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetPakanAddPakan;
+import com.fintech.ternaku.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
+public class AddPakanTernak extends AppCompatActivity {
+    private EditText input_addpakan_activity_jumlahmakan,input_addpakan_activity_hargamakan;
+    private Spinner spinner_addapakan_activity_sesimakan,spinner_addpakan_activity_namakandang,spinner_addpakan_activity_namapakan;
+    private Button button_addpakan_activity_simpan;
+    private TextView input_addpakan_activity_tanggalmakan;
+    ArrayList<String> list_kandang = new ArrayList<String>();
+    ArrayList<String> list_pakan = new ArrayList<String>();
+    private int choosenindex=1;
+    private DatePickerDialog fromDatePickerDialog;
+    private SimpleDateFormat dateFormatter;
+    public String temp_id_kandang,temp_id_pakan;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_pakan_ternak);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
+                    | ActionBar.DISPLAY_SHOW_TITLE
+                    | ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        hideSoftKeyboard();
+
+        //Set Kandang Ternak---------------------------
+        String urlParameter_kandang = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/GetKandangByIdPeternakan", urlParameter_kandang);
+
+        //Set Pakan Ternak---------------------------
+        String urlParameter_pakan = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+        new GetPakanId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataPakan", urlParameter_pakan);
+
+        //Set Date-------------------------------------
+        input_addpakan_activity_tanggalmakan = (TextView) findViewById(R.id.input_addpakan_activity_tanggalmakan);
+        setDateTimeField();
+        input_addpakan_activity_tanggalmakan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromDatePickerDialog.show();
+            }
+        });
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
+        input_addpakan_activity_tanggalmakan.setText(dateFormatter.format(Calendar.getInstance().getTime()));
+
+        //Set Sesi Makan---------------------------------
+        spinner_addapakan_activity_sesimakan = (Spinner)findViewById(R.id.spinner_addpakan_activity_sesimakan);
+        final String[] spinner_sesi_makan_data = {"Pagi","Siang","Sore"};
+        ArrayAdapter<String> adapater_sesi_makan= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_item,spinner_sesi_makan_data);
+        spinner_addapakan_activity_sesimakan.setAdapter(adapater_sesi_makan);
+
+        //Set Informasi dan Harga Pakan------------------------------
+        input_addpakan_activity_jumlahmakan = (EditText) findViewById(R.id.input_addpakan_activity_jumlahmakan);
+        input_addpakan_activity_hargamakan = (EditText) findViewById(R.id.input_addpakan_activity_hargamakan);
+
+        //Insert To Database---------------------------------------
+        button_addpakan_activity_simpan = (Button) findViewById(R.id.button_addpakan_activity_simpan);
+        button_addpakan_activity_simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String urlParameters_insert = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
+                        "&idkandang=" + temp_id_kandang.trim()+
+                        "&idpakan="+ temp_id_pakan.trim()+
+                        "&jumlahpakan="+ input_addpakan_activity_jumlahmakan.getText().toString().trim()+
+                        "&tglmakan="+ input_addpakan_activity_tanggalmakan.getText().toString().trim()+
+                        "&sesimakan="+ spinner_addapakan_activity_sesimakan.getSelectedItem().toString().trim()+
+                        "&satuanpakan="+ "kilogram"+
+                        "&biaya="+ input_addpakan_activity_hargamakan.getText().toString().trim();
+                new InsertToDbPakan().execute("http://ternaku.com/index.php/C_HistoryMakan/InsertPemakaianPakan", urlParameters_insert);
+            }
+        });
+
+    }
+
+    //AsyncTask Insert Database ------------------------------------------
+    private class InsertToDbPakan extends AsyncTask<String,Integer,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("InserToDb",s);
+            if (s.trim().equals("1")){
+                Toast.makeText(getApplicationContext(),"Data Barhasil Dimasukkan!!",Toast.LENGTH_LONG).show();
+            }else if(s.trim().equals("0")){
+                Toast.makeText(getApplicationContext(),"Data Gagal Dimasukkan!!",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    //AsyncTask get Id Pakan AutoComplete--------------------------------
+    private class GetPakanId extends AsyncTask<String,Integer,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("GetIdpakan",s);
+            AddPakanToList(s);
+        }
+    }
+
+    //AsyncTask get Id Ternak AutoComplete--------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("GetIdKandang",s);
+            AddKandangToList(s);
+        }
+    }
+
+    private void AddPakanToList(String res){
+        try{
+            JSONArray jArray = new JSONArray(res);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                ModelGetPakanAddPakan kan = new ModelGetPakanAddPakan();
+                kan.setId_pakan(jObj.getString("id_pakan"));
+                kan.setNama_pakan(jObj.getString("nama_pakan"));
+
+                list_pakan.add("("+kan.getId_pakan()+") "+kan.getNama_pakan());
+            }
+            spinner_addpakan_activity_namapakan = (Spinner)findViewById(R.id.spinner_addpakan_activity_namapakan);
+            ArrayAdapter<String> adapter_nama_pakan= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_item,list_pakan);
+            adapter_nama_pakan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_addpakan_activity_namapakan.setAdapter(adapter_nama_pakan);
+            spinner_addpakan_activity_namapakan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    String id_pakan = list_pakan.get(i);
+                    id_pakan = id_pakan.substring(id_pakan.indexOf("(")+1);
+                    id_pakan = id_pakan.substring(0,id_pakan.indexOf(")"));
+                    temp_id_pakan=id_pakan;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+
+    private void AddKandangToList(String res){
+        try{
+            JSONArray jArray = new JSONArray(res);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                ModelGetKandangAddPakan kan = new ModelGetKandangAddPakan();
+                kan.setId_kandang(jObj.getString("ID_KANDANG"));
+                kan.setNama_kandang(jObj.getString("NAMA_KANDANG"));
+
+                list_kandang.add("("+kan.getId_kandang()+") "+kan.getNama_kandang());
+            }
+            spinner_addpakan_activity_namakandang = (Spinner)findViewById(R.id.spinner_addpakan_activity_namakandang);
+            ArrayAdapter<String> adapter_nama_kandang= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_item,list_kandang);
+            adapter_nama_kandang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_addpakan_activity_namakandang.setAdapter(adapter_nama_kandang);
+            spinner_addpakan_activity_namakandang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    String id_kandang = list_kandang.get(i);
+                    id_kandang = id_kandang.substring(id_kandang.indexOf("(")+1);
+                    id_kandang = id_kandang.substring(0,id_kandang.indexOf(")"));
+                    temp_id_kandang=id_kandang;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    private void setDateTimeField() {
+        //toDateEtxt.setOnClickListener(this);
+
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                input_addpakan_activity_tanggalmakan.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+}
