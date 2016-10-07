@@ -1,8 +1,11 @@
 package com.fintech.ternaku.Main.NavBar.Peternak;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,11 +36,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddPeternak extends AppCompatActivity {
     private EditText input_addpeternak_activity_namaternak,input_addpeternak_activity_alamat,
     input_addpeternak_activity_notelp;
     private Spinner spinner_addpeternak_activity_jabatan;
     private Button button_addpeternak_activity_simpan;
+    String u,p;
 
     ArrayAdapter<String> myAdapter;
     ArrayList<String> spinner_addpeternak_jabatan = new ArrayList<>();
@@ -51,7 +57,7 @@ public class AddPeternak extends AppCompatActivity {
         {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Add Peternak Baru");
+            actionbar.setTitle("Tambah Peternak");
         }
 
         //Set All EditText-----------------------------------------------
@@ -81,17 +87,48 @@ public class AddPeternak extends AppCompatActivity {
                     output = username;
                 }
                 output += randomNumber;
-                String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                        + "&namarole="+spinner_addpeternak_activity_jabatan.getSelectedItem().toString()
-                        + "&namalengkap="+input_addpeternak_activity_namaternak.getText().toString()
-                        + "&alamat="+input_addpeternak_activity_alamat.getText().toString()
-                        + "&telepon="+input_addpeternak_activity_notelp.getText().toString()
-                        + "&username="+output
-                        + "&password="+generateHash(input_addpeternak_activity_notelp.getText().toString()+output);
+                final String temp_output = output;
+                new SweetAlertDialog(AddPeternak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Simpan")
+                        .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                String username = input_addpeternak_activity_namaternak.getText().toString();
+                                Random rand;
+                                int randomNumber = (int)(Math.random()*9000)+1000;
+                                String output ="";
+                                if(username.contains(" ")) {
+                                    output = username.substring(0, username.indexOf(" "));
+                                }else{
+                                    output = username;
+                                }
+                                output += randomNumber;
+                                String pass = generateHash(input_addpeternak_activity_notelp.getText().toString()+output);
+                                String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                                        + "&namarole="+spinner_addpeternak_activity_jabatan.getSelectedItem().toString()
+                                        + "&namalengkap="+input_addpeternak_activity_namaternak.getText().toString()
+                                        + "&alamat="+input_addpeternak_activity_alamat.getText().toString()
+                                        + "&telepon="+input_addpeternak_activity_notelp.getText().toString()
+                                        + "&username="+output
+                                        + "&password="+pass;
 
-                Log.d("data",urlParameters);
-                new InsertPeternak().execute("http://ternaku.com/index.php/C_Pengguna/insertPeternak", urlParameters);
-
+                                u = output;
+                                p = input_addpeternak_activity_notelp.getText().toString();
+                                Log.d("data",urlParameters);
+                                new InsertPeternak().execute("http://ternaku.com/index.php/C_Pengguna/insertPeternak", urlParameters);
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -122,10 +159,14 @@ public class AddPeternak extends AppCompatActivity {
 
     //Get Jabatan Spinner-------------------------------------------
     private class GetJabatan extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPeternak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
         }
 
@@ -140,11 +181,12 @@ public class AddPeternak extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.d("RES",result);
             if (result.trim().equals("404")){
+                pDialog.dismiss();
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
             }
             else {
                 try{
-
+                    pDialog.dismiss();
                     JSONArray jArray = new JSONArray(result);
                     for(int i=0;i<jArray.length();i++)
                     {
@@ -163,13 +205,14 @@ public class AddPeternak extends AppCompatActivity {
 
     //Insert To Database-------------------------------------------
     private class InsertPeternak extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPeternak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddPeternak.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -182,40 +225,57 @@ public class AddPeternak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
+                showCredential(u,p);
+                cleartext();
             }
             else if(result.trim().equals("2")){
 
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(AddPeternak.this);
-                builder1.setTitle("Peringatan");
-                builder1.setMessage("Silahkan upgrade layanan untuk menambah pengguna baru!");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Tambah Layanan",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //dialog.cancel();
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "Nanti",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
+                new SweetAlertDialog(AddPeternak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Upgrade Layanan Untuk Menambah User Baru..")
+                        .show();
             }
             else {
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void showCredential(String username, String pass){
+        //Set Alert-------------------------------------------------------------
+        new SweetAlertDialog(AddPeternak.this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Berhasil!")
+                .setContentText("User Baru Sudah Ditambahkan")
+                .show();
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(AddPeternak.this);
+        builder1.setTitle("Detail Login");
+        builder1.setMessage("Data pengguna : "+"\n Username : "+username+"\n Password : "+pass+"\n\n* Segera catat username dan password!");
+        builder1.setCancelable(true);
+        final String un = username, pas = pass;
+        builder1.setPositiveButton(
+                "Copy data",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Data login", "Username : "+un+"\n Password : "+pas);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(getApplicationContext(),"Data sudah disalin",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Tutup",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
     @Override
@@ -227,5 +287,14 @@ public class AddPeternak extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void cleartext(){
+        input_addpeternak_activity_namaternak.setText("");
+        input_addpeternak_activity_alamat.setText("");
+        input_addpeternak_activity_notelp.setText("");
+        input_addpeternak_activity_namaternak.setHint("Masukkan Nama Peternak");
+        input_addpeternak_activity_alamat.setHint("Alamat");
+        input_addpeternak_activity_notelp.setHint("Nomor Telepon");
     }
 }

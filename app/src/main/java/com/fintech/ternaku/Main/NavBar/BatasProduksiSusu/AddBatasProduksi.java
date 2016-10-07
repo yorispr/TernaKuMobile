@@ -1,6 +1,7 @@
 package com.fintech.ternaku.Main.NavBar.BatasProduksiSusu;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddBatasProduksi extends AppCompatActivity {
     private Spinner spinner_addbatasproduksi_activity_namakawanan;
     private EditText input_addbatasproduksi_activity_rendah,input_addbatasproduksi_activity_sedang,input_addbatasproduksi_activity_tinggi;
@@ -39,11 +42,11 @@ public class AddBatasProduksi extends AppCompatActivity {
         setContentView(R.layout.activity_add_batas_produksi);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
-                    | ActionBar.DISPLAY_SHOW_TITLE
-                    | ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null)
+        {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Batas Produksi Susu");
         }
 
         //Set Kawanan--------------------------------------------
@@ -60,13 +63,32 @@ public class AddBatasProduksi extends AppCompatActivity {
         button_addbatasproduksi_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String urlParameters_insert_batas_produksi = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
-                        "&idkawanan=" + temp_id_kawanan.trim()+
-                        "&rendah="+ input_addbatasproduksi_activity_rendah.getText().toString().trim()+
-                        "&sedang="+ input_addbatasproduksi_activity_sedang.getText().toString().trim()+
-                        "&tinggi="+ input_addbatasproduksi_activity_tinggi.getText().toString().trim();
-                new InsertToBatasProduksi().execute("http://ternaku.com/index.php/C_BatasProduksi/InsertBatasProduksiSusu", urlParameters_insert_batas_produksi);
+                //Insert Database--
+                new SweetAlertDialog(AddBatasProduksi.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Simpan")
+                        .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                String urlParameters_insert_batas_produksi = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
+                                        "&idkawanan=" + temp_id_kawanan.trim()+
+                                        "&rendah="+ input_addbatasproduksi_activity_rendah.getText().toString().trim()+
+                                        "&sedang="+ input_addbatasproduksi_activity_sedang.getText().toString().trim()+
+                                        "&tinggi="+ input_addbatasproduksi_activity_tinggi.getText().toString().trim();
+                                new InsertToBatasProduksi().execute("http://ternaku.com/index.php/C_BatasProduksi/InsertBatasProduksiSusu", urlParameters_insert_batas_produksi);
 
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -74,9 +96,14 @@ public class AddBatasProduksi extends AppCompatActivity {
 
     //AsyncTast Insert To Database Batas Produksi---------------
     private class InsertToBatasProduksi extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddBatasProduksi.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -89,19 +116,36 @@ public class AddBatasProduksi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("InsertToDbBatasProduksi",s);
+            pDialog.dismiss();
             if (s.trim().equals("1")){
-                Toast.makeText(getApplicationContext(),"Data Barhasil Dimasukkan!!",Toast.LENGTH_LONG).show();
-            }else if(s.trim().equals("0")){
-                Toast.makeText(getApplicationContext(),"Data Gagal Dimasukkan!!",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddBatasProduksi.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan..")
+                        .show();
+            }
+            else if(s.trim().equals("2")){
+
+                new SweetAlertDialog(AddBatasProduksi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
+            }
+            else {
+                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
             }
         }
     }
 
     //AsyncTask get Kawanan-------------------------------------
     private class GetIdKawanan extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddBatasProduksi.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -114,6 +158,7 @@ public class AddBatasProduksi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("GetKawanan",s);
+            pDialog.dismiss();
             AddKawananToList(s);
         }
     }

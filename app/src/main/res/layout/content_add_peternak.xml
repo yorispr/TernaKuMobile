@@ -13,10 +13,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak"
     tools:showIn="@layout/activity_add_peternak">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/input_addpeternak_activity_namaternak"
-                android:hint="Nama Peternak"
+                android:hint="Masukkan Nama Peternak"
                 android:textSize="18dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp" />

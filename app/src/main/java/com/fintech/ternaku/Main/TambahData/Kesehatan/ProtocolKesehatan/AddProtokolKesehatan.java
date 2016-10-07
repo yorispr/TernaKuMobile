@@ -8,12 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
 import com.fintech.ternaku.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AddProtokolKesehatan extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -104,6 +109,60 @@ public class AddProtokolKesehatan extends AppCompatActivity {
             }
 
         });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isEdit) {
+            Log.d("key",key);
+            if(creator_id.equals(idpengguna)) {
+                firebaseDatabase.child(idpeternakan).child(idpengguna).child(key).child("judul").setValue(judul);
+                firebaseDatabase.child(idpeternakan).child(idpengguna).child(key).child("isi").setValue(isi);
+                isEdit = false;
+            }
+        }else{ InsertData();}
+    }
+
+    private void InsertData()
+    {
+        key = firebaseDatabase.child(idpeternakan).child(idpengguna).push().getKey();
+
+        SimpleDateFormat df1 = new SimpleDateFormat("dd MMM yyyy HH:mm");
+        String CurrentDate = df1.format(new Date());
+
+        ModelAddProtokolKesehatan pm = new ModelAddProtokolKesehatan(key,judul,isi,false,idpengguna,namapengguna,CurrentDate,0);
+        firebaseDatabase.child(idpeternakan).child(idpengguna).child(key).setValue(pm);
 
     }
 

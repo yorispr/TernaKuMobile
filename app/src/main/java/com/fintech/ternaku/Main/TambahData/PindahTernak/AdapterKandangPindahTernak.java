@@ -111,7 +111,7 @@ public class AdapterKandangPindahTernak extends BaseAdapter implements Filterabl
                         String data = mOriginalValues.get(i).getNama_kandang();
                         String data2 = mOriginalValues.get(i).getLokasi_kandang();
 
-                        if (data.toLowerCase().startsWith(constraint.toString())||data2.toLowerCase().startsWith(constraint.toString())) {
+                        if (data.toLowerCase().contains(constraint.toString())||data2.toLowerCase().contains(constraint.toString())) {
                             FilteredArrList.add(new ModelKandangPindahTernak(mOriginalValues.get(i).getId_kandang(),mOriginalValues.get(i).getId_peternakan(),mOriginalValues.get(i).getNama_kandang(),mOriginalValues.get(i).getLokasi_kandang(),mOriginalValues.get(i).getKapasitas_kandang(),mOriginalValues.get(i).getStatus_aktif()));
                         }
                     }

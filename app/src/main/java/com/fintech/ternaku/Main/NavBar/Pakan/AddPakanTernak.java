@@ -2,6 +2,7 @@ package com.fintech.ternaku.Main.NavBar.Pakan;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetKandangAddPakan;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetPakanAddPakan;
+import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.R;
 
 import org.json.JSONArray;
@@ -33,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddPakanTernak extends AppCompatActivity {
     private EditText input_addpakan_activity_jumlahmakan,input_addpakan_activity_hargamakan;
@@ -52,11 +56,11 @@ public class AddPakanTernak extends AppCompatActivity {
         setContentView(R.layout.activity_add_pakan_ternak);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
-                    | ActionBar.DISPLAY_SHOW_TITLE
-                    | ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null)
+        {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Penggunaan Pakan");
         }
         hideSoftKeyboard();
 
@@ -111,9 +115,14 @@ public class AddPakanTernak extends AppCompatActivity {
 
     //AsyncTask Insert Database ------------------------------------------
     private class InsertToDbPakan extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -126,19 +135,31 @@ public class AddPakanTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("InserToDb",s);
+            pDialog.dismiss();
             if (s.trim().equals("1")){
-                Toast.makeText(getApplicationContext(),"Data Barhasil Dimasukkan!!",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan..")
+                        .show();
             }else if(s.trim().equals("0")){
-                Toast.makeText(getApplicationContext(),"Data Gagal Dimasukkan!!",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
             }
         }
     }
 
     //AsyncTask get Id Pakan AutoComplete--------------------------------
     private class GetPakanId extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -151,15 +172,21 @@ public class AddPakanTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("GetIdpakan",s);
+            pDialog.dismiss();
             AddPakanToList(s);
         }
     }
 
     //AsyncTask get Id Ternak AutoComplete--------------------------------
     private class GetTernakId extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -172,6 +199,7 @@ public class AddPakanTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("GetIdKandang",s);
+            pDialog.dismiss();
             AddKandangToList(s);
         }
     }
@@ -268,6 +296,7 @@ public class AddPakanTernak extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

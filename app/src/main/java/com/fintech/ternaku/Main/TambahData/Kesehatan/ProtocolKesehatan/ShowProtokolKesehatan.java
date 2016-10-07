@@ -53,6 +53,10 @@ public class ShowProtokolKesehatan extends AppCompatActivity {
             actionbar.setTitle("Protokol Kesehatan");
         }
 
+        idpeternakan = getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
+        idpengguna = getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+
+
         list_showprotokolkesehatan_activity = (ListView) findViewById(R.id.list_showprotokolkesehatan_activity);
         prog_showprotokolkesehatan_activity = (ProgressBar)findViewById(R.id.prog_showprotokolkesehatan_activity);
         ValueEventListener postListener = new ValueEventListener() {
@@ -77,6 +81,7 @@ public class ShowProtokolKesehatan extends AppCompatActivity {
                 // ...
             }
         };
+        //Log.d("IDPER",idpeternakan);
         firebaseDatabase.child(idpeternakan).addValueEventListener(postListener);
 
         ChildEventListener childEventListener = new ChildEventListener() {

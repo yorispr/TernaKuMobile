@@ -3,9 +3,11 @@ package com.fintech.ternaku.Main.Laporan.ProduksiSusu;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan;
@@ -40,8 +42,15 @@ public class LaporanProduksiSusuGrafik extends AppCompatActivity {
         setContentView(R.layout.activity_laporan_produksi_susu_grafik);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null)
+        {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Grafik Laporan Produksi Susu");
+        }
 
         //Set Colomn Tahun-----------------------------------------------
+        Log.d("Taguserid",getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null));
         chart_laporanproduksisusu_activity_tahun = (ColumnChartView) findViewById(R.id.chart_laporanproduksisusu_activity_tahun);
         String urlParameter_Get_Tahun = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetDataPerTahun().execute("http://ternaku.com/index.php/C_Laporan/TotalProduksiSusuPeternakan_TAHUN_TERTENTU",urlParameter_Get_Tahun);
@@ -111,5 +120,15 @@ public class LaporanProduksiSusuGrafik extends AppCompatActivity {
         chart_laporanproduksisusu_activity_tahun.setValueSelectionEnabled(true);
         chart_laporanproduksisusu_activity_tahun.setZoomType(ZoomType.HORIZONTAL);
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

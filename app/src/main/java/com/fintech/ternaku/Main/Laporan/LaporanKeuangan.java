@@ -88,7 +88,7 @@ public class LaporanKeuangan extends AppCompatActivity {
         chart_laporankeuangan_activity.setViewportCalculationEnabled(false);
 
         resetViewport();
-        String param = "id_peternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null)
+        String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                 +"&tahun="+"2016";
 
         new GetDataKeuanganMasuk().execute("http://ternaku.com/index.php/C_Laporan/UangMasuk_PETERNAKAN_TAHUN_TERTENTU",param);
@@ -115,7 +115,7 @@ public class LaporanKeuangan extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.d("RES",result);
             jsonMasuk = result;
-            String param = "id_peternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null)
+            String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                     +"&tahun="+"2016";
             new GetDataKeuanganKeluar().execute("http://ternaku.com/index.php/C_Laporan/UangKeluar_PETERNAKAN_TAHUN_TERTENTU",param);
         }

@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -119,34 +122,6 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -154,6 +129,7 @@ public class DashboardFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         relativeLayout_dashboard_fragment = (RelativeLayout)view.findViewById(R.id.relativeLayout_dashboard_fragment);
+        setHasOptionsMenu(true);
 
         //Set Expander--------------------------------------------------------
         buttonexpander_dashboard_fragment_produksisusu=(Button)view.findViewById(R.id.buttonexpander_dashboard_fragment_produksisusu);
@@ -377,7 +353,7 @@ public class DashboardFragment extends Fragment {
                     idpeternakan = idpeternakan.substring(0,idpeternakan.indexOf(")"));
 
                     //Execute Dashboard Data-------------------------------------------
-                    String urlParameters = "idpeternakan="+idpeternakan.trim();
+                    String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
                     new GetDashboardData().execute("http://ternaku.com/index.php/C_Ternak/GetDashboardData",urlParameters);
                     Log.d("IDP",urlParameters);
 
@@ -790,6 +766,27 @@ public class DashboardFragment extends Fragment {
     private void prepareDataAnimation() {
         for (SliceValue value : data_dashboard_fragment_pemeriksaanhariinia.getValues()) {
             value.setTarget((float) Math.random() * 30 + 15);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.refresh_menu:
+                Log.d("Tes","tes");
+                String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
+                new GetDashboardData().execute("http://ternaku.com/index.php/C_Ternak/GetDashboardData",urlParameters);
+                Log.d("IDP",urlParameters);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

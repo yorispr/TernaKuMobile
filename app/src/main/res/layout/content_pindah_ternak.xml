@@ -51,217 +51,217 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp" />
                 </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/relativeLayout2"
-                    android:layout_alignParentStart="true"
+                    android:orientation="vertical"
                     android:layout_marginTop="20dp"
-                    android:background="#B3eb9447"
-                    android:elevation="5dp"
-                    android:layout_alignParentEnd="true"
-                    android:id="@+id/relative_layout_pindahternak_activity_informsapi">
-
+                    android:background="#bdc3c7"
+                    android:id="@+id/linearLayout_pindahternak_activity_informsapi">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Informasi Sapi"
+                            android:id="@+id/textView18"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textColor="#cf6d17"
+                            android:textStyle="bold"/>
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/button_pindahternak_activity_hapus"
+                            android:background="@android:drawable/ic_delete"
+                            android:layout_marginRight="6dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#b86114"
-                        android:id="@+id/view2"
-                        android:layout_below="@+id/textView24"
-                        android:layout_alignParentStart="true"
+                        android:id="@+id/viewds2"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsID"
-                        android:layout_marginLeft="10dp"
-                        android:layout_below="@+id/view"
-                        android:layout_alignStart="@+id/textView18"
-                        android:textColor="#cf6d17" />
-
-                    <View
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#b86114"
-                        android:id="@+id/view"
-                        android:layout_below="@+id/textView18"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:weightSum="3">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:text="N/A"
+                                android:id="@+id/input_pindahternak_activity_iddetail"
+                                android:layout_marginLeft="10dp"
+                                android:textColor="#cf6d17" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
 
-                    <View
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:text="N/A"
+                                android:id="@+id/input_pindahternak_activity_namadetail"
+                                android:textColor="#cf6d17"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:text="N/A"
+                                android:id="@+id/input_pindahternak_activity_breed"
+                                android:layout_marginRight="10dp"
+                                android:textColor="#cf6d17"
+                                android:textAlignment="viewEnd" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#b86114"
-                        android:id="@+id/view4"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_below="@+id/textView25"
-                        android:layout_alignStart="@+id/view2" />
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsNama"
-                        android:layout_marginLeft="10dp"
-                        android:layout_alignTop="@+id/txtInsID"
-                        android:layout_toEndOf="@+id/textView18"
-                        android:textColor="#cf6d17" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Lokasi"
+                            android:id="@+id/textView18sd"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textColor="#cf6d17"
+                            android:textStyle="bold"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#b86114"
+                            android:id="@+id/view2"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:weightSum="3">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="Kandang"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="#cf6d17" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsStatFisik"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="#cf6d17"
-                        android:layout_alignTop="@+id/txtInsKesuburan"
-                        android:layout_alignParentStart="true" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="N/A"
+                                    android:id="@+id/input_pindahternak_activity_namakandang"
+                                    android:textColor="#cf6d17"
+                                    android:textAlignment="center" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsKesuburan"
-                        android:textColor="#cf6d17"
-                        android:layout_marginLeft="9dp"
-                        android:layout_below="@+id/view2"
-                        android:layout_alignEnd="@+id/textView18"
-                        android:layout_marginTop="5dp" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="N/A"
+                                    android:layout_marginRight="10dp"
+                                    android:id="@+id/input_pindahternak_activity_idkandang"
+                                    android:textColor="#cf6d17"
+                                    android:textAlignment="viewEnd" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:weightSum="3">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="Kawanan"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="#cf6d17" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsJnsSapi"
-                        android:layout_alignTop="@+id/txtInsNama"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="#cf6d17"
-                        android:layout_marginRight="10dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsKehamilan"
-                        android:layout_marginRight="10dp"
-                        android:textColor="#cf6d17"
-                        android:lines="2"
-                        android:layout_below="@+id/txtInsStatFisik"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_alignParentStart="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Informasi Sapi"
-                        android:id="@+id/textView18"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginBottom="4dp"
-                        android:textColor="#cf6d17"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Status Kesehatan"
-                        android:id="@+id/textView24"
-                        android:layout_marginLeft="5dp"
-                        android:layout_below="@+id/txtInsID"
-                        android:layout_marginTop="7dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="true"
-                        android:textColor="#cf6d17"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsKandang"
-                        android:textColor="#cf6d17"
-                        android:layout_alignTop="@+id/view4"
-                        android:layout_alignEnd="@+id/btnhapus"
-                        android:layout_toEndOf="@+id/textView26"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="N/A"
-                        android:id="@+id/txtInsKawanan"
-                        android:layout_below="@+id/txtInsKandang"
-                        android:layout_alignStart="@+id/txtInsKandang"
-                        android:textColor="#cf6d17"
-                        android:lines="2"
-                        android:layout_alignParentEnd="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Lokasi"
-                        android:id="@+id/textView25"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="#cf6d17"
-                        android:textStyle="bold"
-                        android:layout_below="@+id/txtInsKehamilan"
-                        android:layout_alignStart="@+id/view2"
-                        android:layout_marginTop="3dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Kandang"
-                        android:id="@+id/textView26"
-                        android:layout_below="@+id/textView25"
-                        android:layout_alignStart="@+id/view4"
-                        android:textColor="#cf6d17"
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Kawanan"
-                        android:id="@+id/textView27"
-                        android:textColor="#cf6d17"
-                        android:layout_alignTop="@+id/txtInsKawanan"
-                        android:layout_alignStart="@+id/textView26"
-                        android:textStyle="bold" />
-
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:id="@+id/button_pindahternak_activity_hapus"
-                        android:background="@android:drawable/ic_delete"
-                        android:layout_marginRight="6dp"
-                        android:layout_alignTop="@+id/textView18"
-                        android:layout_alignEnd="@+id/view" />
-                </RelativeLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="N/A"
+                                    android:id="@+id/input_pindahternak_activity_namakawanan"
+                                    android:textColor="#cf6d17"
+                                    android:textAlignment="center" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="N/A"
+                                    android:layout_marginRight="10dp"
+                                    android:id="@+id/input_pindahternak_activity_idkawanan"
+                                    android:layout_alignTop="@+id/txtInsNama"
+                                    android:textColor="#cf6d17"
+                                    android:textAlignment="viewEnd" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

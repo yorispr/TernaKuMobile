@@ -3,9 +3,11 @@ package com.fintech.ternaku.Main.Laporan.PenggunaanPakan;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
@@ -42,6 +44,12 @@ public class LaporanPenggunaanPakan extends AppCompatActivity {
         setContentView(R.layout.activity_laporan_penggunaan_pakan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null)
+        {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Grafik Laporan Penggunaan Pakan");
+        }
 
         //Set Colomn Bulan-----------------------------------------------
         //chart_laporanpakan_activity_bulan = (LineChartView) findViewById(R.id.chart_laporanpakan_activity_bulan);
@@ -183,4 +191,14 @@ public class LaporanPenggunaanPakan extends AppCompatActivity {
         }
     }
 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

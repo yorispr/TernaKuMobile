@@ -24,6 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+
 public class LaporanFragment extends Fragment {
     private Button button_laporan_fragment_lihat_grafik_produksisusu,button_laporan_fragment_lihat_grafik_penggunaanpakan,
             button_laporan_fragment_lihat_grafik_keuangan,
@@ -46,7 +49,7 @@ public class LaporanFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_laporan, container, false);
 
         //Set Data------------------------------------------------------------
-        String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyUsername",null);
+        String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetProduksiSusuTotal().execute("http://ternaku.com/index.php/C_Laporan/TotalProduksiSusu_TERNAK_TAHUN_INI",param);
 
         //Set Expander--------------------------------------------------------
@@ -115,6 +118,19 @@ public class LaporanFragment extends Fragment {
         return  view;
     }
 
+    //Convert Currency---------------------------------------------------
+    public String Convert(String jumlahbiaya)
+    {
+        String currencyCode = "IDR";
+        Currency currency = Currency.getInstance(currencyCode);
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(0);
+        format.setCurrency(currency);
+        String formattedAmount = format.format(jumlahbiaya);
+
+        return formattedAmount;
+    }
+
     //Get Total Produksi Susu------------------------------------------------
     private class GetProduksiSusuTotal extends AsyncTask<String,Integer,String> {
         ProgressDialog progDialog;
@@ -132,15 +148,10 @@ public class LaporanFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
-            if (result.trim().equals("1")){
-                GetDataTotalProduksi(result);
-                String param2 = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyUsername",null);
-                new GetUangMasuk().execute("http://ternaku.com/index.php/C_Laporan/TotalUangMasuk_TAHUN_INI",param2);
-            }
-            else {
-                Toast.makeText(getActivity(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-            }
+            Log.d("RES", result);
+            GetDataTotalProduksi(result);
+            String param2 = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+            new GetUangMasuk().execute("http://ternaku.com/index.php/C_Laporan/TotalUangMasuk_TAHUN_INI", param2);
         }
     }
     private void GetDataTotalProduksi(String result){
@@ -172,14 +183,21 @@ public class LaporanFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("1")){
-                Toast.makeText(getActivity(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(getActivity(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-            }
+            GetPengeluaranFunc(result);
         }
     }
+    private void GetPengeluaranFunc(String result2){
+        try{
+            JSONArray jArray = new JSONArray(result2);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                input_laporan_fragment_lihat_grafik_penggunaanpakan.setText(jObj.getString("Jumlah Pakan")+ " Kilogram");
+            }
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
 
     //Get Pemasukan Total---------------------------------------
     private class GetUangMasuk extends AsyncTask<String,Integer,String> {
@@ -199,14 +217,9 @@ public class LaporanFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("1")){
-                GetUangMasuk(result);
-                String param2 = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyUsername",null);
-                new GetUangKeluar().execute("http://ternaku.com/index.php/C_Laporan/TotalUangKeluar_TAHUN_INI",param2);
-            }
-            else {
-                Toast.makeText(getActivity(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-            }
+            GetUangMasukFunc(result);
+            String param2 = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+            new GetUangKeluar().execute("http://ternaku.com/index.php/C_Laporan/TotalUangKeluar_TAHUN_INI",param2);
         }
     }
 
@@ -227,18 +240,15 @@ public class LaporanFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
-            if (result.trim().equals("1")){
-                GetUangKeluar(result);
-            }
-            else {
-                Toast.makeText(getActivity(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-            }
+            Log.d("RES", result);
+            GetUangKeluarFunc(result);
+            String param2 = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+            new GetPenggunaanPakanTotal().execute("http://ternaku.com/index.php/C_Laporan/TotalPakan_TERNAK_TAHUN_INI", param2);
         }
     }
-    private void GetUangMasuk(String result){
+    private void GetUangMasukFunc(String result2){
         try{
-            JSONArray jArray = new JSONArray(result);
+            JSONArray jArray = new JSONArray(result2);
             for(int i=0;i<jArray.length();i++)
             {
                 JSONObject jObj = jArray.getJSONObject(i);
@@ -247,13 +257,13 @@ public class LaporanFragment extends Fragment {
         }
         catch (JSONException e){e.printStackTrace();}
     }
-    private void GetUangKeluar(String result){
+    private void GetUangKeluarFunc(String result3){
         try{
-            JSONArray jArray = new JSONArray(result);
+            JSONArray jArray = new JSONArray(result3);
             for(int i=0;i<jArray.length();i++)
             {
                 JSONObject jObj = jArray.getJSONObject(i);
-                input_laporan_fragment_lihat_grafik_pengeluaran_keuangan.setText("Rp. " + jObj.getString("JumlahUangMasuk"));
+                input_laporan_fragment_lihat_grafik_pengeluaran_keuangan.setText("Rp. " + jObj.getString("JumlahUangKeluar"));
             }
         }
         catch (JSONException e){e.printStackTrace();}

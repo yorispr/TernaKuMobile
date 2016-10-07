@@ -9,17 +9,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/edtSearchDialogKandang"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="7dp" />
+        android:drawableRight="@drawable/ic_action_search"
+        android:hint="Pencarian"
+
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="412dp"
+        android:layout_height="wrap_content"
         android:divider="@color/half_black"
+        android:dividerHeight="0.01dip"
         android:id="@+id/list_kandang_dial" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="Batal"
         android:gravity="center"
         android:id="@+id/btnbtl"

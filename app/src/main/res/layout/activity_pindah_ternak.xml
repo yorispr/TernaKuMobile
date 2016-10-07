@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay" >
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -47,32 +48,22 @@
         android:layout_alignEnd="@+id/relativeLayout">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabTambah"
+            android:id="@+id/fabTambah_pindahternak_activity_kandang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_add_white"
             fab:fab_colorNormal="#3498db"
             fab:fab_colorPressed="#2980b9"
-            fab:fab_title="Tambah Kandang"
+            fab:fab_title="Tambah Kandang Baru"
             fab:fab_size="normal"/>
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabHapus"
+            android:id="@+id/fabTambah_pindahternak_activity_kawanan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_cancel"
+            android:src="@drawable/ic_action_add_white"
             fab:fab_colorNormal="#3498db"
             fab:fab_colorPressed="#2980b9"
-            fab:fab_title="Hapus Kandang"
-            fab:fab_size="normal"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="#3498db"
-            android:src="@drawable/ic_mode_edit"
-            fab:fab_colorPressed="#2980b9"
-            fab:fab_title="Edit Kandang"
+            fab:fab_title="Tambah Kawanan Baru"
             fab:fab_size="normal"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>

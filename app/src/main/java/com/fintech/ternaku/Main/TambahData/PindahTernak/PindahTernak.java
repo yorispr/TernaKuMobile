@@ -1,13 +1,14 @@
 package com.fintech.ternaku.Main.TambahData.PindahTernak;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +19,20 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
@@ -47,15 +52,21 @@ public class PindahTernak extends AppCompatActivity {
     AdapterKandangPindahTernak adapter;
     AdapterKawananPindahTernak adapter2;
 
+    ArrayAdapter<String> adp;
+    boolean kandangclick = false;
+    boolean kawananclick = false;
     ArrayList<String> namaList = new ArrayList<String>();
     List<ModelTernakPindahTernak> TernakList  = new ArrayList<ModelTernakPindahTernak>();
     ArrayList<ModelKandangPindahTernak> KandangList  = new ArrayList<ModelKandangPindahTernak>();
     ArrayList<ModelKawananPindahTernak> KawananList  = new ArrayList<ModelKawananPindahTernak>();
 
-    private TextView txtID,txtNama,txtStatFisik,txtKesuburan,txtJnsSapi,txtKehamilan, txtKawanan, txtKandang;
+    private TextView input_pindahternak_activity_iddetail,input_pindahternak_activity_namadetail,
+            input_pindahternak_activity_breed,input_pindahternak_activity_namakandang,
+            input_pindahternak_activity_idkandang,input_pindahternak_activity_namakawanan,
+            input_pindahternak_activity_idkawanan;
     private Button button_pindahternak_activity_hapus, button_pindahternak_activity_simpan;
     private EditText input_pindahternak_activity_kawanan,input_pindahternak_activity_kandang;
-    RelativeLayout relative_layout_pindahternak_activity_informsapi;
+    LinearLayout linearLayout_pindahternak_activity_informsapi;
     int choosenindex=-1;
     int choosenindexkandang=-1;
     int choosenindexkawanan=-1;
@@ -72,16 +83,36 @@ public class PindahTernak extends AppCompatActivity {
                     | ActionBar.DISPLAY_SHOW_TITLE
                     | ActionBar.DISPLAY_SHOW_CUSTOM);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Pindah Ternak");
         }
 
-        txtID = (TextView)findViewById(R.id.txtInsID);
-        txtNama = (TextView)findViewById(R.id.txtInsNama);
-        txtStatFisik = (TextView)findViewById(R.id.txtInsStatFisik);
-        txtKesuburan = (TextView)findViewById(R.id.txtInsKesuburan);
-        txtJnsSapi = (TextView)findViewById(R.id.txtInsJnsSapi);
-        txtKehamilan = (TextView)findViewById(R.id.txtInsKehamilan);
-        txtKandang = (TextView)findViewById(R.id.txtInsKandang);
-        txtKawanan = (TextView)findViewById(R.id.txtInsKawanan);
+        //Floating Action Button-------------------------------------
+        FloatingActionButton fab_kandang = (FloatingActionButton) findViewById(R.id.fabTambah_pindahternak_activity_kandang);
+        fab_kandang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i = new Intent(PindahTernak.this,AddKandang.class);
+                startActivity(i);
+            }
+        });
+        FloatingActionButton fab_kawanan = (FloatingActionButton) findViewById(R.id.fabTambah_pindahternak_activity_kawanan);
+        fab_kawanan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i = new Intent(PindahTernak.this,AddKawanan.class);
+                startActivity(i);
+            }
+        });
+
+        input_pindahternak_activity_iddetail = (TextView)findViewById(R.id.input_pindahternak_activity_iddetail);
+        input_pindahternak_activity_namadetail = (TextView)findViewById(R.id.input_pindahternak_activity_namadetail);
+        input_pindahternak_activity_breed = (TextView)findViewById(R.id.input_pindahternak_activity_breed);
+        input_pindahternak_activity_namakandang = (TextView)findViewById(R.id.input_pindahternak_activity_namakandang);
+        input_pindahternak_activity_idkandang = (TextView)findViewById(R.id.input_pindahternak_activity_idkandang);
+        input_pindahternak_activity_namakawanan = (TextView)findViewById(R.id.input_pindahternak_activity_namakawanan);
+        input_pindahternak_activity_idkawanan = (TextView)findViewById(R.id.input_pindahternak_activity_idkawanan);
 
         input_pindahternak_activity_kandang = (EditText) findViewById(R.id.input_pindahternak_activity_kandang);
         input_pindahternak_activity_kawanan = (EditText) findViewById(R.id.input_pindahternak_activity_kawanan);
@@ -92,20 +123,23 @@ public class PindahTernak extends AppCompatActivity {
         input_pindahternak_activity_kawanan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-                new GetKawanan().execute("http://ternaku.com/index.php/C_Ternak/GetKawananByIdPeternakan", urlParameters);
+                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                    new GetKawanan().execute("http://ternaku.com/index.php/C_Ternak/GetKawananByIdPeternakan", urlParameters);
+                    kawananclick = true;
+
             }
         });
 
         input_pindahternak_activity_kandang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-                new GetKandang().execute("http://ternaku.com/index.php/C_Ternak/GetKandangByIdPeternakan", urlParameters);
+                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                    new GetKandang().execute("http://ternaku.com/index.php/C_Ternak/GetKandangByIdPeternakan", urlParameters);
+
             }
         });
-        relative_layout_pindahternak_activity_informsapi = (RelativeLayout)findViewById(R.id.relative_layout_pindahternak_activity_informsapi);
-        relative_layout_pindahternak_activity_informsapi.setVisibility(View.GONE);
+        linearLayout_pindahternak_activity_informsapi = (LinearLayout) findViewById(R.id.linearLayout_pindahternak_activity_informsapi);
+        linearLayout_pindahternak_activity_informsapi.setVisibility(View.GONE);
 
 
 
@@ -114,7 +148,7 @@ public class PindahTernak extends AppCompatActivity {
         button_pindahternak_activity_hapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                relative_layout_pindahternak_activity_informsapi.setVisibility(View.GONE);
+                linearLayout_pindahternak_activity_informsapi.setVisibility(View.GONE);
                 input_pindahternak_activity_kandang.setText("");
                 input_pindahternak_activity_kawanan.setText("");
                 choosenindex = -1;
@@ -127,16 +161,17 @@ public class PindahTernak extends AppCompatActivity {
             public void onClick(View view) {
                 String idternak = TernakList.get(choosenindex).getId_ternak();
                 String idpeternakan = KawananList.get(choosenindexkawanan).getId_peternakan();
-                String idkawanan;
-                if(choosenindexkawanan == -1) {
+                String idkawanan= input_pindahternak_activity_namakawanan.getText().toString();
+                String idkandang= input_pindahternak_activity_namakandang.getText().toString();
+
+                if(choosenindexkawanan != -1) {
                     idkawanan = KawananList.get(choosenindexkawanan).getId_kawanan();
-                }else{
+                }else if (choosenindexkawanan == -1){
                     idkawanan = TernakList.get(choosenindex).getId_kawanan();
                 }
-                String idkandang;
-                if(choosenindexkandang == -1) {
+                if(choosenindexkandang != -1) {
                     idkandang = KandangList.get(choosenindexkandang).getId_kandang();
-                }else{
+                }else if(choosenindexkandang == -1){
                     idkandang = TernakList.get(choosenindex).getId_kandang();
                 }
                 String status = "Aktif";
@@ -146,6 +181,8 @@ public class PindahTernak extends AppCompatActivity {
                         +"&idkandang="+idkandang
                         +"&statusaktif="+status;
                 new InsertPengelompokkanTask().execute("http://ternaku.com/index.php/C_Ternak/insertinsertHistoryPengelompokan", urlParameters);
+
+                Log.d("param",urlParameters);
             }
         });
 
@@ -156,7 +193,7 @@ public class PindahTernak extends AppCompatActivity {
         input_pindahternak_activity_idternak=(AutoCompleteTextView) findViewById(R.id.input_pindahternak_activity_idternak);
 
         input_pindahternak_activity_idternak.setEnabled(false);
-        ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
+        adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,namaList);
 
         input_pindahternak_activity_idternak.setAdapter(adp);
@@ -169,6 +206,7 @@ public class PindahTernak extends AppCompatActivity {
                 String idter = namaList.get(i).trim();
                 choosenindex = i;
                 setDetailToTextView(idter);
+                hideSoftKeyboard(PindahTernak.this);
             }
         });
 
@@ -180,15 +218,16 @@ public class PindahTernak extends AppCompatActivity {
         for(ModelTernakPindahTernak t : TernakList){
             if(t.getId_ternak().contains(idTernak))
             {
-                relative_layout_pindahternak_activity_informsapi.setVisibility(View.VISIBLE);
-                txtID.setText(t.getId_ternak());
-                txtNama.setText(t.getNama_ternak());
-                txtStatFisik.setText(t.getAktivitas());
-                txtKesuburan.setText(t.getStatus_kesuburan());
-                txtJnsSapi.setText(t.getBreed());
-                txtKehamilan.setText(t.getDiagnosis());
-                txtKawanan.setText(t.getKawanan());
-                txtKandang.setText(t.getKandang());
+
+                linearLayout_pindahternak_activity_informsapi.setVisibility(View.VISIBLE);
+                input_pindahternak_activity_iddetail.setText(t.getId_ternak());
+                input_pindahternak_activity_namadetail.setText(t.getNama_ternak());
+                input_pindahternak_activity_breed.setText(t.getBreed());
+                input_pindahternak_activity_namakawanan.setText(t.getKawanan());
+                input_pindahternak_activity_namakandang.setText(t.getKandang());
+                input_pindahternak_activity_idkawanan.setText(t.getId_kawanan());
+                input_pindahternak_activity_idkandang.setText(t.getId_kandang());
+
                 input_pindahternak_activity_kawanan.setText(t.getKawanan());
                 input_pindahternak_activity_kandang.setText(t.getKandang());
                 input_pindahternak_activity_kandang.setEnabled(true);
@@ -253,8 +292,8 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            //progDialog.show();
+            progDialog.setMessage("Sedang mengambil data...");
+            progDialog.show();
         }
 
         @Override
@@ -269,9 +308,11 @@ public class PindahTernak extends AppCompatActivity {
             Log.d("RES",result);
             if (result.trim().equals("404")){
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+                progDialog.dismiss();
             }
             else {
                 AddKawananToList(result);
+                progDialog.dismiss();
             }
         }
     }
@@ -282,8 +323,8 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            //progDialog.show();
+            progDialog.setMessage("Sedang mengambil data...");
+            progDialog.show();
         }
 
         @Override
@@ -298,9 +339,11 @@ public class PindahTernak extends AppCompatActivity {
             Log.d("RES",result);
             if (result.trim().equals("404")){
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+                progDialog.dismiss();
             }
             else {
                 AddKandangToList(result);
+                progDialog.dismiss();
             }
         }
     }
@@ -327,6 +370,17 @@ public class PindahTernak extends AppCompatActivity {
             Log.d("RES",result);
             if (result.trim().equals("1")){
                 Toast.makeText(getApplication(),"Berhasil memindahkan ternak",Toast.LENGTH_LONG).show();
+                input_pindahternak_activity_namakandang.setText(input_pindahternak_activity_kandang.getText().toString());
+                input_pindahternak_activity_namakawanan.setText(input_pindahternak_activity_kawanan.getText().toString());
+                //input_pindahternak_activity_idkandang.setText(KandangList.get(choosenindexkandang).getId_kandang());
+                //input_pindahternak_activity_idkawanan.setText(KawananList.get(choosenindexkawanan).getId_kawanan());
+
+                TernakList.get(choosenindex).setId_kandang(KandangList.get(choosenindexkandang).getId_kandang());
+                TernakList.get(choosenindex).setId_kawanan(KawananList.get(choosenindexkawanan).getId_kawanan());
+                TernakList.get(choosenindex).setKandang(KandangList.get(choosenindexkandang).getNama_kandang());
+                TernakList.get(choosenindex).setKawanan(KawananList.get(choosenindexkawanan).getNama_kawanan());
+
+                setDetailToTextView(input_pindahternak_activity_idternak.getText().toString());
             }
             else {
                 Toast.makeText(getApplication(),"Gagal memindahkan ternak",Toast.LENGTH_LONG).show();
@@ -398,10 +452,6 @@ public class PindahTernak extends AppCompatActivity {
                 t.setId_ternak(jObj.getString("id_ternak"));
                 t.setNama_ternak(jObj.getString("nama_ternak"));
                 t.setBreed(jObj.getString("breed"));
-                t.setAktivitas(jObj.getString("aktivitas"));
-                t.setTgl_subur(jObj.getString("tgl_perkiraan_subur"));
-                t.setStatus_kesuburan(jObj.getString("NAMA_REF_KESUBURAN"));
-                t.setDiagnosis(jObj.getString("diagnosis"));
                 t.setKandang(jObj.getString("nama_kandang"));
                 t.setKawanan(jObj.getString("nama_kawanan"));
                 t.setId_kandang(jObj.getString("id_kandang"));
@@ -419,8 +469,8 @@ public class PindahTernak extends AppCompatActivity {
 
     private void ShowDialogKawanan(final ArrayList<ModelKawananPindahTernak> kawanan) {
         dialog = new Dialog(PindahTernak.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.list_kawanan_pindah_ternak);
-
         ListView list = (ListView) dialog.findViewById(R.id.list_kawanan_dial);
         EditText edtsearch = (EditText)dialog.findViewById(R.id.edtSearchDialogKawanan);
 
@@ -441,6 +491,7 @@ public class PindahTernak extends AppCompatActivity {
                 choosenindexkawanan = i;
                 input_pindahternak_activity_kawanan.setText(KawananList.get(choosenindexkawanan).getNama_kawanan());
                 Log.d("kawanan",kawanan.get(choosenindexkawanan).getNama_kawanan()+" index: "+String.valueOf(choosenindexkawanan));
+                hideSoftKeyboard(PindahTernak.this);
                 dialog.dismiss();
             }
         });
@@ -449,12 +500,11 @@ public class PindahTernak extends AppCompatActivity {
         edtsearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                PindahTernak.this.adapter2.getFilter().filter(charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                adapter2.getFilter().filter(charSequence);
             }
 
             @Override
@@ -466,6 +516,7 @@ public class PindahTernak extends AppCompatActivity {
 
     private void ShowDialogKandang(final ArrayList<ModelKandangPindahTernak> kandang) {
         dialog2 = new Dialog(PindahTernak.this);
+        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog2.setContentView(R.layout.list_kandang_pindah_ternak);
 
         ListView list = (ListView) dialog2.findViewById(R.id.list_kandang_dial);
@@ -486,6 +537,7 @@ public class PindahTernak extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 choosenindexkandang = i;
                 input_pindahternak_activity_kandang.setText(kandang.get(choosenindexkandang).getNama_kandang());
+                hideSoftKeyboard(PindahTernak.this);
                 dialog2.dismiss();
             }
         });
@@ -521,4 +573,20 @@ public class PindahTernak extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    /*
+    @Override
+    protected void onPause(){
+        super.onPause();
+        choosenindex = -1;
+        choosenindexkandang = -1;
+        choosenindexkawanan = -1;
+    }*/
 }

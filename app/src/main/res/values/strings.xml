@@ -62,6 +62,9 @@
     <string name="title_activity_add_produksi_susu">AddProduksiSusu</string>
     <string name="title_activity_laporan_keuangan">LaporanKeuangan</string>
     <string name="title_activity_add_peternak">AddPeternak</string>
+    <string name="title_activity_insert_ternak">InsertTernak</string>
+    <string name="title_activity_add_kandang">AddKandang</string>
+    <string name="title_activity_add_kawanan">AddKawanan</string>
 
 
 </resources>

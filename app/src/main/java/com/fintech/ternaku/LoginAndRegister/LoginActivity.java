@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText input_login_activity_username,input_login_activity_password;
@@ -81,12 +84,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     private class LoginTask extends AsyncTask<String, Integer, String> {
-        ProgressDialog pDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute(){
-            pDialog = new ProgressDialog(LoginActivity.this);
-            pDialog.setMessage("Harap tunggu...");
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Tunggu Sebentar");
+            pDialog.setCancelable(false);
             pDialog.show();
         }
 
@@ -99,10 +103,14 @@ public class LoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             Log.d("RES",result);
+            pDialog.dismiss();
             if (result.trim().equals("1")) {
                 if(attempt < 3)
                 {
-                    Toast.makeText(getApplication(),"Password yang anda masukkan salah",Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Password Yang Anda Masukkan Salah")
+                            .show();
                     attempt++;
                     pDialog.dismiss();
                 }

@@ -3,6 +3,7 @@ package com.fintech.ternaku.Main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
@@ -25,14 +26,18 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
+import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
+import com.fintech.ternaku.Main.Pengingat.ShowReminderFragment;
+import com.fintech.ternaku.Setting.SetPrefs;
+import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.fintech.ternaku.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.Main.Dashboard.DashboardFragment;
 import com.fintech.ternaku.Main.Laporan.LaporanFragment;
 import com.fintech.ternaku.Main.NavBar.Pakan.AddPakanTernak;
-import com.fintech.ternaku.Main.Pengingat.TasksFragment;
 import com.fintech.ternaku.Main.TambahData.AddDataFragment;
 import com.fintech.ternaku.R;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager_main_activity;
     private TabLayout tabLayout_main_activity;
     private FloatingToolbar mFloatingToolbar;
+    private int opentabs = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +89,15 @@ public class MainActivity extends AppCompatActivity
                         i = new Intent(MainActivity.this,AddProduksiSusu.class);
                         startActivity(i);
                         break;
-                    case R.id.ic_action_add_ternak:
+                    case R.id.ic_action_add_peternak:
                         i = new Intent(MainActivity.this,AddPeternak.class);
                         startActivity(i);
                         break;
+                    case R.id.ic_action_add_ternak:
+                        i = new Intent(MainActivity.this,InsertTernak.class);
+                        startActivity(i);
+                        break;
+
 
                 }
             }
@@ -108,9 +119,12 @@ public class MainActivity extends AppCompatActivity
         TextView nav_role = (TextView) hView.findViewById(R.id.drawer_subtitle);
         nav_role.setText(sharedpreferences.getString("keyNamaRole", null));
 
+        FirebaseMessaging.getInstance().subscribeToTopic(sharedpreferences.getString("keyIdPeternakan", null));
+
         //ViewPager and TabLayout-----------------------------
         viewPager_main_activity = (ViewPager)findViewById(R.id.viewpager_main_activity);
         setupViewPager(viewPager_main_activity);
+        viewPager_main_activity.setCurrentItem(opentabs);
         tabLayout_main_activity = (TabLayout)findViewById(R.id.tabs_main_activity);
         tabLayout_main_activity.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout_main_activity.setTabGravity(TabLayout.GRAVITY_CENTER);
@@ -180,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DashboardFragment(), "DASHBOARD");
         adapter.addFrag(new AddDataFragment(), "TAMBAH DATA");
-        adapter.addFrag(new TasksFragment(), "PENGINGAT");
+        adapter.addFrag(new ShowReminderFragment(), "PENGINGAT");
         adapter.addFrag(new LaporanFragment(), "LAPORAN");
 
         viewPager.setAdapter(adapter);
@@ -247,6 +261,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this, SetPrefs.class);
+            startActivity(i);
             return true;
         } else if(id == R.id.action_logout){
             SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
@@ -254,6 +270,8 @@ public class MainActivity extends AppCompatActivity
             editor.clear();
             editor.commit();
             Toast.makeText(getApplicationContext(),"Log Out",Toast.LENGTH_LONG).show();
+
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
 
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);

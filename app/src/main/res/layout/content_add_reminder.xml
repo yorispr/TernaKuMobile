@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+   >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:elevation="5dp"
+        android:background="#FFFFFF"
+
+        android:layout_height="70dp"
+        android:id="@+id/relativeLayout2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:hint="Judul"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:background="#FFFFFF"
+            android:textStyle="bold"
+            android:id="@+id/txtJudul" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/edtIsi"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:hint="Isi"
+            android:layout_marginRight="10dp"
+            android:background="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:maxLines="100"
+            android:minLines="1"
+            android:gravity="left"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/txtJudul"
+            android:layout_below="@+id/chkImportant" />
+
+        <CheckBox
+            android:text="Pesan Penting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtJudul"
+            android:id="@+id/chkImportant"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

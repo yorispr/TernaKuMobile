@@ -2,6 +2,7 @@ package com.fintech.ternaku.Main.NavBar.Keuangan;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -27,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddKeuangan extends AppCompatActivity {
     private EditText input_addpakan_activity_harga,input_addpakan_activity_keterangantrans;
     private Button button_addkeuangan_activity_simpan;
@@ -43,11 +46,11 @@ public class AddKeuangan extends AppCompatActivity {
         setContentView(R.layout.activity_add_keuangan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
-                    | ActionBar.DISPLAY_SHOW_TITLE
-                    | ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()!=null)
+        {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Pengeluaran dan Pemasukan");
         }
 
         //Set Date-------------------------------------
@@ -87,21 +90,39 @@ public class AddKeuangan extends AppCompatActivity {
         button_addkeuangan_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedId=radiogroup_addkeuangan_activity_kategori.getCheckedRadioButtonId();
-                radiobutton_addkeuangan_activity_kategori=(RadioButton) findViewById(selectedId);
-                Log.d("LogAll",input_addpkeuangan_activity_tanggaltransaksi.getText().toString().trim()+
-                        spinner_addkeuangan_activity_jenis.getSelectedItem().toString().trim()+
-                        input_addpakan_activity_harga.getText().toString().trim()+
-                        input_addpakan_activity_keterangantrans.getText().toString().trim()+
-                        radiobutton_addkeuangan_activity_kategori.getText().toString().trim());
-                String urlParameters_insert ="uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
-                        "&tglTransaksi=" + input_addpkeuangan_activity_tanggaltransaksi.getText().toString().trim()+
-                        "&jenisTransaksi="+ spinner_addkeuangan_activity_jenis.getSelectedItem().toString().trim()+
-                        "&kategori=" + radiobutton_addkeuangan_activity_kategori.getText().toString().trim()+
-                        "&jumlah="+ input_addpakan_activity_harga.getText().toString().trim()+
-                        "&keterangan="+ input_addpakan_activity_keterangantrans.getText().toString().trim();
-                new insertToDbKeuangan().execute("http://ternaku.com/index.php/C_Keuangan/InsertKeuangan", urlParameters_insert);
-            Log.d("tes",urlParameters_insert);
+                new SweetAlertDialog(AddKeuangan.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Simpan")
+                        .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                int selectedId=radiogroup_addkeuangan_activity_kategori.getCheckedRadioButtonId();
+                                radiobutton_addkeuangan_activity_kategori=(RadioButton) findViewById(selectedId);
+                                Log.d("LogAll",input_addpkeuangan_activity_tanggaltransaksi.getText().toString().trim()+
+                                        spinner_addkeuangan_activity_jenis.getSelectedItem().toString().trim()+
+                                        input_addpakan_activity_harga.getText().toString().trim()+
+                                        input_addpakan_activity_keterangantrans.getText().toString().trim()+
+                                        radiobutton_addkeuangan_activity_kategori.getText().toString().trim());
+                                String urlParameters_insert ="uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
+                                        "&tglTransaksi=" + input_addpkeuangan_activity_tanggaltransaksi.getText().toString().trim()+
+                                        "&jenisTransaksi="+ spinner_addkeuangan_activity_jenis.getSelectedItem().toString().trim()+
+                                        "&kategori=" + radiobutton_addkeuangan_activity_kategori.getText().toString().trim()+
+                                        "&jumlah="+ input_addpakan_activity_harga.getText().toString().trim()+
+                                        "&keterangan="+ input_addpakan_activity_keterangantrans.getText().toString().trim();
+                                new insertToDbKeuangan().execute("http://ternaku.com/index.php/C_Keuangan/InsertKeuangan", urlParameters_insert);
+                                Log.d("tes",urlParameters_insert);
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .show();
             }
 
         });
@@ -111,9 +132,14 @@ public class AddKeuangan extends AppCompatActivity {
     }
 
     private class insertToDbKeuangan extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddKeuangan.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -126,10 +152,22 @@ public class AddKeuangan extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("InsertKeuangan",s);
+            pDialog.dismiss();
             if (s.trim().equals("1")){
-                Toast.makeText(getApplicationContext(),"Data Barhasil Dimasukkan!!",Toast.LENGTH_LONG).show();
-            }else if(s.trim().equals("0")){
-                Toast.makeText(getApplicationContext(),"Data Gagal Dimasukkan!!",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddKeuangan.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan..")
+                        .show();
+            }
+            else if(s.trim().equals("2")){
+
+                new SweetAlertDialog(AddKeuangan.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
+            }
+            else {
+                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
             }
         }
     }
