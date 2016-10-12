@@ -2,6 +2,7 @@ package com.fintech.ternaku.Main.TambahData.PindahTernak;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,13 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddKandang extends AppCompatActivity {
     private EditText input_addkandang_activity_nama,input_addkandang_activity_lokasi,
@@ -45,28 +50,50 @@ public class AddKandang extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkForm()){
-                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
-                            +"&namakandang=" + input_addkandang_activity_nama.getText().toString()
-                            +"&lokasi=" + input_addkandang_activity_lokasi.getText().toString()
-                            +"&kapasitas=" + input_addkandang_activity_kapasitas.getText().toString()
-                            +"&statusaktif=Aktif";
-                    new InsertKandangTask().execute("http://ternaku.com/index.php/C_Ternak/insertKandang", urlParameters);
+                    new SweetAlertDialog(AddKandang.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Simpan")
+                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
+                                            +"&namakandang=" + input_addkandang_activity_nama.getText().toString()
+                                            +"&lokasi=" + input_addkandang_activity_lokasi.getText().toString()
+                                            +"&kapasitas=" + input_addkandang_activity_kapasitas.getText().toString()
+                                            +"&statusaktif=Aktif";
+                                    new InsertKandangTask().execute("http://ternaku.com/index.php/C_Ternak/insertKandang", urlParameters);
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
                 }else
                 {
-                    Toast.makeText(getApplicationContext(),"Ada data yang belum terisi!!",Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(AddKandang.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
         });
     }
 
     private class InsertKandangTask extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddKandang.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddKandang.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -79,13 +106,45 @@ public class AddKandang extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Kandang Berhasil Ditambahkan",Toast.LENGTH_LONG).show();
-                progDialog.dismiss();
+                new SweetAlertDialog(AddKandang.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddKandang.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Kandang")
+                                        .setContentText("Apakah Ingin Menambah Data Kandang Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
-                Toast.makeText(getApplication(),"Gagal Menambahkan Kandang",Toast.LENGTH_LONG).show();
-                progDialog.dismiss();
+                new SweetAlertDialog(AddKandang.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
             }
         }
     }
@@ -107,12 +166,29 @@ public class AddKandang extends AppCompatActivity {
 
         if(input_addkandang_activity_nama.getText().toString().matches(""))
         {input_addkandang_activity_nama.setError("Nama Kandang Belum Diisi");cek = false;}
-        else if(input_addkandang_activity_lokasi.getText().toString().matches(""))
+        if(input_addkandang_activity_lokasi.getText().toString().matches(""))
         {input_addkandang_activity_lokasi.setError("Lokasi Kandang Belum Diisi");cek = false;}
-        else if(input_addkandang_activity_kapasitas.getText().toString().matches(""))
+        if(input_addkandang_activity_kapasitas.getText().toString().matches(""))
         {input_addkandang_activity_kapasitas.setError("Kapasitas Kandang Belum Diisi");cek = false;}
 
         return cek;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+    public void cleartext(){
+        input_addkandang_activity_nama.setText("");
+        input_addkandang_activity_lokasi.setText("");
+        input_addkandang_activity_kapasitas.setText("");
+        input_addkandang_activity_nama.setHint("Masukkan Nama Kandang");
+        input_addkandang_activity_lokasi.setHint("Masukkan Lokasi Kandang");
+        input_addkandang_activity_kapasitas.setHint("Masukkan Kapasitas Kandang");
     }
 
 }

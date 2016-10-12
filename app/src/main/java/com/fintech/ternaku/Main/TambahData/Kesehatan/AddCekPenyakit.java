@@ -5,13 +5,16 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -32,6 +35,8 @@ import com.fintech.ternaku.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddCekPenyakit extends AppCompatActivity {
     private AutoCompleteTextView input_addcekpenyakit_activity_idternak;
@@ -87,28 +92,112 @@ public class AddCekPenyakit extends AppCompatActivity {
         button_addcekpenyakit_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cekForm()) {
-                    String diagnosis = "N/A", perawatan = "N/A";
-                    if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
-                        diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                if (checkForm()) {
+                    if(spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItemId()==0){
+                        new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Silahkan Pilih Jenis Pemeriksaan Penyakit")
+                                .show();
+                    }else{
+                        if(spinner_addcekpenyakit_activity_kondisi.getSelectedItemId()==0) {
+                            new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Peringatan!")
+                                    .setContentText("Silahkan Pilih Kondisi Sapi")
+                                    .show();
+                        }else{
+                            if(spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItemId()==2){
+                                if(spinner_addcekpenyakit_activity_statuskesehatansusu.getSelectedItemId()==0){
+                                    new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Peringatan!")
+                                            .setContentText("Silahkan Pilih Kondisi Kesehatan Susu")
+                                            .show();
+                                }else{
+                                    new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("Simpan")
+                                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                                            .setConfirmText("Ya")
+                                            .setCancelText("Tidak")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+                                                    sDialog.cancel();
+
+                                                    String diagnosis = "N/A", perawatan = "N/A";
+                                                    if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
+                                                        diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                    }
+                                                    if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
+                                                        perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
+                                                    }
+                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
+                                                            + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
+                                                            + "&perawatan=" + perawatan
+                                                            + "&diagnosis=" + diagnosis
+                                                            + "&tglperiksaberikutnya=0000-00-00 00:00:00"
+                                                            + "&biayaperiksa=0"
+                                                            + "&susuaman=" + susuaman
+                                                            + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
+                                                            + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
+                                                    new InsertCekPenyakit().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness", param);
+                                                }
+                                            })
+                                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    sweetAlertDialog.cancel();
+                                                }
+                                            })
+                                            .show();
+                                }
+                            }else{
+                                new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Simpan")
+                                        .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+
+                                                String diagnosis = "N/A", perawatan = "N/A";
+                                                if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
+                                                    diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                }
+                                                if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
+                                                    perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
+                                                }
+                                                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                        + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
+                                                        + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
+                                                        + "&perawatan=" + perawatan
+                                                        + "&diagnosis=" + diagnosis
+                                                        + "&tglperiksaberikutnya=0000-00-00 00:00:00"
+                                                        + "&biayaperiksa=0"
+                                                        + "&susuaman=" + susuaman
+                                                        + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
+                                                        + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
+                                                new InsertCekPenyakit().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness", param);
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                            }
+                                        })
+                                        .show();
+
+                            }
+                        }
                     }
-                    if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
-                        perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
-                    }
-                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                            + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
-                            + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
-                            + "&perawatan=" + perawatan
-                            + "&diagnosis=" + diagnosis
-                            + "&tglperiksaberikutnya=0000-00-00 00:00:00"
-                            + "&biayaperiksa=0"
-                            + "&susuaman=" + susuaman
-                            + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
-                            + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
-                    new InsertCekPenyakit().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness", param);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Data belum lengkap!",Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
         });
@@ -117,13 +206,14 @@ public class AddCekPenyakit extends AppCompatActivity {
 
     //Insert To Database------------------------------
     private class InsertCekPenyakit extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddCekPenyakit.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -136,9 +226,39 @@ public class AddCekPenyakit extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Cek Penyakit")
+                                        .setContentText("Apakah Ingin Menambah Data Pengecekan Penyakit Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
@@ -152,9 +272,9 @@ public class AddCekPenyakit extends AppCompatActivity {
         spinner_addcekpenyakit_activity_kondisi = (Spinner)findViewById(R.id.spinner_addcekpenyakit_activity_kondisi);
         linearLayout_addcekpenyakit_activity_susu = (LinearLayout)findViewById(R.id.linearLayout_addcekpenyakit_activity_susu);
 
-        final String[] spinPemeriksaanData= {"Lameness","Mastitis","Kuku"};
-        final String[] spinSusuData= {"Boleh diperah","Tidak boleh diperah"};
-        final String[] spinKondisiData= {"Sakit","Tidak Sakit"};
+        final String[] spinPemeriksaanData= {"Pilih Jenis Pemeriksaan","Lameness","Mastitis","Kuku"};
+        final String[] spinSusuData= {"Pilih Status Kesehatan Susu","Boleh diperah","Tidak boleh diperah"};
+        final String[] spinKondisiData= {"Pilih Kondisi Sapi","Sakit","Tidak Sakit"};
 
         ArrayAdapter<String> myAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,spinPemeriksaanData);
         ArrayAdapter<String> myAdapter2= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,spinSusuData);
@@ -167,7 +287,7 @@ public class AddCekPenyakit extends AppCompatActivity {
         spinner_addcekpenyakit_activity_jenisperiksa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==1){
+                if(i==2){
                     linearLayout_addcekpenyakit_activity_susu.setVisibility(View.VISIBLE);
                 }else{
                     linearLayout_addcekpenyakit_activity_susu.setVisibility(View.GONE);
@@ -181,10 +301,10 @@ public class AddCekPenyakit extends AppCompatActivity {
         spinner_addcekpenyakit_activity_statuskesehatansusu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
+                if(i==1){
+                    susuaman = 2;
+                }else if(i==2){
                     susuaman = 1;
-                }else if(i==1){
-                    susuaman = 0;
                 }
             }
 
@@ -218,8 +338,10 @@ public class AddCekPenyakit extends AppCompatActivity {
         mTimePicker = new TimePickerDialog(AddCekPenyakit.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                datetime+= " "+selectedHour + ":" + selectedMinute+":00";
-                input_addcekpenyakit_activity_tglpemeriksaan.setText(datetime);
+                if(timePicker.isShown()) {
+                    datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                    input_addcekpenyakit_activity_tglpemeriksaan.setText(datetime);
+                }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -244,16 +366,39 @@ public class AddCekPenyakit extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean cekForm(){
-        boolean cek = true;
-        if(input_addcekpenyakit_activity_idternak.getText().toString().matches("")){
-            cek = false;
-            input_addcekpenyakit_activity_idternak.setError("Data belum diisi");
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean checkForm()
+    {
+        boolean value = true;
+
+        if(TextUtils.isEmpty(input_addcekpenyakit_activity_idternak.getText().toString())){
+            value= false;
+            input_addcekpenyakit_activity_idternak.setError("ID Ternak belum diisi");
         }
         if(input_addcekpenyakit_activity_tglpemeriksaan.getText().toString().equalsIgnoreCase("01 Januari 1970")){
-            cek=false;
-            input_addcekpenyakit_activity_tglpemeriksaan.setError("Data belum diisi");
+            value=false;
+            input_addcekpenyakit_activity_tglpemeriksaan.setError("Tanggal belum diisi");
         }
-        return cek;
+        return value;
     }
+
+    public void cleartext(){
+        input_addcekpenyakit_activity_idternak.setText("");
+        input_addcekpenyakit_activity_diagnosis.setText("");
+        input_addcekpenyakit_activity_perawatan.setText("");
+        input_addcekpenyakit_activity_tglpemeriksaan.setText("01 Januari 1970");
+        spinner_addcekpenyakit_activity_jenisperiksa.setSelection(0);
+        spinner_addcekpenyakit_activity_kondisi.setSelection(0);
+        spinner_addcekpenyakit_activity_statuskesehatansusu.setSelection(0);
+    }
+
+
 }

@@ -5,13 +5,17 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -37,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class UpdateMasaKering extends AppCompatActivity {
     private AutoCompleteTextView input_updatemasakering_activity_idternak;
     private TextView input_updatemasakering_activity_tglpemeriksaan;
@@ -47,10 +53,12 @@ public class UpdateMasaKering extends AppCompatActivity {
     private DatePickerDialog DatePickerDialog_tgldryoff;
     private SimpleDateFormat dateFormatter_tgldryoff;
     String datetime;
+    int flag_radio=0;
 
     boolean isMulai;
     int susuaman;
-    private ArrayList<String> list_update_dryoff = new ArrayList<>();
+    private ArrayList<String> list_update_dryoff_idternak = new ArrayList<>();
+    private ArrayList<String> list_update_dryoff_dry = new ArrayList<>();
     ArrayAdapter<String> adp;
 
     @Override
@@ -65,20 +73,26 @@ public class UpdateMasaKering extends AppCompatActivity {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Masa Kering");
         }
+        hideSoftKeyboardOnStart();
 
         //Set Auto Text--------------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakDry", param);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
         input_updatemasakering_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_updatemasakering_activity_idternak);
         input_updatemasakering_activity_idternak.setEnabled(false);
         adp=new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,list_update_dryoff);
+                android.R.layout.simple_dropdown_item_1line,list_update_dryoff_idternak);
         input_updatemasakering_activity_idternak.setAdapter(adp);
         input_updatemasakering_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             }
         });
+
+        //Set Ternak Dry--------------------------------------------
+        String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+        new GetTernakDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakDryByPeternakan", param_2);
+
 
         //Set Mulai Or Selesai--------------------------------------
         radiogroup_updatemasakering_activity_mlaiselesai = (RadioGroup)findViewById(R.id.radiogroup_updatemasakering_activity_mlaiselesai);
@@ -87,8 +101,10 @@ public class UpdateMasaKering extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if(i==R.id.radiobutton_updatemasakering_activity_mlai){
                     isMulai=true;
+                    flag_radio=1;
                 }else if(i==R.id.radiobutton_updatemasakering_activity_selesai){
                     isMulai=false;
+                    flag_radio=1;
                 }
             }
         });
@@ -114,38 +130,82 @@ public class UpdateMasaKering extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (cekForm()) {
-                    String idter = input_updatemasakering_activity_idternak.getText().toString();
-                    if (!isDry(idter)) {
-                        if(isMulai) {
-                            String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                    + "&idternak=" + idter
-                                    + "&tglmulaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                            new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringMulai", param);
-                        }else{
-                            String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                    + "&idternak=" + idter
-                                    + "&tglselesaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                            new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringSelesai", param);
-                        }
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Ternak sedang masa kering!",Toast.LENGTH_LONG).show();
+                    if(flag_radio==1){
+                        final String idter = input_updatemasakering_activity_idternak.getText().toString();
+                        new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Simpan")
+                                .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                                .setConfirmText("Ya")
+                                .setCancelText("Tidak")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                        if(isMulai) {
+                                            if (!isDry(idter)) {
+                                                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                        + "&idternak=" + idter
+                                                        + "&tglmulaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
+                                                new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringMulai", param);
+                                            } else {
+                                                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                                        .setTitleText("Peringatan!")
+                                                        .setContentText("Ternak Sedang Masa Kering")
+                                                        .show();
+                                            }
+                                        }else{
+                                            if (isDry(idter)) {
+                                                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                        + "&idternak=" + idter
+                                                        + "&tglselesaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
+                                                new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringSelesai", param);
+                                            } else {
+                                                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                                        .setTitleText("Peringatan!")
+                                                        .setContentText("Ternak Tidak Sedang Masa Kering")
+                                                        .show();
+                                            }
+                                        }
+                                        //Set Ternak Dry--------------------------------------------
+                                        String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                                        new GetTernakDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakDryByPeternakan", param_2);
+                                    }
+                                })
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.cancel();
+                                    }
+                                })
+                                .show();
+                    }else if(flag_radio==0){
+                        new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Pilih Mode Ganti Data Mulai atau Selesai")
+                                .show();
                     }
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Data belum lengkap!",Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
         });
 
     }
 
-    //Get Data Ternak Dry-------------------------------------------
-    private class GetTernakDry extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+    //Get Data Ternak-------------------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -158,36 +218,106 @@ public class UpdateMasaKering extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if(!result.trim().equalsIgnoreCase("404")) {
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
                 AddTernakToList(result);
+                input_updatemasakering_activity_idternak.setEnabled(true);
             }
-            input_updatemasakering_activity_idternak.setEnabled(true);
         }
     }
     private void AddTernakToList(String result) {
-        list_update_dryoff.clear();
+        list_update_dryoff_idternak.clear();
         Log.d("PET",result);
         try{
             JSONArray jArray = new JSONArray(result);
             for(int i=0;i<jArray.length();i++)
             {
                 JSONObject jObj = jArray.getJSONObject(i);
-                list_update_dryoff.add(jObj.getString("id_ternak"));
+                list_update_dryoff_idternak.add(jObj.getString("id_ternak"));
             }
             adp.notifyDataSetChanged();
         }
         catch (JSONException e){e.printStackTrace();}
     }
 
-    //Insert To Database----------------------------------------------------
-    private class AddDry extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+    //Get Ternak Dry--------------------------------------------------------
+    private class GetTernakDry extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(UpdateMasaKering.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES2",result);
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
+                AddTernakHeat(result);
+            }
+        }
+    }
+    private void AddTernakHeat(String result)
+    {
+        list_update_dryoff_dry.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_update_dryoff_dry.add(jObj.getString("id_ternak"));
+            }
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    //Insert To Database----------------------------------------------------
+    private class AddDry extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -200,23 +330,51 @@ public class UpdateMasaKering extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Ubah Masa Kering")
+                                        .setContentText("Apakah Ingin Mengubah Data Masa Kering Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
         }
     }
 
     private boolean isDry(String id){
-        for(int i=0;i<list_update_dryoff.size();i++){
-            if(list_update_dryoff.get(i).equals(id)){
-                return true;
+        boolean cek=false;
+        for(int i=0;i<list_update_dryoff_dry.size();i++){
+            if(id.equals(list_update_dryoff_dry.get(i))){
+                cek = true;
             }
         }
-        return false;
+        return cek;
     }
 
     private void setDateTimeField() {
@@ -240,8 +398,11 @@ public class UpdateMasaKering extends AppCompatActivity {
         mTimePicker = new TimePickerDialog(UpdateMasaKering.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                datetime+= " "+selectedHour + ":" + selectedMinute+":00";
-                input_updatemasakering_activity_tglpemeriksaan.setText(datetime);
+                if(timePicker.isShown()) {
+
+                    datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                    input_updatemasakering_activity_tglpemeriksaan.setText(datetime);
+                }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -255,6 +416,12 @@ public class UpdateMasaKering extends AppCompatActivity {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public void hideSoftKeyboardOnStart() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -268,7 +435,7 @@ public class UpdateMasaKering extends AppCompatActivity {
 
     public boolean cekForm(){
         boolean cek = true;
-        if(input_updatemasakering_activity_idternak.getText().toString().matches("")){
+        if(TextUtils.isEmpty(input_updatemasakering_activity_idternak.getText().toString())){
             cek = false;
             input_updatemasakering_activity_idternak.setError("Data belum diisi");
         }
@@ -277,5 +444,20 @@ public class UpdateMasaKering extends AppCompatActivity {
             input_updatemasakering_activity_tglpemeriksaan.setError("Data belum diisi");
         }
         return cek;
+    }
+
+    public void cleartext(){
+        input_updatemasakering_activity_idternak.setText("");
+        input_updatemasakering_activity_tglpemeriksaan.setText("01 Januari 1970");
+        radiogroup_updatemasakering_activity_mlaiselesai.clearCheck();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

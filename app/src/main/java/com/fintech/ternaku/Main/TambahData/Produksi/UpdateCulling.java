@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,10 +29,16 @@ import android.widget.Toast;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UpdateCulling extends AppCompatActivity {
     private AutoCompleteTextView input_updateculling_activity_idternak;
@@ -42,6 +52,7 @@ public class UpdateCulling extends AppCompatActivity {
 
     private int choosenindex =-1;
     ArrayList<String> list_updateculling_idternak = new ArrayList<String >();
+    ArrayAdapter<String> adp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +67,20 @@ public class UpdateCulling extends AppCompatActivity {
             actionbar.setTitle("Culling");
         }
 
-        //Set Id Ternak Auto Complete-------------------------------------------
+        //Set Auto Text--------------------------------------------
+        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
         input_updateculling_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_updateculling_activity_idternak);
+        input_updateculling_activity_idternak.setEnabled(false);
+        adp=new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,list_updateculling_idternak);
+        input_updateculling_activity_idternak.setAdapter(adp);
+        input_updateculling_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
+
 
         //Set Date Culling------------------------------------------------------
         setDateTimeField();
@@ -80,31 +103,110 @@ public class UpdateCulling extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (cekForm()) {
-                    String idter = input_updateculling_activity_idternak.getText().toString();
-                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                            + "&idternak=" + idter
-                            + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
-                            + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
+                    new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Simpan")
+                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                    String idter = input_updateculling_activity_idternak.getText().toString();
+                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                            + "&idternak=" + idter
+                                            + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
+                                            + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
+                                    new AddCulling().execute("http://ternaku.com/index.php/C_HistoryKesehatan/UpdateCulling", param);
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
 
-                    new AddCulling().execute("http://ternaku.com/index.php/C_HistoryKesehatan/UpdateCulling", param);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Data belum lengkap!",Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
         });
 
     }
 
-    //Insert In To Database---------------------------------------------------
-    private class AddCulling extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+    //Get Data Ternak Dry-------------------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(UpdateCulling.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0], params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES", result);
+            pDialog.dismiss();
+            if (result.trim().equals("kosong")) {
+                new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else {
+                AddTernakToList(result);
+                input_updateculling_activity_idternak.setEnabled(true);
+            }
+        }
+    }
+
+    private void AddTernakToList(String result) {
+        list_updateculling_idternak.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_updateculling_idternak.add(jObj.getString("id_ternak"));
+            }
+            adp.notifyDataSetChanged();
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    //Insert In To Database---------------------------------------------------
+    private class AddCulling extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -117,12 +219,44 @@ public class UpdateCulling extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Penggunaan Pakan")
+                                        .setContentText("Apakah Ingin Menambah Data Penggunaan Pakan Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
+            }else if(result.trim().equals("0")){
+                new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
             }
         }
     }
@@ -147,8 +281,11 @@ public class UpdateCulling extends AppCompatActivity {
         mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                datetime+= " "+selectedHour + ":" + selectedMinute+":00";
-                input_updateculling_activity_tanggal.setText(datetime);
+                if(timePicker.isShown()) {
+
+                    datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                    input_updateculling_activity_tanggal.setText(datetime);
+                }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -185,7 +322,27 @@ public class UpdateCulling extends AppCompatActivity {
             cek=false;
             input_updateculling_activity_tanggal.setError("Data belum diisi");
         }
+        if(input_updateculling_activity_alasan.getText().toString().equalsIgnoreCase("")){
+            cek=false;
+            input_updateculling_activity_alasan.setError("Data belum diisi");
+        }
         return cek;
+    }
+
+    public void cleartext(){
+        input_updateculling_activity_idternak.setText("");
+        input_updateculling_activity_tanggal.setText("");
+        input_updateculling_activity_alasan.setText("");
+        input_updateculling_activity_tanggal.setHint("01 Januari 1970");
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 }

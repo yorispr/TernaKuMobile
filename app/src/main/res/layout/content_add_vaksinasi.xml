@@ -158,6 +158,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -166,6 +167,7 @@
                                     android:id="@+id/input_addvaksinasi_activity_dosis"
                                     android:gravity="center_horizontal"
                                     android:inputType="number"/>
+
                                 <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

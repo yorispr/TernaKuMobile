@@ -10,8 +10,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import com.fintech.ternaku.LoginAndRegister.RegisterActivity;
 import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Pakan.AddPakanTernak;
+import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.R;
 
 import org.json.JSONArray;
@@ -31,6 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -49,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
+
+            SweetAlertDialog pDialog = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.PROGRESS_TYPE);
             input_login_activity_username = (EditText) findViewById(R.id.input_login_activity_username);
             input_login_activity_password = (EditText) findViewById(R.id.input_login_activity_password);
             button_login_activity_masuk = (Button) findViewById(R.id.button_login_activity_masuk);
@@ -65,14 +72,21 @@ public class LoginActivity extends AppCompatActivity {
             button_login_activity_masuk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        String password = generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString());
-                        String urlParameters = "username=" + URLEncoder.encode(input_login_activity_username.getText().toString(), "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
-                        new LoginTask().execute("http://ternaku.com/index.php/C_Pengguna/cekLogin", urlParameters);
-                        Log.d("HASH",generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString()));
+                    if(checkForm()){
+                        try {
+                            String password = generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString());
+                            String urlParameters = "username=" + URLEncoder.encode(input_login_activity_username.getText().toString(), "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
+                            new LoginTask().execute("http://ternaku.com/index.php/C_Pengguna/cekLogin", urlParameters);
+                            Log.d("HASH",generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString()));
 
-                    } catch (UnsupportedEncodingException u) {
-                        u.printStackTrace();
+                        } catch (UnsupportedEncodingException u) {
+                            u.printStackTrace();
+                        }
+                    }else{
+                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Isikan Semua Data")
+                                .show();
                     }
                 }
             });
@@ -112,31 +126,37 @@ public class LoginActivity extends AppCompatActivity {
                             .setContentText("Password Yang Anda Masukkan Salah")
                             .show();
                     attempt++;
-                    pDialog.dismiss();
                 }
                 else
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-                        }
-                    });
-                    builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Password Salah!")
+                            .setContentText("Apakah Anda Ingin Menggunakan Fitur Lupa Password?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
 
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.setTitle("Peringatan");
-                    dialog.setMessage("Apakah anda ingin menggunakan fitur lupa password?");
-                    pDialog.dismiss();
-                    dialog.show();
-                    attempt = 0;
+                                        }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
+                    attempt=0;
                 }
             }
             else if(result.trim().equals("2")){
-                Toast.makeText(getApplication(),"Username dan password belum terdaftar",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("Username Belum Terdaftar?")
+                        .show();
+
                 pDialog.dismiss();
             }
             else{
@@ -150,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
                         savetoLocal(result);
-                        pDialog.dismiss();
                         finish();
                     }
 
@@ -214,4 +233,27 @@ public class LoginActivity extends AppCompatActivity {
         }
         return sb.toString();
     }
+
+    private boolean checkForm(){
+        boolean value = true;
+        if(TextUtils.isEmpty(input_login_activity_username.getText().toString())){
+            value= false;
+            input_login_activity_username.setError("Isikan Username Anda");
+        }
+        if(TextUtils.isEmpty(input_login_activity_password.getText().toString())){
+            value= false;
+            input_login_activity_password.setError("Isikan Password Anda");
+        }
+        return value;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
 }

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -44,6 +46,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static android.R.attr.value;
+
 public class PindahTernak extends AppCompatActivity {
     private ArrayAdapter<String> listAdapter;
     ListView itemList;
@@ -59,6 +65,8 @@ public class PindahTernak extends AppCompatActivity {
     List<ModelTernakPindahTernak> TernakList  = new ArrayList<ModelTernakPindahTernak>();
     ArrayList<ModelKandangPindahTernak> KandangList  = new ArrayList<ModelKandangPindahTernak>();
     ArrayList<ModelKawananPindahTernak> KawananList  = new ArrayList<ModelKawananPindahTernak>();
+    int flag_kandang=0;
+    int flag_kawanan=0;
 
     private TextView input_pindahternak_activity_iddetail,input_pindahternak_activity_namadetail,
             input_pindahternak_activity_breed,input_pindahternak_activity_namakandang,
@@ -67,9 +75,10 @@ public class PindahTernak extends AppCompatActivity {
     private Button button_pindahternak_activity_hapus, button_pindahternak_activity_simpan;
     private EditText input_pindahternak_activity_kawanan,input_pindahternak_activity_kandang;
     LinearLayout linearLayout_pindahternak_activity_informsapi;
-    int choosenindex=-1;
-    int choosenindexkandang=-1;
-    int choosenindexkawanan=-1;
+    int choosenindex;
+    int choosenindexkandang;
+    int choosenindexkawanan;
+    String idpeternakan;
     AutoCompleteTextView input_pindahternak_activity_idternak;
 
     @Override
@@ -85,6 +94,12 @@ public class PindahTernak extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Pindah Ternak");
         }
+
+        //Initial----------------------------------------------------
+        idpeternakan =  getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
+        choosenindex=-1;
+        choosenindexkandang = -1;
+        choosenindexkawanan = -1;
 
         //Floating Action Button-------------------------------------
         FloatingActionButton fab_kandang = (FloatingActionButton) findViewById(R.id.fabTambah_pindahternak_activity_kandang);
@@ -106,6 +121,7 @@ public class PindahTernak extends AppCompatActivity {
             }
         });
 
+        //Detail Information-----------------------------------------------------------
         input_pindahternak_activity_iddetail = (TextView)findViewById(R.id.input_pindahternak_activity_iddetail);
         input_pindahternak_activity_namadetail = (TextView)findViewById(R.id.input_pindahternak_activity_namadetail);
         input_pindahternak_activity_breed = (TextView)findViewById(R.id.input_pindahternak_activity_breed);
@@ -114,12 +130,11 @@ public class PindahTernak extends AppCompatActivity {
         input_pindahternak_activity_namakawanan = (TextView)findViewById(R.id.input_pindahternak_activity_namakawanan);
         input_pindahternak_activity_idkawanan = (TextView)findViewById(R.id.input_pindahternak_activity_idkawanan);
 
+        //Spinner Initial---------------------------------------------------------------
         input_pindahternak_activity_kandang = (EditText) findViewById(R.id.input_pindahternak_activity_kandang);
         input_pindahternak_activity_kawanan = (EditText) findViewById(R.id.input_pindahternak_activity_kawanan);
-
         input_pindahternak_activity_kawanan.setEnabled(false);
         input_pindahternak_activity_kandang.setEnabled(false);
-
         input_pindahternak_activity_kawanan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,7 +144,6 @@ public class PindahTernak extends AppCompatActivity {
 
             }
         });
-
         input_pindahternak_activity_kandang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,30 +173,63 @@ public class PindahTernak extends AppCompatActivity {
         button_pindahternak_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String idternak = TernakList.get(choosenindex).getId_ternak();
-                String idpeternakan = KawananList.get(choosenindexkawanan).getId_peternakan();
-                String idkawanan= input_pindahternak_activity_namakawanan.getText().toString();
-                String idkandang= input_pindahternak_activity_namakandang.getText().toString();
+                if(checkForm()){
+                    new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Simpan")
+                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
 
-                if(choosenindexkawanan != -1) {
-                    idkawanan = KawananList.get(choosenindexkawanan).getId_kawanan();
-                }else if (choosenindexkawanan == -1){
-                    idkawanan = TernakList.get(choosenindex).getId_kawanan();
-                }
-                if(choosenindexkandang != -1) {
-                    idkandang = KandangList.get(choosenindexkandang).getId_kandang();
-                }else if(choosenindexkandang == -1){
-                    idkandang = TernakList.get(choosenindex).getId_kandang();
-                }
-                String status = "Aktif";
-                String urlParameters = "idternak="+idternak
-                        +"&idpeternakan="+idpeternakan
-                        +"&idkawanan="+idkawanan
-                        +"&idkandang="+idkandang
-                        +"&statusaktif="+status;
-                new InsertPengelompokkanTask().execute("http://ternaku.com/index.php/C_Ternak/insertinsertHistoryPengelompokan", urlParameters);
+                                    //Insert To Database------------------------------------------------
+                                    String idternak = TernakList.get(choosenindex).getId_ternak();
+                                    String idkawanan= input_pindahternak_activity_namakawanan.getText().toString();
+                                    String idkandang= input_pindahternak_activity_namakandang.getText().toString();
 
-                Log.d("param",urlParameters);
+                                    if(choosenindexkawanan != -1) {
+                                        idkawanan = KawananList.get(choosenindexkawanan).getId_kawanan();
+                                        Log.d("res"," index kawanan != -1  choosenindex = " + String.valueOf(choosenindex) );
+
+                                    }else if (choosenindexkawanan == -1){
+                                        idkawanan = TernakList.get(choosenindex).getId_kawanan();
+                                        Log.d("res"," index kawanan == -1  choosenindex = " + String.valueOf(choosenindex) );
+
+                                    }
+                                    if(choosenindexkandang != -1) {
+                                        idkandang = KandangList.get(choosenindexkandang).getId_kandang();
+                                        Log.d("res"," index kandang != -1 choosenindex = " + String.valueOf(choosenindex));
+
+                                    }else if(choosenindexkandang == -1){
+                                        idkandang = TernakList.get(choosenindex).getId_kandang();
+                                        Log.d("res"," index kandang == -1 choosenindex = " + String.valueOf(choosenindex));
+
+                                    }
+                                    String status = "Aktif";
+                                    String urlParameters = "idternak="+idternak
+                                            +"&idpeternakan="+idpeternakan
+                                            +"&idkawanan="+idkawanan
+                                            +"&idkandang="+idkandang
+                                            +"&statusaktif="+status;
+                                    new InsertPengelompokkanTask().execute("http://ternaku.com/index.php/C_Ternak/insertinsertHistoryPengelompokan", urlParameters);
+                                    Log.d("param",urlParameters);
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
+                }else{
+                    new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
+                }
             }
         });
 
@@ -218,7 +265,6 @@ public class PindahTernak extends AppCompatActivity {
         for(ModelTernakPindahTernak t : TernakList){
             if(t.getId_ternak().contains(idTernak))
             {
-
                 linearLayout_pindahternak_activity_informsapi.setVisibility(View.VISIBLE);
                 input_pindahternak_activity_iddetail.setText(t.getId_ternak());
                 input_pindahternak_activity_namadetail.setText(t.getNama_ternak());
@@ -257,13 +303,14 @@ public class PindahTernak extends AppCompatActivity {
     }
 
     private class GetAllTernak extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            //progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -276,24 +323,59 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+            pDialog.dismiss();
+
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Kawanan Masih Kosong" + "\nApakah Ingin Memasukkan Data Kawanan?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .show();
             }
-            else {
+            else{
                 AddTernakToList(result);
                 input_pindahternak_activity_idternak.setEnabled(true);
             }
         }
     }
 
+    //Get Data Kawanan--------------------------------------------------------
     private class GetKawanan extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Sedang mengambil data...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -306,25 +388,58 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-                progDialog.dismiss();
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Kawanan Masih Kosong" + "\nApakah Ingin Memasukkan Data Kawanan?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                                startActivity(new Intent(PindahTernak.this, AddKawanan.class));
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .show();
             }
-            else {
+            else{
                 AddKawananToList(result);
-                progDialog.dismiss();
             }
         }
     }
 
+    //Get Data Kandang--------------------------------------------------------
     private class GetKandang extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Sedang mengambil data...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -337,25 +452,57 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-                progDialog.dismiss();
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Kandang Masih Kosong" + "\nApakah Ingin Memasukkan Data Kandang?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                                startActivity(new Intent(PindahTernak.this, AddKandang.class));
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .show();
             }
-            else {
+            else{
                 AddKandangToList(result);
-                progDialog.dismiss();
             }
         }
     }
 
     private class InsertPengelompokkanTask extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(PindahTernak.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            //progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -368,6 +515,7 @@ public class PindahTernak extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
+            pDialog.dismiss();
             if (result.trim().equals("1")){
                 Toast.makeText(getApplication(),"Berhasil memindahkan ternak",Toast.LENGTH_LONG).show();
                 input_pindahternak_activity_namakandang.setText(input_pindahternak_activity_kandang.getText().toString());
@@ -375,15 +523,24 @@ public class PindahTernak extends AppCompatActivity {
                 //input_pindahternak_activity_idkandang.setText(KandangList.get(choosenindexkandang).getId_kandang());
                 //input_pindahternak_activity_idkawanan.setText(KawananList.get(choosenindexkawanan).getId_kawanan());
 
-                TernakList.get(choosenindex).setId_kandang(KandangList.get(choosenindexkandang).getId_kandang());
-                TernakList.get(choosenindex).setId_kawanan(KawananList.get(choosenindexkawanan).getId_kawanan());
-                TernakList.get(choosenindex).setKandang(KandangList.get(choosenindexkandang).getNama_kandang());
-                TernakList.get(choosenindex).setKawanan(KawananList.get(choosenindexkawanan).getNama_kawanan());
+                if(choosenindexkandang != -1) {
+                    TernakList.get(choosenindex).setKandang(KandangList.get(choosenindexkandang).getNama_kandang());
+                    TernakList.get(choosenindex).setId_kandang(KandangList.get(choosenindexkandang).getId_kandang());
+                    Log.d("choosenindexkandang", String.valueOf(choosenindexkandang));
+                }
+                if(choosenindexkawanan != -1) {
+                    TernakList.get(choosenindex).setKawanan(KawananList.get(choosenindexkawanan).getNama_kawanan());
+                    TernakList.get(choosenindex).setId_kawanan(KawananList.get(choosenindexkawanan).getId_kawanan());
+                    Log.d("choosenindexkawanan", String.valueOf(choosenindexkawanan));
+                }
 
                 setDetailToTextView(input_pindahternak_activity_idternak.getText().toString());
             }
             else {
-                Toast.makeText(getApplication(),"Gagal memindahkan ternak",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Penambahan Gagal!")
+                        .setContentText("Silahkan Simpan Data Kembali")
+                        .show();
             }
         }
     }
@@ -579,6 +736,35 @@ public class PindahTernak extends AppCompatActivity {
                         Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    private boolean checkForm()
+    {
+        boolean value = true;
+        if(TextUtils.isEmpty(input_pindahternak_activity_idternak.getText().toString())){
+            value= false;
+            input_pindahternak_activity_idternak.setError("Isikan Id Ternak");
+        }
+        if(TextUtils.isEmpty(input_pindahternak_activity_kandang.getText().toString())){
+            value= false;
+            input_pindahternak_activity_kandang.setError("Pilih Data Kandang");
+        }
+        if(TextUtils.isEmpty(input_pindahternak_activity_kawanan.getText().toString())){
+            value= false;
+            input_pindahternak_activity_kawanan.setError("Pilih Data Kawanan");
+        }
+
+
+        return value;
+    }
+
+    public void cleartext(){
+        input_pindahternak_activity_idternak.setText("");
+        input_pindahternak_activity_kandang.setText("");
+        input_pindahternak_activity_kawanan.setText("");
+        input_pindahternak_activity_idternak.setHint("Ketikan ID Sapi atau Scan RFID");
+        input_pindahternak_activity_kandang.setHint("Pilih Kandang");
+        input_pindahternak_activity_kawanan.setHint("Pilih Kawanan");
     }
 
     /*

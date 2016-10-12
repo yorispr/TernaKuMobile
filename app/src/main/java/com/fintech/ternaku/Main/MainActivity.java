@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
+import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.Main.Pengingat.ShowReminderFragment;
@@ -42,9 +44,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,FloatingToolbar.ItemClickListener,
-        Toolbar.OnMenuItemClickListener,  FloatingToolbar.MorphListener {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager_main_activity;
     private TabLayout tabLayout_main_activity;
@@ -71,42 +73,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         //Set Toolbar Floating Button-----------------------------
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.buttonfloat_main_activity);
-        mFloatingToolbar = (FloatingToolbar) findViewById(R.id.toolbarfloating_main_activity);
-        mFloatingToolbar.setClickListener(this);
-        mFloatingToolbar.attachFab(fab);
-        mFloatingToolbar.addMorphListener(this);
-        mFloatingToolbar.setClickListener(new FloatingToolbar.ItemClickListener() {
-            @Override
-            public void onItemClick(MenuItem item) {
-                Intent i = new Intent();
-                switch (item.getItemId()){
-                    case R.id.action_add_pakan :
-                        i = new Intent(MainActivity.this,AddPakanTernak.class);
-                        startActivity(i);
-                        break;
-                    case R.id.action_add_produksisusu :
-                        i = new Intent(MainActivity.this,AddProduksiSusu.class);
-                        startActivity(i);
-                        break;
-                    case R.id.ic_action_add_peternak:
-                        i = new Intent(MainActivity.this,AddPeternak.class);
-                        startActivity(i);
-                        break;
-                    case R.id.ic_action_add_ternak:
-                        i = new Intent(MainActivity.this,InsertTernak.class);
-                        startActivity(i);
-                        break;
-
-
-                }
-            }
-
-            @Override
-            public void onItemLongClick(MenuItem item) {
-
-            }
-        });
+        InitUI();
 
 
         //Shared Preferences------------------------------------
@@ -135,7 +102,7 @@ public class MainActivity extends AppCompatActivity
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition() == 0)
                 {
-                    getSupportActionBar().setTitle("Ternaku");
+                    getSupportActionBar().setTitle("TernaKu");
                 }
                 else if(tab.getPosition() == 1)
                 {
@@ -164,6 +131,83 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+    public void InitUI()
+    {
+        final String[] colors = getResources().getStringArray(R.array.default_preview);
+        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.navigation_main_activity);
+        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_user),
+                        Color.parseColor(colors[0]))
+                        .title("Peternak")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_cow),
+                        Color.parseColor(colors[0]))
+                        .title("Ternak")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_restaurant),
+                        Color.parseColor(colors[0]))
+                        .title("Pakan")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_filter),
+                        Color.parseColor(colors[0]))
+                        .title("Produksi Susu")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_line_chart_white),
+                        Color.parseColor(colors[0]))
+                        .title("Batas Produksi Susu")
+                        .build()
+        );
+        navigationTabBar.setModels(models);
+        navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+            @Override
+            public void onStartTabSelected(NavigationTabBar.Model model, int index) {
+                Intent i = new Intent();
+                switch (navigationTabBar.getModelIndex()){
+                    case 0 :
+                        i = new Intent(MainActivity.this,AddPeternak.class);
+                        startActivity(i);
+                        break;
+                    case 1 :
+                        i = new Intent(MainActivity.this,InsertTernak.class);
+                        startActivity(i);
+                        break;
+                    case 2:
+                        i = new Intent(MainActivity.this,AddPakanTernak.class);
+                        startActivity(i);
+                        break;
+                    case 3:
+                        i = new Intent(MainActivity.this,AddProduksiSusu.class);
+                        startActivity(i);
+                        break;
+                    case 4:
+                        i = new Intent(MainActivity.this,AddBatasProduksi.class);
+                        startActivity(i);
+                        break;
+                }
+            }
+
+            @Override
+            public void onEndTabSelected(NavigationTabBar.Model model, int index) {
+
+            }
+        });
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -201,41 +245,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return false;
-    }
-
-    @Override
-    public void onItemClick(MenuItem item) {
-
-    }
-
-    @Override
-    public void onItemLongClick(MenuItem item) {
-
-    }
-
-    @Override
-    public void onMorphEnd() {
-
-    }
-
-    @Override
-    public void onMorphStart() {
-
-    }
-
-    @Override
-    public void onUnmorphStart() {
-
-    }
-
-    @Override
-    public void onUnmorphEnd() {
-
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -243,6 +252,56 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode, KeyEvent e) {
+        switch(keycode) {
+            case KeyEvent.KEYCODE_BACK:
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("Apakah Anda Yakin Ingin Keluar Dari Aplikasi Ini?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .show();
+                return true;
+            case KeyEvent.KEYCODE_MENU:
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("Apakah Anda Yakin Ingin Keluar?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .show();
+                return true;
+        }
+
+        return super.onKeyDown(keycode, e);
     }
 
     @Override
@@ -268,7 +327,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
-            editor.commit();
+            editor.apply();
             Toast.makeText(getApplicationContext(),"Log Out",Toast.LENGTH_LONG).show();
 
             FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
