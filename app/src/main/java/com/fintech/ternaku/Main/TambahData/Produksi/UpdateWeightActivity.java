@@ -1,16 +1,20 @@
 package com.fintech.ternaku.Main.TambahData.Produksi;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UpdateWeightActivity extends AppCompatActivity {
     private AutoCompleteTextView input_updateweight_activity_idternak;
@@ -51,9 +57,8 @@ public class UpdateWeightActivity extends AppCompatActivity {
         }
 
         //Set Id Ternak dan Berat Sebelum---------------------------
-        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
-                + "&idpeternakan=" + "FNT-P1";
-        new GetTernak().execute("http://ternaku.com/index.php/C_Ternak/getDetailTernakByUserId", urlParameters);
+        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+        new GetTernak().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters);
         input_updateweight_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_updateweight_activity_idternak);
         input_weightupdate_activity_beratsebelum = (TextView)findViewById(R.id.input_weightupdate_activity_beratsebelum);
         input_updateweight_activity_idternak.setEnabled(false);
@@ -128,9 +133,14 @@ public class UpdateWeightActivity extends AppCompatActivity {
 
     //AsycnTask Get Id Ternak Auto Complete--------------------------
     private class GetTernak extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateWeightActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -143,10 +153,20 @@ public class UpdateWeightActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan", Toast.LENGTH_LONG).show();
-            }
-            else {
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(UpdateWeightActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
                 AddTernakToList(result);
                 input_updateweight_activity_idternak.setEnabled(true);
             }
@@ -169,6 +189,25 @@ public class UpdateWeightActivity extends AppCompatActivity {
         catch (JSONException e){e.printStackTrace();}
     }
 
+    public boolean cekForm(){
+        boolean cek = true;
+        if(TextUtils.isEmpty(input_updateweight_activity_idternak.getText().toString())){
+            cek = false;
+            input_updateweight_activity_idternak.setError("Data belum diisi");
+        }
+        if(input_weightupdate_activity_beratsesudah.getText().toString().equalsIgnoreCase("")){
+            cek=false;
+            input_weightupdate_activity_beratsesudah.setError("Masukkan Panjang dan Lebar Sapi Untuk Menghitung Berat");
+        }
+        return cek;
+    }
+
+    public void cleartext(){
+        input_updateweight_activity_idternak.setText("");
+        input_weightupdate_activity_beratsesudah.setText("");
+        input_weightupdate_activity_beratsesudah.setText("");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -179,6 +218,15 @@ public class UpdateWeightActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 

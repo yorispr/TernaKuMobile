@@ -5,13 +5,16 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -38,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddVaksinasi extends AppCompatActivity {
     private AutoCompleteTextView input_addvaksinasi_activity_idternak;
     private TextView input_addvaksinasi_activity_tglvaksinasi;
@@ -51,6 +56,8 @@ public class AddVaksinasi extends AppCompatActivity {
 
     ArrayList<String> list_addvaksinasi_idvaksin = new ArrayList<String>();
     ArrayList<ModelAddVaksin> list_addvaksinasi_namavaksin = new ArrayList<ModelAddVaksin>();
+    ArrayList<String> list_addvaksinasi_idternak = new ArrayList<String>();
+    ArrayAdapter<String> adp;
     ArrayAdapter<String> myAdapter;
     private boolean cekKarantina;
     private int selectedindex=-1;
@@ -69,7 +76,18 @@ public class AddVaksinasi extends AppCompatActivity {
         }
 
         //Set Text Input Id----------------------------------------------------------------------------
+        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
         input_addvaksinasi_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addvaksinasi_activity_idternak);
+        input_addvaksinasi_activity_idternak.setEnabled(false);
+        adp=new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,list_addvaksinasi_idternak);
+        input_addvaksinasi_activity_idternak.setAdapter(adp);
+        input_addvaksinasi_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
 
         //Set Tanggal Vaksinasi--------------------------------------------------------------
         setDateTimeField();
@@ -114,20 +132,47 @@ public class AddVaksinasi extends AppCompatActivity {
         button_addvaksinasi_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cekForm()) {
-                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                            + "&idternak=" + input_addvaksinasi_activity_idternak.getText().toString()
-                            + "&idvaksin=" + list_addvaksinasi_namavaksin.get(selectedindex).getId()
-                            + "&dosis=" + input_addvaksinasi_activity_dosis.getText().toString()
-                            + "&satuandosis=" + input_addvaksinasi_activity_satuan.getText().toString()
-                            + "&repetisi=" + input_addvaksinasi_activity_pemberianke.getText().toString()
-                            + "&tglvaksinasi=" + input_addvaksinasi_activity_tglvaksinasi.getText().toString();
-                    new AddVaksinasitoDatabase().execute("http://ternaku.com/index.php/C_Vaksinasi/insertVaksinasi", param);
-                    Log.d("Param",param);
+                if (checkForm()) {
+                    if(selectedindex==-1){
+                        new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Silahkan Pilih Nama Vaksin")
+                                .show();
+                    }else{
+                        new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Simpan")
+                                .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                                .setConfirmText("Ya")
+                                .setCancelText("Tidak")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                + "&idternak=" + input_addvaksinasi_activity_idternak.getText().toString()
+                                                + "&idvaksin=" + list_addvaksinasi_namavaksin.get(selectedindex).getId()
+                                                + "&dosis=" + input_addvaksinasi_activity_dosis.getText().toString()
+                                                + "&satuandosis=" + input_addvaksinasi_activity_satuan.getText().toString()
+                                                + "&repetisi=" + input_addvaksinasi_activity_pemberianke.getText().toString()
+                                                + "&tglvaksinasi=" + input_addvaksinasi_activity_tglvaksinasi.getText().toString();
+                                        new AddVaksinasitoDatabase().execute("http://ternaku.com/index.php/C_Vaksinasi/insertVaksinasi", param);
+                                        Log.d("Param",param);
+                                    }
+                                })
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.cancel();
+                                    }
+                                })
+                                .show();                    }
                 }
 
                 else {
-                    Toast.makeText(getApplicationContext(), "Data belum lengkap!", Toast.LENGTH_LONG).show();
+                    new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
 
@@ -136,14 +181,16 @@ public class AddVaksinasi extends AppCompatActivity {
 
     }
 
-    //Get Data Vaksin--------------------------------------------------------------------
-    private class GetVaksin extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+    //Set AutoComplete-----------------------------------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddVaksinasi.this);
-            progDialog.setMessage("Tunggu Sebentar...");
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -156,7 +203,91 @@ public class AddVaksinasi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            AddVaksinToList(result);
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
+                AddTernakToList(result);
+                input_addvaksinasi_activity_idternak.setEnabled(true);
+            }
+        }
+    }
+    private void AddTernakToList(String result) {
+        list_addvaksinasi_idternak.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_addvaksinasi_idternak.add(jObj.getString("id_ternak"));
+            }
+            adp.notifyDataSetChanged();
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    //Get Data Vaksin--------------------------------------------------------------------
+    private class GetVaksin extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Vaksin Masih Kosong")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                AddVaksinToList(result);
+            }
         }
     }
 
@@ -179,13 +310,14 @@ public class AddVaksinasi extends AppCompatActivity {
 
     //Insert To Database--------------------------------------------------
     private class AddVaksinasitoDatabase extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddVaksinasi.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -198,9 +330,39 @@ public class AddVaksinasi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Cek Vaksinasi")
+                                        .setContentText("Apakah Ingin Menambah Data Cek Vaksinasi Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
@@ -229,8 +391,10 @@ public class AddVaksinasi extends AppCompatActivity {
         mTimePicker = new TimePickerDialog(AddVaksinasi.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                datetime+= " "+selectedHour + ":" + selectedMinute+":00";
-                input_addvaksinasi_activity_tglvaksinasi.setText(datetime);
+                if (timePicker.isShown()) {
+                    datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                    input_addvaksinasi_activity_tglvaksinasi.setText(datetime);
+                }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -243,17 +407,51 @@ public class AddVaksinasi extends AppCompatActivity {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    public boolean cekForm(){
-        boolean cek = true;
-        if(input_addvaksinasi_activity_idternak.getText().toString().matches("")){
-            cek = false;
-            input_addvaksinasi_activity_idternak.setError("Data belum diisi");
+
+    private boolean checkForm()
+    {
+        boolean value = true;
+
+        if(TextUtils.isEmpty(input_addvaksinasi_activity_idternak.getText().toString())){
+            value= false;
+            input_addvaksinasi_activity_idternak.setError("ID Ternak belum diisi");
         }
         if(input_addvaksinasi_activity_tglvaksinasi.getText().toString().equalsIgnoreCase("01 Januari 1970")){
-            cek=false;
-            input_addvaksinasi_activity_tglvaksinasi.setError("Data belum diisi");
+            value=false;
+            input_addvaksinasi_activity_tglvaksinasi.setError("Tanggal belum diisi");
         }
-        return cek;
+        if(TextUtils.isEmpty(input_addvaksinasi_activity_dosis.getText().toString())){
+            value= false;
+            input_addvaksinasi_activity_dosis.setError("Dosis Vaksin Belum Diisi");
+        }
+        if(TextUtils.isEmpty(input_addvaksinasi_activity_satuan.getText().toString())){
+            value= false;
+            input_addvaksinasi_activity_satuan.setError("Satuan Dosis Belum Diisi");
+        }
+        if(TextUtils.isEmpty(input_addvaksinasi_activity_pemberianke.getText().toString())){
+            value= false;
+            input_addvaksinasi_activity_pemberianke.setError("Data Belum Diisi");
+        }
+
+        return value;
+    }
+
+    public void cleartext(){
+        input_addvaksinasi_activity_idternak.setText("");
+        input_addvaksinasi_activity_dosis.setText("");
+        input_addvaksinasi_activity_satuan.setText("");
+        input_addvaksinasi_activity_pemberianke.setText("");
+        input_addvaksinasi_activity_tglvaksinasi.setText("01 Januari 1970");
+        spinner_addvaksinasi_activity_namavaksin.clearFocus();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

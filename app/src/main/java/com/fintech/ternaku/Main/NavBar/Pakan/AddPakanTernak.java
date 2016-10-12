@@ -2,14 +2,17 @@ package com.fintech.ternaku.Main.NavBar.Pakan;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -25,6 +28,7 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetKandangAddPakan;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetPakanAddPakan;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
+import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
 import com.fintech.ternaku.R;
 
 import org.json.JSONArray;
@@ -64,13 +68,13 @@ public class AddPakanTernak extends AppCompatActivity {
         }
         hideSoftKeyboard();
 
+        //Set Prog Dialog------------------------------
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.PROGRESS_TYPE);
+
         //Set Kandang Ternak---------------------------
         String urlParameter_kandang = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/GetKandangByIdPeternakan", urlParameter_kandang);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataKandang", urlParameter_kandang);
 
-        //Set Pakan Ternak---------------------------
-        String urlParameter_pakan = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetPakanId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataPakan", urlParameter_pakan);
 
         //Set Date-------------------------------------
         input_addpakan_activity_tanggalmakan = (TextView) findViewById(R.id.input_addpakan_activity_tanggalmakan);
@@ -86,7 +90,7 @@ public class AddPakanTernak extends AppCompatActivity {
 
         //Set Sesi Makan---------------------------------
         spinner_addapakan_activity_sesimakan = (Spinner)findViewById(R.id.spinner_addpakan_activity_sesimakan);
-        final String[] spinner_sesi_makan_data = {"Pagi","Siang","Sore"};
+        final String[] spinner_sesi_makan_data = {"Silahkan Pilih Sesi Makan","Pagi","Siang","Sore"};
         ArrayAdapter<String> adapater_sesi_makan= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_item,spinner_sesi_makan_data);
         spinner_addapakan_activity_sesimakan.setAdapter(adapater_sesi_makan);
 
@@ -99,16 +103,48 @@ public class AddPakanTernak extends AppCompatActivity {
         button_addpakan_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String urlParameters_insert = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
-                        "&idkandang=" + temp_id_kandang.trim()+
-                        "&idpakan="+ temp_id_pakan.trim()+
-                        "&jumlahpakan="+ input_addpakan_activity_jumlahmakan.getText().toString().trim()+
-                        "&tglmakan="+ input_addpakan_activity_tanggalmakan.getText().toString().trim()+
-                        "&sesimakan="+ spinner_addapakan_activity_sesimakan.getSelectedItem().toString().trim()+
-                        "&satuanpakan="+ "kilogram"+
-                        "&biaya="+ input_addpakan_activity_hargamakan.getText().toString().trim();
-                new InsertToDbPakan().execute("http://ternaku.com/index.php/C_HistoryMakan/InsertPemakaianPakan", urlParameters_insert);
-            }
+                if(checkform()){
+                    if(spinner_addapakan_activity_sesimakan.getSelectedItemId()==0){
+                        new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Silahkan Pilih Sesi Makan")
+                                .show();
+                    }else {
+                        new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Simpan")
+                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                    String urlParameters_insert = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)+
+                                            "&idkandang=" + temp_id_kandang.trim()+
+                                            "&idpakan="+ temp_id_pakan.trim()+
+                                            "&jumlahpakan="+ input_addpakan_activity_jumlahmakan.getText().toString().trim()+
+                                            "&tglmakan="+ input_addpakan_activity_tanggalmakan.getText().toString().trim()+
+                                            "&sesimakan="+ spinner_addapakan_activity_sesimakan.getSelectedItem().toString().trim()+
+                                            "&satuanpakan="+ "kilogram"+
+                                            "&biaya="+ input_addpakan_activity_hargamakan.getText().toString().trim();
+                                    new InsertToDbPakan().execute("http://ternaku.com/index.php/C_HistoryMakan/InsertPemakaianPakan", urlParameters_insert);
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
+                    }
+                }else{
+                    new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
+                }
+                            }
         });
 
     }
@@ -139,7 +175,34 @@ public class AddPakanTernak extends AppCompatActivity {
             if (s.trim().equals("1")){
                 new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Berhasil!")
-                        .setContentText("Data Berhasil Dimasukkan..")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Penggunaan Pakan")
+                                        .setContentText("Apakah Ingin Menambah Data Penggunaan Pakan Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
                         .show();
             }else if(s.trim().equals("0")){
                 new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
@@ -173,7 +236,22 @@ public class AddPakanTernak extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d("GetIdpakan",s);
             pDialog.dismiss();
-            AddPakanToList(s);
+            if (s.trim().equals("404")){
+                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Pakan Masih Kosong")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+            else{
+                AddPakanToList(s);
+            }
         }
     }
 
@@ -200,7 +278,48 @@ public class AddPakanTernak extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d("GetIdKandang",s);
             pDialog.dismiss();
-            AddKandangToList(s);
+            if(s.trim().equals("kosong")){
+                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (s.trim().equals("404")){
+                new SweetAlertDialog(AddPakanTernak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Kandang Masih Kosong" + "\nApakah Ingin Memasukkan Data Kandang?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                                startActivity(new Intent(AddPakanTernak.this, AddKandang.class));
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+            else{
+                AddKandangToList(s);
+
+                //Set Pakan Ternak---------------------------
+                String urlParameter_pakan = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+                new GetPakanId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataPakan", urlParameter_pakan);
+            }
         }
     }
 
@@ -308,5 +427,36 @@ public class AddPakanTernak extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void cleartext(){
+        input_addpakan_activity_jumlahmakan.setText("");
+        input_addpakan_activity_hargamakan.setText("");
+        input_addpakan_activity_jumlahmakan.setHint("Jumlah Makan");
+        input_addpakan_activity_hargamakan.setHint("Harga Makan(Rupiah)");
+        spinner_addapakan_activity_sesimakan.setSelection(0);
+    }
+
+    public boolean checkform(){
+        boolean value = true;
+        if(TextUtils.isEmpty(input_addpakan_activity_jumlahmakan.getText().toString())){
+            value= false;
+            input_addpakan_activity_jumlahmakan.setError("Isikan Jumlah Makan");
+        }
+        if(TextUtils.isEmpty(input_addpakan_activity_hargamakan.getText().toString())){
+            value= false;
+            input_addpakan_activity_hargamakan.setError("Isikan Harga Makan");
+        }
+
+        return  value;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

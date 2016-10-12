@@ -265,6 +265,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
+                            android:inputType="number"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:id="@+id/input_addpemeriksaansubur_activity_biaya"

@@ -146,6 +146,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/input_addproduksisusu_activity_durasiperah"
                         android:layout_marginLeft="6dp"
+                        android:hint="Masukkan Durasi Perah"
                         android:layout_marginRight="6dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"

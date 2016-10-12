@@ -34,6 +34,7 @@
                     android:orientation="horizontal"
                     android:elevation="5dp"
                     android:background="#FFFFFF">
+
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -91,7 +92,7 @@
                                 android:layout_marginRight="15dp"
                                 android:layout_toEndOf="@+id/imageView13"
                                 android:layout_gravity="center_vertical"
-                                android:text="Tanggal Pemeriksaan" />
+                                android:text="01 Januari 1970" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -222,9 +223,10 @@
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
                         <EditText
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
+                            android:hint="Masukkan Metode Inseminasi"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:id="@+id/input_addinseminasi_activity_metode"

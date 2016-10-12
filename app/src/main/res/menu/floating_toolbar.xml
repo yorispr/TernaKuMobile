@@ -26,6 +26,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_add_batasproduksisusu"
+        android:icon="@drawable/ic_action_line_chart_white"
+        android:title="Add Produksi Susu"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/ic_action_cancel"
         android:icon="@drawable/ic_action_cancel"
         android:title="Refresh"

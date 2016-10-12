@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -90,7 +91,7 @@
                             android:layout_marginRight="15dp"
                             android:layout_toEndOf="@+id/imageView13"
                             android:layout_gravity="center_vertical"
-                            android:text="Tanggal Pemeriksaan" />
+                            android:text="01 Januari 1970" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -168,13 +169,12 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/input_addmengandung_activity_tglperkiraanhamil"
-                            android:hint="Pilih kandang"
                             android:textSize="18dp"
                             android:focusable="false"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
                             android:layout_gravity="center_vertical"
-                            android:text="Tanggal Perkiraan Hamil" />
+                            android:text="01 Januari 1970" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

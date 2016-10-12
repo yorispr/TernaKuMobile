@@ -16,7 +16,7 @@
             android:name=".LoginAndRegister.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,192 +27,195 @@
             android:name=".LoginAndRegister.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="TernaKu"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Produksi.UpdateWeightActivity"
             android:label="@string/title_activity_update_weight"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".DetailTernak.DetailTernakMain"
             android:label="@string/title_activity_detail_ternak_main"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ListDetailTernak.ListDetailTernakMain"
             android:label="@string/title_activity_list_detail_ternak_main"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.NavBar.Pakan.AddPakanTernak"
             android:label="@string/title_activity_add_pakan_ternak"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.NavBar.Keuangan.AddKeuangan"
             android:label="@string/title_activity_add_keuangan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.NavBar.BatasProduksiSusu.AddBatasProduksi"
             android:label="@string/title_activity_add_batas_produksi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan"
             android:label="@string/title_activity_laporan_penggunaan_pakan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik"
             android:label="@string/title_activity_laporan_produksi_susu_grafik"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.PindahTernak.PindahTernak"
             android:label="@string/title_activity_pindah_ternak"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesuburan.AddMengandung"
             android:label="@string/title_activity_add_mengandung"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesuburan.AddInseminasi"
             android:label="@string/title_activity_add_inseminasi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.TambahData.Kesuburan.AddPemeriksaanReproduksi"
             android:label="@string/title_activity_add_pemeriksaan_subur"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesuburan.AddMasaSubur"
             android:label="@string/title_activity_add_masa_subur"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.TambahData.Kesuburan.AddMelahirkan"
             android:label="@string/title_activity_add_melahirkan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesuburan.AddMenyusui"
             android:label="@string/title_activity_add_menyusui"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Produksi.UpdateCulling"
             android:label="@string/title_activity_update_culling"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Produksi.UpdateMasaKering"
             android:label="@string/title_activity_update_masa_kering"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.TambahData.Kesehatan.AddVaksinasi"
             android:label="@string/title_activity_add_vaksinasi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesehatan.AddKarantina"
             android:label="@string/title_activity_add_karantina"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesehatan.AddCekPenyakit"
             android:label="@string/title_activity_add_cek_penyakit"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesehatan.AddCekKesehatan"
             android:label="@string/title_activity_add_cek_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
             android:label="@string/title_activity_add_injeksi_hormon"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon"
             android:label="@string/title_activity_show_injeksi_hormon"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan"
             android:label="@string/title_activity_show_protokol_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.AddProtokolKesehatan"
             android:label="@string/title_activity_add_protokol_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.NavBar.AddProduksiSusu"
             android:label="@string/title_activity_add_produksi_susu"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.Laporan.LaporanKeuangan"
             android:label="@string/title_activity_laporan_keuangan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.NavBar.Peternak.AddPeternak"
             android:label="@string/title_activity_add_peternak"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.NavBar.Ternak.InsertTernak"
             android:label="@string/title_activity_insert_ternak"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.TambahData.PindahTernak.AddKandang"
             android:label="@string/title_activity_add_kandang"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Main.TambahData.PindahTernak.AddKawanan"
             android:label="@string/title_activity_add_kawanan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name=".Main.Pengingat.AddReminderActivity"
             android:label="Add Reminder"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Main.Pengingat.ViewReminderActivity"
             android:label="View Reminder"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Setting.SetPrefs"
             android:label="Pengaturan"/>
         <activity
             android:name=".Setting.ChangePasswordActivity"
             android:label="Ganti Password"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Setting.UpdatePeternakActivity"
             android:label="Ganti Data Akun"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".Setting.UpdatePeternakanActivity"
             android:label="Ganti Data"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
 
         <service
             android:name=".FCM.MyFirebaseMessagingService">

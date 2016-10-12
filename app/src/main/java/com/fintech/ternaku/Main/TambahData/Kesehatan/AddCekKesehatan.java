@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,10 +13,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -28,14 +32,20 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddCekKesehatan extends AppCompatActivity {
     private AutoCompleteTextView input_addcekkesehatan_activity_idternak;
@@ -51,8 +61,10 @@ public class AddCekKesehatan extends AppCompatActivity {
     private DatePickerDialog fromDatePickerDialog;
     private TimePickerDialog mTimePicker;
     private SimpleDateFormat dateFormatter;
+    private ArrayList<String> list_add_cekkesehatan_idternak = new ArrayList<>();
+    ArrayAdapter<String> adp;
     String datetime;
-
+    int noOfTimesCalled = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +79,18 @@ public class AddCekKesehatan extends AppCompatActivity {
         }
 
         //Set AutoComplete--------------------------------------
+        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
         input_addcekkesehatan_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addcekkesehatan_activity_idternak);
+        input_addcekkesehatan_activity_idternak.setEnabled(false);
+        adp=new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,list_add_cekkesehatan_idternak);
+        input_addcekkesehatan_activity_idternak.setAdapter(adp);
+        input_addcekkesehatan_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
 
         //Set Tanggal Pemeriksaan--------------------------------
         setDateTimeField();
@@ -117,35 +140,89 @@ public class AddCekKesehatan extends AppCompatActivity {
         button_addcekkesehatan_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                        + "&idternak=" + input_addcekkesehatan_activity_idternak.getText().toString().trim()
-                        + "&tglperiksa=" + input_addcekkesehatan_activity_tglpemeriksaan.getText().toString()
-                        + "&suhubadan="+input_addcekkesehatan_activity_suhubadan.getText().toString()
-                        + "&beratbadan="+input_addcekkesehatan_activity_beratbadan.getText().toString()
-                        + "&tinggiternak="+input_addcekkesehatan_activity_tinggibadan.getText().toString()
-                        + "&aktivitas="+spinner_addcekkesehatan_activity_aktivitas.getSelectedItem().toString()
-                        + "&produksisusu="+spinner_addcekkesehatan_activity_produksisusu.getSelectedItem().toString()
-                        + "&statusfisik="+spinner_addcekkesehatan_activity_statusfisik.getSelectedItem().toString()
-                        + "&statusStress="+spinner_addcekkesehatan_activity_statusstress.getSelectedItem().toString()
-                        + "&bodyscore="+input_addcekkesehatan_activity_conditionscore.getText().toString()
-                        ;
+                if(checkForm()){
+                    if(spinner_addcekkesehatan_activity_statusstress.getSelectedItemId()==0){
+                        new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Silahkan Pilih Status Stress")
+                                .show();
+                    }else{
+                        if(spinner_addcekkesehatan_activity_aktivitas.getSelectedItemId()==0){
+                            new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Peringatan!")
+                                    .setContentText("Silahkan Pilih Jenis Aktivitas")
+                                    .show();
+                        }else{
+                            if(spinner_addcekkesehatan_activity_statusfisik.getSelectedItemId()==0){
+                                new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Peringatan!")
+                                        .setContentText("Silahkan Pilih Status Fisik")
+                                        .show();
+                            }else{
+                                if(spinner_addcekkesehatan_activity_produksisusu.getSelectedItemId()==0){
+                                    new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Peringatan!")
+                                            .setContentText("Silahkan Pilih Tingkat Produksi Susu")
+                                            .show();
+                                }else{
+                                    new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("Simpan")
+                                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                                            .setConfirmText("Ya")
+                                            .setCancelText("Tidak")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+                                                    sDialog.cancel();
 
-                new InsertKesehatan().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanUmum", urlParameters);
-                Log.d("param",urlParameters);
+                                                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addcekkesehatan_activity_idternak.getText().toString().trim()
+                                                            + "&tglperiksa=" + input_addcekkesehatan_activity_tglpemeriksaan.getText().toString()
+                                                            + "&suhubadan="+input_addcekkesehatan_activity_suhubadan.getText().toString()
+                                                            + "&beratbadan="+input_addcekkesehatan_activity_beratbadan.getText().toString()
+                                                            + "&tinggiternak="+input_addcekkesehatan_activity_tinggibadan.getText().toString()
+                                                            + "&aktivitas="+spinner_addcekkesehatan_activity_aktivitas.getSelectedItem().toString()
+                                                            + "&produksisusu="+spinner_addcekkesehatan_activity_produksisusu.getSelectedItem().toString()
+                                                            + "&statusfisik="+spinner_addcekkesehatan_activity_statusfisik.getSelectedItem().toString()
+                                                            + "&statusStress="+spinner_addcekkesehatan_activity_statusstress.getSelectedItem().toString()
+                                                            + "&bodyscore="+input_addcekkesehatan_activity_conditionscore.getText().toString();
+
+                                                    new InsertKesehatan().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanUmum", urlParameters);
+                                                    Log.d("param",urlParameters);
+                                                }
+                                            })
+                                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    sweetAlertDialog.cancel();
+                                                }
+                                            })
+                                            .show();
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
+                }
             }
         });
 
     }
 
-    //Insert To Database--------------------------------------------------
-    private class InsertKesehatan extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+    //Set AutoComplete-----------------------------------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddCekKesehatan.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -158,9 +235,95 @@ public class AddCekKesehatan extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
+                AddTernakToList(result);
+                input_addcekkesehatan_activity_idternak.setEnabled(true);
+            }
+        }
+    }
+    private void AddTernakToList(String result) {
+        list_add_cekkesehatan_idternak.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_add_cekkesehatan_idternak.add(jObj.getString("id_ternak"));
+            }
+            adp.notifyDataSetChanged();
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    //Insert To Database--------------------------------------------------
+    private class InsertKesehatan extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Cek Kesehatan")
+                                        .setContentText("Apakah Ingin Menambah Data Cek Kesehatan Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
@@ -171,24 +334,24 @@ public class AddCekKesehatan extends AppCompatActivity {
     private void setSpinner(){
         spinner_addcekkesehatan_activity_aktivitas = (Spinner)findViewById(R.id.spinner_addcekkesehatan_activity_aktivitas);
         spinner_addcekkesehatan_activity_aktivitas.setPrompt("Aktivitas");
-        final String[] dataAktivitas= {"Tinggi","Sedang","Rendah"};
+        final String[] dataAktivitas= {"Pilih Jenis Aktivitas","Tinggi","Sedang","Rendah"};
         ArrayAdapter adapterAktivitas= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,dataAktivitas);
         spinner_addcekkesehatan_activity_aktivitas.setAdapter(adapterAktivitas);
 
         spinner_addcekkesehatan_activity_statusfisik = (Spinner)findViewById(R.id.spinner_addcekkesehatan_activity_statusfisik);
         spinner_addcekkesehatan_activity_statusfisik.setPrompt("Status Fisik");
-        final String[] dataFisik= {"Sehat","Tidak Sehat"};
+        final String[] dataFisik= {"Pilih Status Fisik","Sehat","Tidak Sehat"};
         ArrayAdapter adapterFisik= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,dataFisik);
         spinner_addcekkesehatan_activity_statusfisik.setAdapter(adapterFisik);
 
         spinner_addcekkesehatan_activity_statusstress = (Spinner)findViewById(R.id.spinner_addcekkesehatan_activity_statusstress);
-        final String[] dataStress= {"Stress","Tidak Stress"};
+        final String[] dataStress= {"Pilih Tingkat Stress Ternak","Stress","Tidak Stress"};
         spinner_addcekkesehatan_activity_statusstress.setPrompt("Status Stress");
         ArrayAdapter adapterStress= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,dataStress);
         spinner_addcekkesehatan_activity_statusstress.setAdapter(adapterStress);
 
         spinner_addcekkesehatan_activity_produksisusu = (Spinner)findViewById(R.id.spinner_addcekkesehatan_activity_produksisusu);
-        final String[] dataProduksi= {"Tinggi","Sedang","Rendah","Belum Diketahui"};
+        final String[] dataProduksi= {"Pilih Tingkat Produksi Susu","Tinggi","Sedang","Rendah","Belum Diketahui"};
         spinner_addcekkesehatan_activity_produksisusu.setPrompt("Produksi Susu");
         ArrayAdapter adapterProduksi= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,dataProduksi);
         spinner_addcekkesehatan_activity_produksisusu.setAdapter(adapterProduksi);
@@ -213,10 +376,14 @@ public class AddCekKesehatan extends AppCompatActivity {
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
         mTimePicker = new TimePickerDialog(AddCekKesehatan.this, new TimePickerDialog.OnTimeSetListener() {
+
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                datetime+= " "+selectedHour + ":" + selectedMinute+":00";
-                input_addcekkesehatan_activity_tglpemeriksaan.setText(datetime);
+                    if(timePicker.isShown()) {
+                        datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                        input_addcekkesehatan_activity_tglpemeriksaan.setText(datetime);
+                        Log.d("Time", datetime);
+                    }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -237,5 +404,59 @@ public class AddCekKesehatan extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean checkForm()
+    {
+        boolean value = true;
+
+        if(TextUtils.isEmpty(input_addcekkesehatan_activity_idternak.getText().toString())){
+            value= false;
+            input_addcekkesehatan_activity_idternak.setError("ID Ternak belum diisi");
+        }
+        if(input_addcekkesehatan_activity_tglpemeriksaan.getText().toString().equalsIgnoreCase("01 Januari 1970")){
+            value=false;
+            input_addcekkesehatan_activity_tglpemeriksaan.setError("Tanggal belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addcekkesehatan_activity_panjangbadan.getText().toString())){
+            value= false;
+            input_addcekkesehatan_activity_panjangbadan.setError("Panjang Badan belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addcekkesehatan_activity_tinggibadan.getText().toString())){
+            value= false;
+            input_addcekkesehatan_activity_tinggibadan.setError("Tinggi Badan belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addcekkesehatan_activity_beratbadan.getText().toString())){
+            value= false;
+            input_addcekkesehatan_activity_beratbadan.setError("Berat Badan belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addcekkesehatan_activity_suhubadan.getText().toString())){
+            value= false;
+            input_addcekkesehatan_activity_suhubadan.setError("Suhu Badan belum diisi");
+        }
+
+        return value;
+    }
+
+    public void cleartext(){
+        input_addcekkesehatan_activity_idternak.setText("");
+        input_addcekkesehatan_activity_panjangbadan.setText("");
+        input_addcekkesehatan_activity_tinggibadan.setText("");
+        input_addcekkesehatan_activity_beratbadan.setText("");
+        input_addcekkesehatan_activity_suhubadan.setText("");
+        input_addcekkesehatan_activity_tglpemeriksaan.setText("01 Januari 1970");
+        spinner_addcekkesehatan_activity_aktivitas.setSelection(0);
+        spinner_addcekkesehatan_activity_produksisusu.setSelection(0);
+        spinner_addcekkesehatan_activity_statusfisik.setSelection(0);
+        spinner_addcekkesehatan_activity_statusstress.setSelection(0);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

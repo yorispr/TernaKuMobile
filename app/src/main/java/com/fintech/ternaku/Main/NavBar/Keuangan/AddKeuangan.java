@@ -67,15 +67,15 @@ public class AddKeuangan extends AppCompatActivity {
 
         //Set Jenis Transaksi-----------------------------
         spinner_addkeuangan_activity_jenis = (Spinner)findViewById(R.id.spinner_addkeuangan_activity_jenis);
-        final String[] spinner_jenis_transaksi = {"Pembelian Pakan",
+        final String[] spinner_jenis_transaksi = {
+                "Pembelian Pakan",
                 "Pembelian Obat",
                 "Pembelian Vaksin",
                 "Pembelian Semen",
                 "Pemeriksaan Kesehatan Sapi",
                 "Pembelian Perlengkapan",
                 "Pembelian Ternak",
-                "Pembelian Susu",
-                "Pembelian Kompos",
+                "Pembayaran Listrik",
                 "Lain-lain"};
         ArrayAdapter<String> adapater_jenis_transaksi= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_item,spinner_jenis_transaksi);
         spinner_addkeuangan_activity_jenis.setAdapter(adapater_jenis_transaksi);

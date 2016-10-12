@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -142,7 +143,7 @@ public class InsertTernak extends AppCompatActivity {
                     insertDB();
                 }else{
                     new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Data Kosong")
+                            .setTitleText("Peringatan!")
                             .setContentText("Isikan Semua Data")
                             .show();
                 }
@@ -221,17 +222,43 @@ public class InsertTernak extends AppCompatActivity {
             if (result.trim().equals("1")){
                 new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Berhasil!")
-                        .setContentText("Data Berhasil Dimasukkan..")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Tambah Peternak")
+                                        .setContentText("Apakah Ingin Menambah Data Peternak Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                txtRFID.setEnabled(true);
+                                                txtRFID.setText("");
+                                                txtRFID.setHint("Dekatkan Tag RFID");
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
                         .show();
-                txtRFID.setEnabled(true);
-                txtRFID.setText("");
-                txtRFID.setHint("Dekatkan Tag RFID");
             }
             else if(result.trim().equals("2")){
 
                 new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Penambahan Gagal!")
-                        .setContentText("Silahkan Simpan Data Kembali")
+                        .setTitleText("Peringatan!")
+                        .setContentText("Penambahan Gagal, Silahkan Simpan Data Kembali")
                         .show();
             }
             else {
@@ -324,18 +351,18 @@ public class InsertTernak extends AppCompatActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         txtBrt.setText(txtBerat.getText());
-                        /*InputMethodManager imm = (InputMethodManager) getSystemService(
+                        InputMethodManager imm = (InputMethodManager) getSystemService(
                                 INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtBerat.getWindowToken(), 0);*/
+                        imm.hideSoftInputFromWindow(txtBerat.getWindowToken(), 0);
                     }
                 })
                 .setNegativeButton("Batal",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //imgr.toggleSoftInput(0,InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                /*InputMethodManager imm = (InputMethodManager) getSystemService(
+                                InputMethodManager imm = (InputMethodManager) getSystemService(
                                         INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);*/
+                                imm.hideSoftInputFromWindow(txtBerat.getWindowToken(), 0);
                                 dialog.cancel();
                             }
                         });
@@ -399,6 +426,15 @@ public class InsertTernak extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 }

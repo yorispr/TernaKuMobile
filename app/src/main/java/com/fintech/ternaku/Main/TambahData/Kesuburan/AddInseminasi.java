@@ -2,15 +2,21 @@ package com.fintech.ternaku.Main.TambahData.Kesuburan;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -19,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -33,6 +40,8 @@ import java.util.Locale;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddInseminasi extends AppCompatActivity {
     private TextView input_addinseminasi_activity_tglinseminasi;
     private AutoCompleteTextView input_addinseminasi_activity_idternak;
@@ -41,6 +50,8 @@ public class AddInseminasi extends AppCompatActivity {
     private DatePickerDialog DatePickerDialog_tglinseminasi;
     private SimpleDateFormat dateFormatter_tglinseminasi;
     private Button button_addinseminasi_activity_simpan;
+    private TimePickerDialog mTimePicker;
+    String datetime;
     int choosenindex=-1;
 
     ArrayList<String> list_addinseminasi_semen = new ArrayList<String>();
@@ -62,10 +73,11 @@ public class AddInseminasi extends AppCompatActivity {
         }
 
         //Set Tanggal Inseminasi--------------------------------------
+        setDateTimeField();
+        setTime();
         input_addinseminasi_activity_tglinseminasi = (TextView)findViewById(R.id.input_addinseminasi_activity_tglinseminasi);
         dateFormatter_tglinseminasi = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         input_addinseminasi_activity_tglinseminasi.setText(dateFormatter_tglinseminasi.format(Calendar.getInstance().getTime()));
-        setDateTimeField();
         input_addinseminasi_activity_tglinseminasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +87,7 @@ public class AddInseminasi extends AppCompatActivity {
 
         //Set Data Id Ternak-----------------------------------------------
         String urlParameters_idternak = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakHeat().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakHeatByPeternakan", urlParameters_idternak);
+        new GetTernakHeat().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters_idternak);
         input_addinseminasi_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addinseminasi_activity_idternak);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,list_addinseminasi_idternak);
@@ -89,8 +101,6 @@ public class AddInseminasi extends AppCompatActivity {
         input_addinseminasi_activity_idternak.setEnabled(false);
 
         //Set Spinner Daftar Semen------------------------------------
-        String urlParameters_semen = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetSemen().execute("http://ternaku.com/index.php/C_HistoryInseminasi/GetSemen", urlParameters_semen);
         spinner_addinseminasi_activity_semen = (Spinner)findViewById(R.id.spinner_addinseminasi_activity_semen);
         myAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,list_addinseminasi_semen);
         spinner_addinseminasi_activity_semen.setAdapter(myAdapter);
@@ -107,19 +117,41 @@ public class AddInseminasi extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkForm()) {
-                    String urlParameters;
-                    String spinstr = spinner_addinseminasi_activity_semen.getSelectedItem().toString();
-                    String idsemen = spinstr.substring(spinstr.indexOf("(") + 1, spinstr.indexOf(")"));
-                    ;
-                    urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                            + "&idternak=" + input_addinseminasi_activity_idternak.getText().toString().trim()
-                            + "&tglinseminasi=" + input_addinseminasi_activity_tglinseminasi.getText().toString()
-                            + "&metodeinseminasi=" + input_addinseminasi_activity_metode.getText().toString()
-                            + "&idsemen=" + idsemen.trim()
-                            + "&jumlahsemen=" + input_addinseminasi_activity_jumlah.getText().toString()
-                            + "&biayasemen=" + input_addinseminasi_activity_biaya.getText().toString();
-                    new InsertInseminasi().execute("http://ternaku.com/index.php/C_HistoryInseminasi/insertInseminasi", urlParameters);
-                    Log.d("Param", urlParameters.toString());
+                    new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Simpan")
+                            .setContentText("Data Yang Dimasukkan Sudah Benar?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                    String urlParameters;
+                                    String spinstr = spinner_addinseminasi_activity_semen.getSelectedItem().toString();
+                                    String idsemen = spinstr.substring(spinstr.indexOf("(") + 1, spinstr.indexOf(")"));
+                                    urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                            + "&idternak=" + input_addinseminasi_activity_idternak.getText().toString().trim()
+                                            + "&tglinseminasi=" + input_addinseminasi_activity_tglinseminasi.getText().toString()
+                                            + "&metodeinseminasi=" + input_addinseminasi_activity_metode.getText().toString()
+                                            + "&idsemen=" + idsemen.trim()
+                                            + "&jumlahsemen=" + input_addinseminasi_activity_jumlah.getText().toString()
+                                            + "&biayasemen=" + input_addinseminasi_activity_biaya.getText().toString();
+                                    new InsertInseminasi().execute("http://ternaku.com/index.php/C_HistoryInseminasi/insertInseminasi", urlParameters);
+                                    Log.d("Param", urlParameters.toString());
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
+                }else{
+                    new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan!")
+                            .setContentText("Isikan Semua Data")
+                            .show();
                 }
             }
         });
@@ -129,10 +161,14 @@ public class AddInseminasi extends AppCompatActivity {
 
     //Set Input AutoComplete Id Ternak-----------------------------------------------
     private class GetTernakHeat extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
         }
 
@@ -146,15 +182,42 @@ public class AddInseminasi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
-            }
-            else {
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Gagal Memuat Data, Data Ternak Masih Kosong")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
                 AddTernakToList(result);
                 input_addinseminasi_activity_idternak.setEnabled(true);
+
+                //Set Data Spinner----------------------------------------
+                String urlParameters_semen = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+                new GetSemen().execute("http://ternaku.com/index.php/C_HistoryInseminasi/GetSemen", urlParameters_semen);
             }
         }
     }
+
     private void AddTernakToList(String result)
     {
         list_addinseminasi_idternak.clear();
@@ -172,10 +235,14 @@ public class AddInseminasi extends AppCompatActivity {
 
     //Set Daftar Semen----------------------------------------------
     private class GetSemen extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
 
         }
 
@@ -189,12 +256,23 @@ public class AddInseminasi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
+            pDialog.dismiss();
             if (result.trim().equals("404")){
-                Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Semen Masih Kosong")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
             }
             else {
                 AddSemenToList(result);
-                //autocomplete.setEnabled(true);
+                input_addinseminasi_activity_idternak.setEnabled(true);
             }
         }
     }
@@ -222,21 +300,41 @@ public class AddInseminasi extends AppCompatActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 input_addinseminasi_activity_tglinseminasi.setText(dateFormatter_tglinseminasi.format(newDate.getTime()));
+                datetime = dateFormatter_tglinseminasi.format(newDate.getTime());
+                mTimePicker.show();
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
     }
 
+    private void setTime() {
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                if(timePicker.isShown()) {
+
+                    datetime += " " + selectedHour + ":" + selectedMinute + ":00";
+                    input_addinseminasi_activity_tglinseminasi.setText(datetime);
+                }
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+    }
+
     //Insert Inseminasi-----------------------------------------
     private class InsertInseminasi extends AsyncTask<String,Integer,String> {
-        ProgressDialog progDialog;
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.PROGRESS_TYPE);
 
         @Override
         protected void onPreExecute() {
-            progDialog = new ProgressDialog(AddInseminasi.this);
-            progDialog.setMessage("Tunggu Sebentar...");
-            progDialog.show();
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
@@ -249,9 +347,39 @@ public class AddInseminasi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d("RES",result);
-            progDialog.dismiss();
+            pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil Menambah Data",Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Ubah Data Inseminasi")
+                                        .setContentText("Apakah Ingin Menambah Data Inseminasi Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
                 Toast.makeText(getApplication(),"Terjadi kesalahan",Toast.LENGTH_LONG).show();
@@ -261,18 +389,40 @@ public class AddInseminasi extends AppCompatActivity {
 
     private boolean checkForm()
     {
-        boolean cek = true;
+        boolean value = true;
 
-        /*if(autocomplete.getText().toString().matches(""))
-        {autocomplete.setError("ID Ternak belum diisi");cek = false;}
-        else */if(input_addinseminasi_activity_biaya.getText().toString().matches(""))
-        {input_addinseminasi_activity_biaya.setError("Biaya belum diisi");cek = false;}
-        else if(input_addinseminasi_activity_jumlah.getText().toString().matches(""))
-        {input_addinseminasi_activity_jumlah.setError("Jumlah belum diisi");cek = false;}
-        else if(input_addinseminasi_activity_metode.getText().toString().matches(""))
-        {input_addinseminasi_activity_metode.setError("Metode belum diisi");cek = false;}
+        if(TextUtils.isEmpty(input_addinseminasi_activity_idternak.getText().toString())){
+            value= false;
+            input_addinseminasi_activity_idternak.setError("ID Ternak belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addinseminasi_activity_biaya.getText().toString())){
+            value= false;
+            input_addinseminasi_activity_biaya.setError("Biaya belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addinseminasi_activity_jumlah.getText().toString())){
+            value= false;
+            input_addinseminasi_activity_jumlah.setError("Jumlah belum diisi");
+        }
+        if(TextUtils.isEmpty(input_addinseminasi_activity_metode.getText().toString())){
+            value= false;
+            input_addinseminasi_activity_metode.setError("Metode belum diisi");
+        }
+        if(input_addinseminasi_activity_tglinseminasi.getText().toString().matches(""))
+        {
+            input_addinseminasi_activity_tglinseminasi.setError("Tanggal belum diisi");
+            value = false;
+        }
 
-        return cek;
+        return value;
+    }
+
+    public void cleartext(){
+        input_addinseminasi_activity_idternak.setText("");
+        input_addinseminasi_activity_biaya.setText("");
+        input_addinseminasi_activity_jumlah.setText("");
+        input_addinseminasi_activity_metode.setText("");
+        input_addinseminasi_activity_tglinseminasi.setText("01 Januari 1970");
+        spinner_addinseminasi_activity_semen.clearFocus();
     }
 
     @Override
@@ -284,6 +434,16 @@ public class AddInseminasi extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 }

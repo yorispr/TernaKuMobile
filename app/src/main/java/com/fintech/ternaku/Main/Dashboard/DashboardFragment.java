@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +47,8 @@ import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 import pl.pawelkleczkowski.customgauge.CustomGauge;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class DashboardFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -338,11 +341,16 @@ public class DashboardFragment extends Fragment {
 
                 list_dashboard_fragment_peternakan.add("("+pet.getId_peternakan()+") "+pet.getNama_peternakan());
             }
+            //Execute Dashboard Data-------------------------------------------
+            String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
+            new GetDashboardData().execute("http://ternaku.com/index.php/C_Ternak/GetDashboardData",urlParameters);
+            Log.d("IDP",urlParameters);
+
+            /*
             ArrayAdapter<String> adapter_peternakan = new ArrayAdapter<String>(
                     getContext(), android.R.layout.simple_spinner_item, list_dashboard_fragment_peternakan);
             adapter_peternakan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_dashboard_fragment_namapeternakan.setAdapter(adapter_peternakan);
-
             spinner_dashboard_fragment_namapeternakan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -367,7 +375,7 @@ public class DashboardFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> adapterView) {
 
                 }
-            });
+            });*/
         }
         catch (JSONException e){e.printStackTrace();}
     }
