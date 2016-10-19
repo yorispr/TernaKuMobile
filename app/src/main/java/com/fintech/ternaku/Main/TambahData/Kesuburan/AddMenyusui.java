@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -59,6 +60,7 @@ public class AddMenyusui extends AppCompatActivity {
     ArrayList<String> list_addmenyusui_idternak = new ArrayList<String >();
     ArrayList<String> list_addmenyusui_menyusui = new ArrayList<String >();
     ArrayList<String> list_addmenyusui_id_ternak_autocomplete = new ArrayList<String >();
+    ArrayAdapter<String> adp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +78,7 @@ public class AddMenyusui extends AppCompatActivity {
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters);
         input_addmenyusui_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addmenyusui_activity_idternak);
-        ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,list_addmenyusui_id_ternak_autocomplete);
-        input_addmenyusui_activity_idternak.setAdapter(adp);
+        input_addmenyusui_activity_idternak.setEnabled(false);
         input_addmenyusui_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -94,9 +94,11 @@ public class AddMenyusui extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId == R.id.radiobutton_addmenyusui_activity_mlai) {
+                    flag_radio=1;
                     isMenyusui=true;
                     txt_addmenyusui_activity_ket.setText("Tanggal mulai");
                 } else if(checkedId == R.id.radiobutton_addmenyusui_activity_selesai) {
+                    flag_radio=1;
                     isMenyusui=false;
                     txt_addmenyusui_activity_ket.setText("Tanggal selesai");
                 }
@@ -146,6 +148,7 @@ public class AddMenyusui extends AppCompatActivity {
                                                 + "&statusmenyusui=" + status;
                                         new UpdateMenyusui().execute("http://ternaku.com/index.php/C_HistoryKesehatan/StatusMenyusui", urlParameters);
                                         Log.d("param", urlParameters);
+
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -209,9 +212,8 @@ public class AddMenyusui extends AppCompatActivity {
             }
             else {
                 AddTernakToList(result);
-                input_addmenyusui_activity_idternak.setEnabled(true);
 
-                //Set Ternak Heat-------------------------------------------------
+                //Set Ternak Melahirkan-------------------------------------------------
                 String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
                 new GetTernakMenyusui().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakMenyusuiByPeternakan", param_2);
 
@@ -269,39 +271,19 @@ public class AddMenyusui extends AppCompatActivity {
                             }
                         })
                         .show();
-            } else if (result.trim().equals("404")){
-                new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Simpan")
-                        .setContentText("Data Ternak Tidak Ada Yang Melahirkan" +
-                                "\nApakah Ingin Memasukkan Data Ternak Melahirkan?")
-                        .setConfirmText("Ya")
-                        .setCancelText("Tidak")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.cancel();
-                                finish();
-                                startActivity(new Intent(AddMenyusui.this,AddMelahirkan.class));
-                            }
-                        })
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.cancel();
-                                finish();
-                            }
-                        })
-                        .show();
             } else{
                 AddTernakMenyusui(result);
-                AddTernakAutoComplete();
             }
         }
     }
+
+
     private void AddTernakMenyusui(String result)
     {
+        int flag=0;
         list_addmenyusui_menyusui.clear();
-        Log.d("PET",result);
+        list_addmenyusui_id_ternak_autocomplete.clear();
+
         try{
             JSONArray jArray = new JSONArray(result);
             for(int i=0;i<jArray.length();i++)
@@ -311,23 +293,44 @@ public class AddMenyusui extends AppCompatActivity {
             }
         }
         catch (JSONException e){e.printStackTrace();}
-    }
 
-    //Get Data to AutoComplete----------------------------------------------
-    private void AddTernakAutoComplete()
-    {
-        list_addmenyusui_id_ternak_autocomplete.clear();
+        if(list_addmenyusui_menyusui.size()!=0){
+            for(int i=0;i<list_addmenyusui_idternak.size();i++)
+            {
+                for(int j=0;j<list_addmenyusui_menyusui.size();j++){
+                    if(list_addmenyusui_idternak.get(i).toString().equalsIgnoreCase(list_addmenyusui_menyusui.get(j).toString())){
+                        break;
+                    }else if(!list_addmenyusui_idternak.get(i).toString().equalsIgnoreCase(list_addmenyusui_menyusui.get(j).toString())){
+                        for(int h=0;h<list_addmenyusui_id_ternak_autocomplete.size();h++){
+                            if(list_addmenyusui_idternak.get(i).toString().equalsIgnoreCase(list_addmenyusui_id_ternak_autocomplete.get(h).toString())){
+                                flag=1;
+                            }else{
+                                for(int k=0;k<list_addmenyusui_menyusui.size();k++){
+                                    if(list_addmenyusui_idternak.get(i).toString().equalsIgnoreCase(list_addmenyusui_menyusui.get(k).toString())){
+                                        flag=1;
+                                    }
+                                }
+                            }
+                        }
 
-        for(int i=0;i<list_addmenyusui_idternak.size();i++)
-        {
-                for(int j=0;j<list_addmenyusui_menyusui.size();i++){
-                    if(!list_addmenyusui_idternak.get(i).toString().
-                            equalsIgnoreCase(list_addmenyusui_menyusui.get(j).toString())){
-                        list_addmenyusui_id_ternak_autocomplete.add(list_addmenyusui_idternak.get(i).toString());
+                        if(flag==0){
+                            list_addmenyusui_id_ternak_autocomplete.add(list_addmenyusui_idternak.get(i).toString());
+                        }else if(flag==1){
+                            flag=0;
+                        }
                     }
                 }
+            }
+        }else{
+            list_addmenyusui_id_ternak_autocomplete=list_addmenyusui_idternak;
         }
+
+        adp=new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,list_addmenyusui_id_ternak_autocomplete);
+        input_addmenyusui_activity_idternak.setAdapter(adp);
+        input_addmenyusui_activity_idternak.setEnabled(true);
     }
+
 
 
     //Insert into Database---------------------------------------------------
@@ -372,6 +375,11 @@ public class AddMenyusui extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.cancel();
                                                 cleartext();
+
+                                                //Refresh---------------------------------------------------
+                                                String urlParameters_ref = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
+                                                new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters_ref);
+
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

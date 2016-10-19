@@ -1,5 +1,6 @@
 package com.fintech.ternaku.DetailTernak;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.internal.CollectionMapper;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Event.ModelDetailTernakEvent;
@@ -29,7 +31,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class DetailTernakMain extends AppCompatActivity {
@@ -63,7 +70,11 @@ public class DetailTernakMain extends AppCompatActivity {
     public TextView txt_detailternak_activity_tglperiksapotongkukuterakhir_kesehatan;
     public TextView txt_detailternak_activity_jumlahharicekpotongkukuterakhir_kesehatan;
 
-    private String id_ternak="TRK-3",id_peternakan="FNT-P1";
+    List<ModelDetailTernakEvent> temp_list = new ArrayList <ModelDetailTernakEvent>();
+    AdapterDetailTernakEvent adapterEventTernak;
+    private int finish_attempt_event=0;
+    private String id_ternak="",id_peternakan="FNT-P1";
+    ListView lvItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +89,22 @@ public class DetailTernakMain extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        //Get Data Id Ternak-------------------------------------
+        id_ternak = getIntent().getExtras().getString("idternak");
+
         //GetProfileData--------------------------------------------
         TextView input_detailternak_activity_idternak = (TextView)findViewById(R.id.input_detailternak_activity_idternak);
         input_detailternak_activity_idternak.setText(id_ternak);
-        //GetEventData--------------------------------------------
+
+        //Get Data Profile--------------------------------------------
+        String urlParameters_profile = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                + "&id_ternak=" + id_ternak.trim();
+        new getDataProfile().execute("http://ternaku.com/index.php/C_Ternak/GetTernakUmum", urlParameters_profile);
+
+        //Get Data Event Ternak---------------------------------------------------
+        String urlParameters_events = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                + "&idternak=" + id_ternak.trim();
+        new getDataEvent().execute("http://ternaku.com/index.php/C_Ternak/GetTernakUmumEvent", urlParameters_events);
 
         initUI();
 
@@ -267,10 +290,6 @@ public class DetailTernakMain extends AppCompatActivity {
         txt_detailternak_activity_tglperiksapotongkukuterakhir_kesehatan = (TextView) view.findViewById(R.id.txt_detailternak_activity_tglperiksapotongkukuterakhir_kesehatan);
         txt_detailternak_activity_jumlahharicekpotongkukuterakhir_kesehatan = (TextView) view.findViewById(R.id.txt_detailternak_activity_jumlahharicekpotongkukuterakhir_kesehatan);
 
-        //Get Data Profile--------------------------------------------
-        String urlParameters = "id_peternakan=" + id_peternakan.trim() + "&id_ternak=" + id_ternak.trim();
-        new getDataProfile().execute("http://ternaku.com/index.php/C_Ternak/GetTernakUmum", urlParameters);
-
         Button btnFertility=(Button)view.findViewById(R.id.btnFertility);
         expander_profile_layout_fertility = (ExpandableRelativeLayout) view.findViewById(R.id.fertilityLayout);
 
@@ -416,42 +435,332 @@ public class DetailTernakMain extends AppCompatActivity {
     public View getpageTwo() {
         View view = LayoutInflater.from(
                 getBaseContext()).inflate(R.layout.layout_event, null, false);
-        final ListView lvItems = (ListView) view.findViewById(R.id.lv_items);
+        lvItems = (ListView) view.findViewById(R.id.lv_items);
 
-        AdapterDetailTernakEvent adapter = getAdapter();
 
-        lvItems.setAdapter(adapter);
-        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AdapterDetailTernakEvent adapter = (AdapterDetailTernakEvent) parent.getAdapter();
 
-                ModelDetailTernakEvent item = (ModelDetailTernakEvent) adapter.getItem(position);
-                if (item != null) {
-                    if (item.isExpanded) {
-                        item.isExpanded = false;
-                    } else {
-                        item.isExpanded = true;
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
         return view;
     }
-    private AdapterDetailTernakEvent getAdapter(){
 
-        List<ModelDetailTernakEvent> items = new ArrayList<>();
-
-        for(int i = 0; i < 50; i++){
-            ModelDetailTernakEvent item = new ModelDetailTernakEvent();
-            item.title = "Title Item " + i;
-            item.desciption = "Description for Title Item "+ i;
-            item.isExpanded = false;
-
-            items.add(item);
+    private class getDataEvent extends AsyncTask<String,Integer,String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
-        return new AdapterDetailTernakEvent(this, items);
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0], params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            Log.d("Detail_Event_Json",res);
+            SetEventDetailTernak(res);
+            finish_attempt_event=1;
+        }
+    }
+
+    private void SetEventDetailTernak(String result){
+        int count_data_total=0;
+
+        try {
+            JSONArray jArray = new JSONArray(result);
+            JSONObject jObj = jArray.getJSONObject(0);
+
+            JSONArray getPengelompokkan_arr = jObj.getJSONArray("EventPengelompokanKawanan");
+            JSONArray getPemerahan_arr = jObj.getJSONArray("EventPemerahan");
+            JSONArray getPemeriksaanKesehatan_arr = jObj.getJSONArray("EventKesehatan");
+            JSONArray getPemeriksaanKuku_arr = jObj.getJSONArray("EventCekKuku");
+            JSONArray getPemeriksaanLameness_arr = jObj.getJSONArray("EventCekLameness");
+            JSONArray getPemeriksaanMastitis_arr = jObj.getJSONArray("EventCekMastitis");
+            JSONArray getPemeriksaanReproduksi_arr = jObj.getJSONArray("EventCekReproduksi");
+            JSONArray getPemeriksaanHeat_arr = jObj.getJSONArray("EventHeat");
+            JSONArray getVaksinasi_arr = jObj.getJSONArray("EventVaksinasi");
+            JSONArray getInseminasi_arr = jObj.getJSONArray("EventInseminasi");
+            JSONArray getMelahirkan_arr = jObj.getJSONArray("EventMelahirkan");
+            JSONArray getAborsi_arr = jObj.getJSONArray("EventAborsi");
+
+            for (int i = 0; i < getPengelompokkan_arr.length(); i++) {
+                JSONObject obj_getPengelompokkan = getPengelompokkan_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Pengelompokan";
+                ter.tgl = obj_getPengelompokkan.getString("Tgl pengelompokan");
+                ter.key_event = "1";
+
+                setDefaultDataModel(ter);
+                ter.pengelompokan_kandang = obj_getPengelompokkan.getString("kandang");
+                ter.pengelompokan_kawanan = obj_getPengelompokkan.getString("kawanan");
+
+                temp_list.add(ter);
+            }
+
+            for (int i = 0; i < getPemerahan_arr.length(); i++) {
+                JSONObject obj_getPemerahan = getPemerahan_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Pemerahan";
+                ter.tgl = obj_getPemerahan.getString("tgl_perah");
+                ter.key_event = "2";
+
+                setDefaultDataModel(ter);
+                ter.pemerahan_sesi = obj_getPemerahan.getString("sesi_perah");
+                ter.pemerahan_durasi = obj_getPemerahan.getString("durasi");
+                ter.pemerahan_kapasitas = obj_getPemerahan.getString("kapasitas");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanKesehatan_arr.length(); i++) {
+                JSONObject obj_getPemeriksaanKesehatan = getPemeriksaanKesehatan_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Cek Kesehatan";
+                ter.tgl = obj_getPemeriksaanKesehatan.getString("tgl_periksa");
+                ter.key_event = "3";
+
+                setDefaultDataModel(ter);
+                ter.kesehatan_diagnosis = obj_getPemeriksaanKesehatan.getString("diagnosis");
+                ter.kesehatan_berat = obj_getPemeriksaanKesehatan.getString("berat badan");
+                ter.kesehatan_perawatan = obj_getPemeriksaanKesehatan.getString("perawatan");
+                ter.kesehatan_statusfisik = obj_getPemeriksaanKesehatan.getString("statusfisik");
+                ter.kesehatan_statusstress = obj_getPemeriksaanKesehatan.getString("statusstress");
+                ter.kesehatan_suhu = obj_getPemeriksaanKesehatan.getString("suhubadan");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanKuku_arr.length(); i++) {
+                JSONObject obj_getPemeriksaanKuku = getPemeriksaanKuku_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Cek Kuku";
+                ter.tgl = obj_getPemeriksaanKuku.getString("tgl_periksa");
+                ter.key_event = "4";
+
+                setDefaultDataModel(ter);
+                ter.kuku_diagnosis = obj_getPemeriksaanKuku.getString("diagnosis");
+                ter.kuku_perawatan = obj_getPemeriksaanKuku.getString("perawatan");
+                ter.kuku_statusfisik = obj_getPemeriksaanKuku.getString("statusfisik");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanMastitis_arr.length(); i++) {
+                JSONObject obj_getPemeriksaanMastitis = getPemeriksaanMastitis_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Cek Mastitis";
+                ter.tgl = obj_getPemeriksaanMastitis.getString("tgl_periksa");
+                ter.key_event = "5";
+
+                setDefaultDataModel(ter);
+                ter.mastitis_diagnosis = obj_getPemeriksaanMastitis.getString("diagnosis");
+                ter.mastitis_perawatan = obj_getPemeriksaanMastitis.getString("perawatan");
+                ter.mastitis_statusfisik = obj_getPemeriksaanMastitis.getString("statusfisik");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanLameness_arr.length(); i++) {
+                JSONObject obj_getPemeriksaanLameness = getPemeriksaanLameness_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Cek Lameness";
+                ter.tgl = obj_getPemeriksaanLameness.getString("tgl_periksa");
+                ter.key_event = "6";
+
+                setDefaultDataModel(ter);
+                ter.lameness_diagnosis = obj_getPemeriksaanLameness.getString("diagnosis");
+                ter.lameness_perawatan = obj_getPemeriksaanLameness.getString("perawatan");
+                ter.lameness_statusfisik = obj_getPemeriksaanLameness.getString("statusfisik");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanReproduksi_arr.length(); i++) {
+                JSONObject obj_getPemeriksaanReproduksi = getPemeriksaanReproduksi_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Cek Reproduksi";
+                ter.tgl = obj_getPemeriksaanReproduksi.getString("tgl_periksa");
+                ter.key_event = "7";
+
+                setDefaultDataModel(ter);
+                if(obj_getPemeriksaanReproduksi.getString("Kondisi Reproduksi").equalsIgnoreCase("1")){
+                    ter.reproduksi_kondisi = "BAIK";
+
+                }else if(obj_getPemeriksaanReproduksi.getString("Kondisi Reproduksi").equalsIgnoreCase("0")){
+                    ter.reproduksi_kondisi = "TIDAK BAIK";
+                }
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getPemeriksaanHeat_arr.length(); i++) {
+                JSONObject obj_PemeriksaanHeat = getPemeriksaanHeat_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Birahi";
+                ter.tgl = obj_PemeriksaanHeat.getString("tgl_periksa");
+                ter.key_event = "8";
+
+                setDefaultDataModel(ter);
+                ter.heat_tglmulai = obj_PemeriksaanHeat.getString("tgl_mulai_heat");
+                ter.heat_tglselesai = obj_PemeriksaanHeat.getString("tgl_heat_selesai");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getVaksinasi_arr.length(); i++) {
+                JSONObject obj_getVaksinasi = getVaksinasi_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Vaksinasi";
+                ter.tgl = obj_getVaksinasi.getString("tgl_vaksin_real");
+                ter.key_event = "9";
+
+                setDefaultDataModel(ter);
+                ter.vaksinasi_nama = obj_getVaksinasi.getString("nama_vaksin");
+                ter.vaksinasi_dosis = obj_getVaksinasi.getString("dosis");
+                ter.vaksinasi_satuan = obj_getVaksinasi.getString("satuan_dosis");
+                ter.vaksinasi_repetisi = obj_getVaksinasi.getString("repetisi_ke");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getInseminasi_arr.length(); i++) {
+                JSONObject obj_getInseminasi = getInseminasi_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Inseminasi";
+                ter.tgl = obj_getInseminasi.getString("tgl_inseminasi");
+                ter.key_event = "10";
+
+                setDefaultDataModel(ter);
+                ter.inseminasi_metode = obj_getInseminasi.getString("metode_inseminasi");
+                ter.inseminasi_status = obj_getInseminasi.getString("status_keberhasilan");
+                ter.inseminasi_tgl_perkiraan_melahirkan = obj_getInseminasi.getString("tgl_perkiraan_melahirkan");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getMelahirkan_arr.length(); i++) {
+                JSONObject obj_getMelahirkan = getMelahirkan_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Melahirkan";
+                ter.tgl = obj_getMelahirkan.getString("tgl_melahirkan_real");
+                ter.key_event = "11";
+
+                setDefaultDataModel(ter);
+                ter.melahirkan_jumlahanak = obj_getMelahirkan.getString("jumlah_anak");
+                ter.melahirkan_kondisi = obj_getMelahirkan.getString("kondisi_melahirkan");
+
+                temp_list.add(ter);
+
+            }
+
+            for (int i = 0; i < getAborsi_arr.length(); i++) {
+                JSONObject obj_getAborsi = getAborsi_arr.getJSONObject(i);
+                ModelDetailTernakEvent ter = new ModelDetailTernakEvent();
+                ter.title = "Aborsi";
+                ter.tgl = obj_getAborsi.getString("tgl_aborsi");
+                ter.key_event = "12";
+
+                setDefaultDataModel(ter);
+                ter.aborsi_penyebab = obj_getAborsi.getString("penyebab_aborsi");
+
+                temp_list.add(ter);
+
+            }
+
+            Collections.sort(temp_list, new Comparator<ModelDetailTernakEvent>() {
+                @Override
+                public int compare(ModelDetailTernakEvent o1, ModelDetailTernakEvent o2) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date_1 = null;
+                    Date date_2 = null;
+                    try {
+                        date_1 = sdf.parse(o1.tgl);
+                        date_2 = sdf.parse(o2.tgl);
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                    return date_2.compareTo(date_1);
+                }
+            });
+            adapterEventTernak = new AdapterDetailTernakEvent(this, temp_list);
+            lvItems.setAdapter(adapterEventTernak);
+            lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AdapterDetailTernakEvent adapter = (AdapterDetailTernakEvent) parent.getAdapter();
+
+                    ModelDetailTernakEvent item = (ModelDetailTernakEvent) adapter.getItem(position);
+                    if (item != null) {
+                        if (item.isExpanded) {
+                            item.isExpanded = false;
+                        } else {
+                            item.isExpanded = true;
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void setDefaultDataModel(ModelDetailTernakEvent ter){
+        ter.isExpanded = false;
+
+        //Pengelompokan--------------------------------------
+        ter.pengelompokan_kandang = "N/A";
+        ter.pengelompokan_kawanan = "N/A";
+
+        //Pemerahan------------------------------------------
+        ter.pemerahan_sesi = "N/A";
+        ter.pemerahan_durasi = "N/A";
+        ter.pemerahan_kapasitas = "N/A";
+
+        //Pemeriksaan Kesehatan------------------------------
+        ter.kesehatan_diagnosis = "N/A";
+        ter.kesehatan_perawatan = "N/A";
+        ter.kesehatan_berat = "N/A";
+        ter. kesehatan_statusfisik = "N/A";
+        ter.kesehatan_statusstress = "N/A";
+        ter.kesehatan_suhu = "N/A";
+
+        //Kuku-----------------------------------------------
+        ter.kuku_diagnosis = "N/A";
+        ter.kuku_perawatan = "N/A";
+        ter.kuku_statusfisik = "N/A";
+
+        //Mastitis-------------------------------------------
+        ter.mastitis_diagnosis = "N/A";
+        ter.mastitis_perawatan = "N/A";
+        ter.mastitis_statusfisik = "N/A";
+
+        //Lameness-------------------------------------------
+        ter.lameness_diagnosis = "N/A";
+        ter.lameness_perawatan = "N/A";
+        ter.lameness_statusfisik = "N/A";
+
+        //Pemeriksaan Reproduksi-----------------------------
+        ter.reproduksi_kondisi = "N/A";
+
+        //Pemeriksaa Heat------------------------------------
+        ter.heat_tglmulai = "N/A";
+        ter.heat_tglselesai = "N/A";
+
+        //Vaksinasi------------------------------------------
+        ter.vaksinasi_nama = "N/A";
+        ter.vaksinasi_satuan = "N/A";
+        ter.vaksinasi_dosis = "N/A";
+        ter.vaksinasi_repetisi = "N/A";
     }
     //Set Page Event-------------------------------------------------------------
 

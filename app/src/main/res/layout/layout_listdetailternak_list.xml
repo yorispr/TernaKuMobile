@@ -1,146 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:elevation="10dp"
-    android:layout_marginTop="5dp">
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:background="@color/gray_btn_bg_color"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="#ecf0f1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:id="@+id/relativeLayout3">
 
-        <LinearLayout
+
+        <ImageView
+            android:layout_height="80dp"
+            app:srcCompat="@drawable/ic_cow_red"
+            android:id="@+id/img_listdetailternak_activity_kondisitubuh"
+            android:layout_width="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="18dp"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_tag"
+            android:layout_gravity="center_vertical|fill_horizontal"
+            android:id="@+id/imageView7"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal Lahir"
+            android:id="@+id/textView26"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RFID Tag"
+            android:textAlignment="center"
+            android:id="@+id/textView6"
+            android:layout_below="@+id/txt_listdetailternak_activity_rfid"
+            android:layout_centerHorizontal="true" />
+
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="7">
-            <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:stretchColumns="*"
+            android:layout_below="@+id/textView6"
+            android:layout_marginTop="7dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp">
+
+            <TableRow
+                android:id="@+id/tableRow2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="2">
-                <cn.fanrunqi.waveprogress.WaveProgressView
-                    android:id="@+id/img_listdetailternak_activity_kondisitubuh"
-                    android:background="@drawable/circle"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:elevation="10dp"
-                    android:layout_gravity="center_vertical|fill_horizontal" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="4">
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+
+                android:layout_below="@+id/txt_listdetailternak_activity_kondisikesuburan"
+                android:layout_alignParentStart="true"
+                >
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_tag"
-                            android:layout_gravity="center_vertical|fill_horizontal" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Id Ternak"
-                                android:textAlignment="center" />
-                            <TextView
-                                android:id="@+id/txt_listdetailternak_activity_idternak"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Id Ternak"
-                                android:textAppearance="@android:style/TextAppearance.Medium" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_heart_dark"
-                            android:layout_gravity="center_vertical|fill_horizontal" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Kondisi Tubuh"
-                                android:textAlignment="center" />
-                            <TextView
-                                android:id="@+id/txt_listdetailternak_activity_kondisitubuh"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Id Ternak"
-                                android:textAppearance="@android:style/TextAppearance.Medium" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_action_line_chart"
-                            android:layout_gravity="center_vertical|fill_horizontal" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Kondisi Kesuburan"
-                                android:textAlignment="center" />
-                            <TextView
-                                android:id="@+id/txt_listdetailternak_activity_kondisikesuburan"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Id Ternak"
-                                android:textAppearance="@android:style/TextAppearance.Medium" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Heat"
+                    android:gravity="center"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                <TextView
+                    android:id="@+id/textView111"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Menyusui"
+                    android:gravity="center"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="Kering"
+                    android:gravity="center"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"></LinearLayout>
-        </LinearLayout>
+                android:gravity="center"
+                android:layout_below="@+id/tableRow2"
+                android:layout_alignParentStart="true">
 
-        <LinearLayout
+                <TextView
+                    android:id="@+id/txtIsHeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="TextView"
+                    android:gravity="center"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textAllCaps="false"
+                    android:textStyle="normal|bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtIsMenyusui"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:gravity="center"
+
+                    android:text="TextView"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="normal|bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtisKering"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cell_shape"
+                    android:padding="5dp"
+                    android:text="TextView"
+                    android:gravity="center"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="normal|bold"></TextView>
+
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_listdetailternak_activity_berat"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_alignStart="@+id/textView6"
+            android:layout_above="@+id/txt_listdetailternak_activity_rfid"
+            android:layout_below="@+id/txt_listdetailternak_activity_idternak"
+            android:layout_marginTop="7dp" />
+
+        <TextView
+            android:id="@+id/txt_listdetailternak_activity_rfid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Terakhir Cek  : "/>
-            <TextView
-                android:id="@+id/txt_listdetailternak_activity_terkahircek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="tgl/tgl/tgl"
-                android:textColor="#000"/>
-        </LinearLayout>
-    </LinearLayout>
+            android:text="RFID"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:gravity="center"
+            android:layout_below="@+id/txt_listdetailternak_activity_kondisitubuh"
+            android:layout_alignParentStart="true" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/txt_listdetailternak_activity_idternak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Id Ternak"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginLeft="10dp"
+            android:layout_alignBottom="@+id/imageView7"
+            android:layout_toEndOf="@+id/imageView7"
+            android:layout_alignParentTop="true"
+            android:gravity="left|center" />
+
+        <TextView
+            android:id="@+id/txt_listdetailternak_activity_tgllahir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tgl/tgl/tgl"
+            android:textColor="#000"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:layout_below="@+id/textView26"
+            android:layout_alignStart="@+id/textView26"
+            android:layout_alignEnd="@+id/textView26"
+            android:layout_above="@+id/txtUmur" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kondisi Tubuh"
+            android:textAlignment="center"
+            android:id="@+id/textView11"
+            android:layout_marginStart="15dp"
+            android:layout_alignBottom="@+id/img_listdetailternak_activity_kondisitubuh"
+            android:layout_alignStart="@+id/tableLayout5"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/txt_listdetailternak_activity_kondisitubuh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kondisi Tubuh"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textSize="15sp"
+            android:layout_alignBottom="@+id/img_listdetailternak_activity_kondisitubuh"
+            android:layout_alignStart="@+id/textView11" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtUmur"
+            android:textSize="12sp"
+            android:gravity="top|center"
+            android:layout_alignTop="@+id/txt_listdetailternak_activity_berat"
+            android:layout_alignStart="@+id/txt_listdetailternak_activity_tgllahir"
+            android:layout_alignEnd="@+id/txt_listdetailternak_activity_tgllahir"
+            android:layout_above="@+id/txt_listdetailternak_activity_kondisitubuh" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

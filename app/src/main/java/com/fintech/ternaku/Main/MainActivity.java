@@ -25,8 +25,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fintech.ternaku.DetailTernak.DetailTernakMain;
+import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
+import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.Main.Pengingat.ShowReminderFragment;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout_main_activity;
     private FloatingToolbar mFloatingToolbar;
     private int opentabs = 0;
+    private boolean flag_log_out=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public boolean getStatusLogOut(){
+        return flag_log_out;
+    }
+
+    public void setFlag_log_out(boolean flag_log_out) {
+        this.flag_log_out = flag_log_out;
+    }
+
     public void InitUI()
     {
         final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -169,7 +181,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_line_chart_white),
                         Color.parseColor(colors[0]))
-                        .title("Batas Produksi Susu")
+                        .title("Batas Produksi")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_calculator),
+                        Color.parseColor(colors[0]))
+                        .title("Keuangan")
                         .build()
         );
         navigationTabBar.setModels(models);
@@ -198,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         i = new Intent(MainActivity.this,AddBatasProduksi.class);
                         startActivity(i);
                         break;
+                    case 5:
+                        i = new Intent(MainActivity.this,AddKeuangan.class);
+                        startActivity(i);
+                        break;
                 }
             }
 
@@ -215,18 +238,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_animal_list) {
+            startActivity(new Intent(MainActivity.this,ListDetailTernakMain.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -324,17 +337,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
             return true;
         } else if(id == R.id.action_logout){
-            SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
-            editor.apply();
-            Toast.makeText(getApplicationContext(),"Log Out",Toast.LENGTH_LONG).show();
+            if(flag_log_out){
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
+                Toast.makeText(getApplicationContext(),"Log Out",Toast.LENGTH_LONG).show();
 
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
 
-            Intent i = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(i);
-            finish();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+
+            }
         }
 
         return super.onOptionsItemSelected(item);

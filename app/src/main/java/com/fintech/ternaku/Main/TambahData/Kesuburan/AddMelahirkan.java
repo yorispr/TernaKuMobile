@@ -448,10 +448,12 @@ public class AddMelahirkan extends AppCompatActivity {
             input_addmelahirkan_activity_idternak.setError("ID Ternak belum diisi");
             cek = false;
         }
-        if(input_addmelahirkan_activity_jumlahanak.getText().toString().matches(""))
-        {
-            input_addmelahirkan_activity_jumlahanak.setError("Biaya belum diisi");
-            cek = false;
+        if(spinner_addmelahirkan_activity_statuskeberhasilan.getSelectedItemId()==1){
+            if(input_addmelahirkan_activity_jumlahanak.getText().toString().matches(""))
+            {
+                input_addmelahirkan_activity_jumlahanak.setError("Biaya belum diisi");
+                cek = false;
+            }
         }
         if(input_addmelahirkan_activity_tglmelahirkan.getText().toString().equalsIgnoreCase("01 Januari 1970")){
             cek=false;

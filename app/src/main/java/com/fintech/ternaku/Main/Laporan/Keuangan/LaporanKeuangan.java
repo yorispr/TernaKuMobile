@@ -1,18 +1,17 @@
-package com.fintech.ternaku.Main.Laporan;
+package com.fintech.ternaku.Main.Laporan.Keuangan;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
@@ -28,17 +27,13 @@ import java.util.List;
 
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
-
-import static android.R.attr.data;
 
 public class LaporanKeuangan extends AppCompatActivity {
     ProgressDialog progDialog;
@@ -48,11 +43,9 @@ public class LaporanKeuangan extends AppCompatActivity {
 
     private int numberOfLines = 2 ;
     private int maxNumberOfLines = 2;
-    private int numberOfPoints = 12;
+    private int numberOfPoints = 0;
     ArrayList<Float> uangListMasuk = new ArrayList<Float>();
     ArrayList<Float> uangListKeluar = new ArrayList<Float>();
-    float[][] dataUangMasuk = new float[maxNumberOfLines][numberOfPoints];
-    float[][] dataUangKeluar = new float[maxNumberOfLines][numberOfPoints];
     private boolean hasAxes = true;
     private boolean hasAxesNames = true;
     private boolean hasLines = true;
@@ -66,6 +59,7 @@ public class LaporanKeuangan extends AppCompatActivity {
 
     float totaluangmasuk=0, totaluangkeluar=0;
     String jsonMasuk, jsonKeluar;
+    String bln,thn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +77,21 @@ public class LaporanKeuangan extends AppCompatActivity {
         chart_laporankeuangan_activity = (LineChartView)findViewById(R.id.chart_laporankeuangan_activity);
         chart_laporankeuangan_activity.setOnValueTouchListener(new ValueTouchListener());
 
+        //Get Bundle-------------------------------------------------------
+        bln = getIntent().getExtras().getString("bln");
+        thn = getIntent().getExtras().getString("thn");
+
 
         // Disable viewport recalculations, see toggleCubic() method for more info.
         chart_laporankeuangan_activity.setViewportCalculationEnabled(false);
 
         resetViewport();
         String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
-                +"&tahun="+"2016";
+                +"&bulan=" + bln.trim()
+                +"&tahun=" + thn.trim();
+        new GetDataKeuanganMasuk().execute("http://ternaku.com/index.php/C_Laporan/UangMasuk_PETERNAKAN_BULAN_TERTENTU",param);
+        Log.d("Url",param);
 
-        new GetDataKeuanganMasuk().execute("http://ternaku.com/index.php/C_Laporan/UangMasuk_PETERNAKAN_TAHUN_TERTENTU",param);
 
 
     }
@@ -113,11 +113,12 @@ public class LaporanKeuangan extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESGrafikKeuangan",result);
             jsonMasuk = result;
             String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
-                    +"&tahun="+"2016";
-            new GetDataKeuanganKeluar().execute("http://ternaku.com/index.php/C_Laporan/UangKeluar_PETERNAKAN_TAHUN_TERTENTU",param);
+                    +"&bulan=" + bln.trim()
+                    +"&tahun=" + thn.trim();
+            new GetDataKeuanganKeluar().execute("http://ternaku.com/index.php/C_Laporan/UangKeluar_PETERNAKAN_BULAN_TERTENTU",param);
         }
     }
     private class GetDataKeuanganKeluar extends AsyncTask<String,Integer,String> {
@@ -135,7 +136,7 @@ public class LaporanKeuangan extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESGrafikKeuangan",result);
             jsonKeluar = result;
             addDataToList(jsonMasuk,jsonKeluar);
             progDialog.dismiss();
@@ -149,29 +150,31 @@ public class LaporanKeuangan extends AppCompatActivity {
             for(int k=0;k<jArray.length();k++)
             {
                 JSONObject jObj = jArray.getJSONObject(k);
-                uangListMasuk.add((float)jObj.getDouble("Jumlah Uang"));
-                totaluangmasuk+=(float)jObj.getDouble("Jumlah Uang");
+                uangListMasuk.add((float)jObj.getDouble("JumlahUang"));
+                totaluangmasuk+=(float)jObj.getDouble("JumlahUang");
             }
 
             JSONArray jArray2 = new JSONArray(resultKeluar);
             for(int k=0;k<jArray2.length();k++)
             {
                 JSONObject jObj2 = jArray2.getJSONObject(k);
-                uangListKeluar.add((float)jObj2.getDouble("Jumlah Uang"));
-                totaluangkeluar+=(float)jObj2.getDouble("Jumlah Uang");
+                uangListKeluar.add((float)jObj2.getDouble("JumlahUang"));
+                totaluangkeluar+=(float)jObj2.getDouble("JumlahUang");
             }
+            numberOfPoints = jArray.length();
+            float[][] dataUangMasuk = new float[maxNumberOfLines][numberOfPoints];
+            float[][] dataUangKeluar = new float[maxNumberOfLines][numberOfPoints];
 
-            generateValues();
-            generateData();
-            //generateData2();
+            generateValues(dataUangMasuk,dataUangKeluar);
+            generateData(dataUangMasuk,dataUangKeluar);
 
         }catch (JSONException e){e.printStackTrace();}
 
     }
 
-    private void generateData() {
+    private void generateData(float[][] dataUangMasuk,float[][] dataUangKeluar) {
         List<Line> linesMasuk = new ArrayList<Line>();
-        List<Line> linesKeluar = new ArrayList<Line>();
+
 
         for (int i = 0; i < numberOfLines; ++i) {
             //===============START UANG MASUK======================
@@ -213,7 +216,7 @@ public class LaporanKeuangan extends AppCompatActivity {
             Axis axisX = new Axis();
             Axis axisY = new Axis().setHasLines(true);
             if (hasAxesNames) {
-                axisX.setName("Bulan");
+                axisX.setName("Tanggal");
                 axisY.setName("Rupiah");
             }
             data_laporankeuangan_activity.setAxisXBottom(axisX);
@@ -228,55 +231,7 @@ public class LaporanKeuangan extends AppCompatActivity {
         chart_laporankeuangan_activity.setLineChartData(data_laporankeuangan_activity);
     }
 
-    private void generateData2() {
-        List<Line> linesMasuk = new ArrayList<Line>();
-        List<Line> linesKeluar = new ArrayList<Line>();
-
-        for (int i = 0; i < numberOfLines; ++i) {
-            //===============START UANG KELUAR======================
-            List<PointValue> valuesKeluar = new ArrayList<PointValue>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                //values.add(new PointValue(j, uangListMasuk.get(j)));
-                valuesKeluar.add(new PointValue(j, dataUangKeluar[i][j]));
-            }
-            Line lineKeluar = new Line(valuesKeluar);
-            lineKeluar.setColor(Color.parseColor("#e74c3c"));
-            lineKeluar.setShape(shape);
-            lineKeluar.setCubic(isCubic);
-            lineKeluar.setFilled(isFilled);
-            lineKeluar.setHasLabels(hasLabels);
-            lineKeluar.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            lineKeluar.setHasLines(hasLines);
-            lineKeluar.setHasPoints(hasPoints);
-            if (pointsHaveDifferentColor){
-                lineKeluar.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-            }
-            linesKeluar.add(lineKeluar);
-            //===============END UANG KELUAR========================
-        }
-
-        data_laporankeuangan_activity = new LineChartData(linesKeluar);
-
-        if (hasAxes) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            if (hasAxesNames) {
-                axisX.setName("Bulan");
-                axisY.setName("Rupiah");
-            }
-            data_laporankeuangan_activity.setAxisXBottom(axisX);
-            data_laporankeuangan_activity.setAxisYLeft(axisY);
-        } else {
-            data_laporankeuangan_activity.setAxisXBottom(null);
-            data_laporankeuangan_activity.setAxisYLeft(null);
-        }
-
-        data_laporankeuangan_activity.setBaseValue(Float.NEGATIVE_INFINITY);
-
-        chart_laporankeuangan_activity.setLineChartData(data_laporankeuangan_activity);
-    }
-
-    private void generateValues() {
+    private void generateValues(float[][] dataUangMasuk,float[][] dataUangKeluar) {
 
         final Viewport v = new Viewport(chart_laporankeuangan_activity.getMaximumViewport());
         v.bottom = 0;
@@ -306,45 +261,16 @@ public class LaporanKeuangan extends AppCompatActivity {
         }
     }
 
-    private void reset() {
-        numberOfLines = 1;
-
-        hasAxes = true;
-        hasAxesNames = true;
-        hasLines = true;
-        hasPoints = true;
-        shape = ValueShape.CIRCLE;
-        isFilled = false;
-        hasLabels = false;
-        isCubic = false;
-        hasLabelForSelected = false;
-        pointsHaveDifferentColor = false;
-
-        chart_laporankeuangan_activity.setValueSelectionEnabled(hasLabelForSelected);
-        resetViewport();
-    }
 
     private void resetViewport() {
         // Reset viewport height range to (0,100)
         final Viewport v = new Viewport(chart_laporankeuangan_activity.getMaximumViewport());
         v.bottom = 0;
-        v.top = 100000;
+        v.top = 10000;
         v.left = 0;
         v.right = numberOfPoints - 1;
         chart_laporankeuangan_activity.setMaximumViewport(v);
         chart_laporankeuangan_activity.setCurrentViewport(v);
-    }
-
-
-    private void addLineToData() {
-        if (data_laporankeuangan_activity.getLines().size() >= maxNumberOfLines) {
-            Toast.makeText(LaporanKeuangan.this, "Samples app uses max 4 lines!", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            ++numberOfLines;
-        }
-
-        generateData();
     }
 
     private class ValueTouchListener implements LineChartOnValueSelectListener {

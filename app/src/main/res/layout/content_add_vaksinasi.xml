@@ -174,8 +174,7 @@
                                     android:layout_weight="1"
                                     android:hint="Cth : ml"
                                     android:id="@+id/input_addvaksinasi_activity_satuan"
-                                    android:gravity="center_horizontal"
-                                    android:inputType="number"/>
+                                    android:gravity="center_horizontal"/>
                             </LinearLayout>
                         </LinearLayout>
                         <LinearLayout

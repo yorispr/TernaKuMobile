@@ -2,6 +2,7 @@ package com.fintech.ternaku.Main.Dashboard;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -25,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
+import com.fintech.ternaku.Main.MainActivity;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.numetriclabz.numandroidcharts.ChartData;
 import com.fintech.ternaku.Connection;
@@ -118,6 +121,7 @@ public class DashboardFragment extends Fragment {
     int jumlahSubur=0;
     int totDewasa;
     int i;
+    boolean flag_run=false;
     String temp_result;
     RelativeLayout relativeLayout_dashboard_fragment;
     View view;
@@ -199,7 +203,14 @@ public class DashboardFragment extends Fragment {
         chart_dashboard_fragment_pemeriksaanhariini.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
-
+                if(i == 0) {
+                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    act.putExtra("periksa", "periksa");
+                    startActivity(act);
+                }else{
+                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    startActivity(act);
+                }
             }
 
             @Override
@@ -211,7 +222,14 @@ public class DashboardFragment extends Fragment {
         chart_dashboard_fragment_sedangdalammasasubur.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
-
+                if(i == 0) {
+                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    act.putExtra("masasubur", "masasubur");
+                    startActivity(act);
+                }else{
+                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    startActivity(act);
+                }
             }
 
             @Override
@@ -223,7 +241,25 @@ public class DashboardFragment extends Fragment {
         chart_dashboard_fragment_datakehamilan.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
-
+                Log.d("SLICE",String.valueOf(i));
+                Intent act;
+                switch (i){
+                    case 0:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("mengandung", "mengandung");
+                        startActivity(act);
+                        break;
+                    case 1:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("melahirkan", "melahirkan");
+                        startActivity(act);
+                        break;
+                    case 2:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("menyusui", "menyusui");
+                        startActivity(act);
+                        break;
+                }
             }
 
             @Override
@@ -235,7 +271,26 @@ public class DashboardFragment extends Fragment {
         chart_dashboard_fragment_datakawanan.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
+                Log.d("SLICEKawanan",String.valueOf(i));
+                Intent act;
 
+                switch (i){
+                    case 0:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("dewasa", "dewasa");
+                        startActivity(act);
+                        break;
+                    case 1:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("muda", "muda");
+                        startActivity(act);
+                        break;
+                    case 2:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("bayi", "bayi");
+                        startActivity(act);
+                        break;
+                }
             }
 
             @Override
@@ -316,8 +371,7 @@ public class DashboardFragment extends Fragment {
     }
 
     //Set To Spinner---------------------------------
-    private void ShowPeternakan(String result)
-    {
+    private void ShowPeternakan(String result) {
         list_dashboard_fragment_peternakan.clear();
 
         Log.d("PET",result);
@@ -395,64 +449,64 @@ public class DashboardFragment extends Fragment {
         value_dashboard_fragment_datakawanan.clear();
 
         try {
-                JSONArray jArray = new JSONArray(temp_result);
-                for (int i = 0; i < jArray.length(); i++) {
-                    JSONObject jObj = jArray.getJSONObject(i);
+            JSONArray jArray = new JSONArray(temp_result);
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject jObj = jArray.getJSONObject(i);
 
-                    //Get Data Gauge Produksi Susu------------------------------------------
-                    if(nullHandle(jObj,"produksi_susu")==0){
-                        totalsusu = 0;
-                    }else if(nullHandle(jObj,"produksi_susu")==1){
-                        totalsusu = jObj.getLong("produksi_susu");
-                    }
-
-                    //Get Data Periksa Hari ini----------------------------------------------
-                    SliceValue valuePeriksaHariIni = new SliceValue(jObj.getInt("periksa"), Color.parseColor("#2ecc71"));
-                    int belumperiksa = jObj.getInt("total_sapi") - jObj.getInt("periksa");
-                    SliceValue valueBelumPeriksa = new SliceValue(belumperiksa, Color.parseColor("#e74c3c"));
-                    jumlahperiksa = jObj.getInt("periksa");
-                    totsapi = jObj.getInt("total_sapi");
-                    value_dashboard_fragment_pemeriksaanhariini.add(valuePeriksaHariIni);
-                    value_dashboard_fragment_pemeriksaanhariini.add(valueBelumPeriksa);
-
-                    //Get Data Sapi dalam Masa Subur----------------------------------------------
-                    SliceValue valueSubur = new SliceValue(jObj.getInt("subur"), Color.parseColor("#ff9ad7"));
-                    int belumSubur = jObj.getInt("sapi_dewasa") - jObj.getInt("subur");
-                    SliceValue valueBelumSubur = new SliceValue(belumSubur, Color.parseColor("#9cb6c1"));
-                    jumlahSubur = jObj.getInt("subur");
-                    totDewasa = jObj.getInt("sapi_dewasa");
-                    value_dashboard_fragment_sedangdalammasasubur.add(valueSubur);
-                    value_dashboard_fragment_sedangdalammasasubur.add(valueBelumSubur);
-
-                    if (!jObj.isNull("jumlah_pakan")) {
-                        jumlahpakan = jObj.getInt("jumlah_pakan");
-                    }
-                    if (!jObj.isNull("harga")) {
-                        jumlahbiaya = jObj.getInt("harga");
-                    }
-
-                    //Get Data Kehamilan----------------------------------------------------------
-                    SliceValue valuehamil = new SliceValue(jObj.getInt("jumlah_ternakhamil"), Color.parseColor("#d280f0"));
-                    SliceValue valuemelahirkan = new SliceValue(jObj.getInt("jumlah_ternakmelahirkan"), Color.parseColor("#8bdafc"));
-                    SliceValue valuemenyusui = new SliceValue(jObj.getInt("jumlah_ternakmenyusui"), Color.parseColor("#2ecc71"));
-                    int lainnya = totsapi - jObj.getInt("jumlah_ternakhamil")-jObj.getInt("jumlah_ternakmelahirkan")-jObj.getInt("jumlah_ternakmenyusui");
-                    SliceValue valueLainnya = new SliceValue(lainnya, Color.parseColor("#bdc3c7"));
-                    value_dashboard_fragment_datakehamilan.add(valuehamil);
-                    value_dashboard_fragment_datakehamilan.add(valuemelahirkan);
-                    value_dashboard_fragment_datakehamilan.add(valuemenyusui);
-                    value_dashboard_fragment_datakehamilan.add(valueLainnya);
-
-                    //Get Data Kawanan----------------------------------------------------------
-                    SliceValue valuedewasa = new SliceValue(jObj.getInt("jumlah_dewasa"), Color.parseColor("#4183D7"));
-                    SliceValue valueanak = new SliceValue(jObj.getInt("jumlah_heifers"), Color.parseColor("#59ABE3"));
-                    SliceValue valuebayi = new SliceValue(jObj.getInt("jumlah_calv"), Color.parseColor("#8bdafc"));
-                    int lainnya2 = totsapi - jObj.getInt("jumlah_dewasa")-jObj.getInt("jumlah_heifers")-jObj.getInt("jumlah_calv");
-                    SliceValue valuelainnya2 = new SliceValue(lainnya2, Color.parseColor("#bdc3c7"));
-                    value_dashboard_fragment_datakawanan.add(valuedewasa);
-                    value_dashboard_fragment_datakawanan.add(valueanak);
-                    value_dashboard_fragment_datakawanan.add(valuebayi);
-                    value_dashboard_fragment_datakawanan.add(valuelainnya2);
+                //Get Data Gauge Produksi Susu------------------------------------------
+                if(nullHandle(jObj,"produksi_susu")==0){
+                    totalsusu = 0;
+                }else if(nullHandle(jObj,"produksi_susu")==1){
+                    totalsusu = jObj.getLong("produksi_susu");
                 }
+
+                //Get Data Periksa Hari ini----------------------------------------------
+                SliceValue valuePeriksaHariIni = new SliceValue(jObj.getInt("periksa"), Color.parseColor("#2ecc71"));
+                int belumperiksa = jObj.getInt("total_sapi") - jObj.getInt("periksa");
+                SliceValue valueBelumPeriksa = new SliceValue(belumperiksa, Color.parseColor("#e74c3c"));
+                jumlahperiksa = jObj.getInt("periksa");
+                totsapi = jObj.getInt("total_sapi");
+                value_dashboard_fragment_pemeriksaanhariini.add(valuePeriksaHariIni);
+                value_dashboard_fragment_pemeriksaanhariini.add(valueBelumPeriksa);
+
+                //Get Data Sapi dalam Masa Subur----------------------------------------------
+                SliceValue valueSubur = new SliceValue(jObj.getInt("subur"), Color.parseColor("#ff9ad7"));
+                int belumSubur = jObj.getInt("sapi_dewasa") - jObj.getInt("subur");
+                SliceValue valueBelumSubur = new SliceValue(belumSubur, Color.parseColor("#9cb6c1"));
+                jumlahSubur = jObj.getInt("subur");
+                totDewasa = jObj.getInt("sapi_dewasa");
+                value_dashboard_fragment_sedangdalammasasubur.add(valueSubur);
+                value_dashboard_fragment_sedangdalammasasubur.add(valueBelumSubur);
+
+                if (!jObj.isNull("jumlah_pakan")) {
+                    jumlahpakan = jObj.getInt("jumlah_pakan");
+                }
+                if (!jObj.isNull("harga")) {
+                    jumlahbiaya = jObj.getInt("harga");
+                }
+
+                //Get Data Kehamilan----------------------------------------------------------
+                SliceValue valuehamil = new SliceValue(jObj.getInt("jumlah_ternakhamil"), Color.parseColor("#d280f0"));
+                SliceValue valuemelahirkan = new SliceValue(jObj.getInt("jumlah_ternakmelahirkan"), Color.parseColor("#8bdafc"));
+                SliceValue valuemenyusui = new SliceValue(jObj.getInt("jumlah_ternakmenyusui"), Color.parseColor("#2ecc71"));
+                int lainnya = jObj.getInt("jumlah_tidakhamilmenyusuimelahirkan");
+                SliceValue valueLainnya = new SliceValue(lainnya, Color.parseColor("#bdc3c7"));
+                value_dashboard_fragment_datakehamilan.add(valuehamil);
+                value_dashboard_fragment_datakehamilan.add(valuemelahirkan);
+                value_dashboard_fragment_datakehamilan.add(valuemenyusui);
+                value_dashboard_fragment_datakehamilan.add(valueLainnya);
+
+                //Get Data Kawanan----------------------------------------------------------
+                SliceValue valuedewasa = new SliceValue(jObj.getInt("jumlah_dewasa"), Color.parseColor("#4183D7"));
+                SliceValue valueanak = new SliceValue(jObj.getInt("jumlah_heifers"), Color.parseColor("#59ABE3"));
+                SliceValue valuebayi = new SliceValue(jObj.getInt("jumlah_calv"), Color.parseColor("#8bdafc"));
+                int lainnya2 = totsapi - jObj.getInt("jumlah_dewasa")-jObj.getInt("jumlah_heifers")-jObj.getInt("jumlah_calv");
+                SliceValue valuelainnya2 = new SliceValue(lainnya2, Color.parseColor("#bdc3c7"));
+                value_dashboard_fragment_datakawanan.add(valuedewasa);
+                value_dashboard_fragment_datakawanan.add(valueanak);
+                value_dashboard_fragment_datakawanan.add(valuebayi);
+                value_dashboard_fragment_datakawanan.add(valuelainnya2);
+            }
             //Start Gauge Produksi Susu-------------------------------------------
             startRunning(-255+(totalsusu*(float)15.1));
             txt_dashboard_fragment_produksisusuhariini.setText(String.valueOf((totalsusu)));
@@ -631,6 +685,7 @@ public class DashboardFragment extends Fragment {
                     if (i == 299) {
                         isInProgress = false;
                         canReset = true;
+                        ((MainActivity)getActivity()).setFlag_log_out(true);
                     }
                 }
             }

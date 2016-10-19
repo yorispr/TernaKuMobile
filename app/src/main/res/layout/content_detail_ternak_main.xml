@@ -20,7 +20,7 @@
     <com.gigamole.navigationtabbar.ntb.NavigationTabBar
         android:id="@+id/navigation_detailternak_activity"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:background="#fff"
         app:ntb_badge_gravity="top"
         app:ntb_badge_position="right"

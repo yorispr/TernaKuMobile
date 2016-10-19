@@ -156,7 +156,7 @@ public class AddReminderActivity extends AppCompatActivity {
         String CurrentDate = df1.format(new Date());
         ModelAddProtokolInjeksi pm = new ModelAddProtokolInjeksi(key,judul,isi,isimportant,idpengguna,namapengguna,CurrentDate,0);
         DatabaseHandler db = new DatabaseHandler(this);
-        db.addReminder(pm);
+        //db.addReminder(pm);
         firebaseDatabase.child(idpeternakan).child(idpengguna).child(key).setValue(pm);
 
         String param = "id_reminder=" + key

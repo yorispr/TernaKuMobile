@@ -1,5 +1,6 @@
 package com.fintech.ternaku.LoginAndRegister;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -50,10 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         shr = getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE);
         if(!shr.contains("keyUsername") || shr.getString("keyUsername",null)==null) {
-            setContentView(R.layout.activity_login);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
+            setContentView(R.layout.activity_login);
 
             SweetAlertDialog pDialog = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.PROGRESS_TYPE);
             input_login_activity_username = (EditText) findViewById(R.id.input_login_activity_username);

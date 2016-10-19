@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -111,35 +112,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:text="Jenis Transaksi"
-                    android:textSize="18sp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_action_database"/>
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spinner_addkeuangan_activity_jenis"
-                        android:layout_gravity="center_vertical"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="Kategori"
                     android:textColor="#000"
                     android:textSize="18sp"/>
@@ -163,8 +135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Uang Keluar"
-                            android:layout_weight="1"
-                            android:checked="true"/>
+                            android:layout_weight="1"/>
                         <RadioButton
                             android:id="@+id/radiobutton_addkeuangan_activity_uangmasuk"
                             android:layout_width="wrap_content"
@@ -173,6 +144,35 @@
                             android:checked="false"
                             android:layout_weight="1" />
                     </RadioGroup>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Jenis Transaksi"
+                        android:textSize="18sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_action_database"/>
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinner_addkeuangan_activity_jenis"
+                            android:layout_gravity="center_vertical"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -226,19 +226,16 @@
                     android:scrollbars="vertical"
                     android:textColor="#000"/>
             </LinearLayout>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Simpan"
-                android:id="@+id/button_addkeuangan_activity_simpan"
-                android:textColor="#FFFFFF"
-                android:background="@color/colorPrimary"
-                android:elevation="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/linearLayout_addkeuangan_activity_ket"
-                android:layout_alignStart="@+id/linearLayout_addkeuangan_activity_ket"
-                android:layout_alignEnd="@+id/linearLayout_addkeuangan_activity_ket" />
         </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_addkeuangan_activity_simpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/colorPrimary"
+            android:elevation="10dp"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

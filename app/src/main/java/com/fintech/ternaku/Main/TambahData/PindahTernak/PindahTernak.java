@@ -517,7 +517,6 @@ public class PindahTernak extends AppCompatActivity {
             Log.d("RES",result);
             pDialog.dismiss();
             if (result.trim().equals("1")){
-                Toast.makeText(getApplication(),"Berhasil memindahkan ternak",Toast.LENGTH_LONG).show();
                 input_pindahternak_activity_namakandang.setText(input_pindahternak_activity_kandang.getText().toString());
                 input_pindahternak_activity_namakawanan.setText(input_pindahternak_activity_kawanan.getText().toString());
                 //input_pindahternak_activity_idkandang.setText(KandangList.get(choosenindexkandang).getId_kandang());
@@ -535,6 +534,37 @@ public class PindahTernak extends AppCompatActivity {
                 }
 
                 setDetailToTextView(input_pindahternak_activity_idternak.getText().toString());
+                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Berhasil!")
+                        .setContentText("Data Berhasil Dimasukkan")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                                new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Pindah Ternak")
+                                        .setContentText("Apakah Ingin Memindah Ternak Lagi?")
+                                        .setConfirmText("Ya")
+                                        .setCancelText("Tidak")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                                cleartext();
+                                            }
+                                        })
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                                finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
             else {
                 new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
@@ -765,6 +795,7 @@ public class PindahTernak extends AppCompatActivity {
         input_pindahternak_activity_idternak.setHint("Ketikan ID Sapi atau Scan RFID");
         input_pindahternak_activity_kandang.setHint("Pilih Kandang");
         input_pindahternak_activity_kawanan.setHint("Pilih Kawanan");
+        linearLayout_pindahternak_activity_informsapi.setVisibility(View.GONE);
     }
 
     /*
