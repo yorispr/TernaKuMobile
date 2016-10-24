@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +65,8 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
     ArrayList<String> list_addipemeriksaansubur_idternak = new ArrayList<String>();
     ArrayAdapter<String> myAdapter;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
 
         //Set Id Ternak Auto Complete-------------------------------------
         String urlParameters_idternak = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakHeat().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters_idternak);
+        new GetTernakHeat().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters_idternak);
         input_addpemeriksaansubur_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addpemeriksaansubur_activity_idternak);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,list_addipemeriksaansubur_idternak);
@@ -178,7 +181,7 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
                                                 + "&tglperiksaberikutnya=" + input_addpemeriksaansubur_activity_tglperiksaberikut.getText().toString()
                                                 + "&statusreproduksi=" + String.valueOf(isSehat)
                                                 + "&biayaperiksa=" + input_addpemeriksaansubur_activity_biaya.getText().toString();
-                                        new InsertPeriksaReproduksi().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanReproduksi", urlParameters);
+                                        new InsertPeriksaReproduksi().execute(url.getUrl_InsertPemeriksaanReproduksi(), urlParameters);
                                         Log.d("Param",urlParameters);
                                     }
                                 })

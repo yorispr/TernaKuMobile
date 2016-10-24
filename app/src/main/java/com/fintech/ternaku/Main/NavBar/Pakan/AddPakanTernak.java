@@ -30,6 +30,7 @@ import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetPakanAddPakan;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +55,9 @@ public class AddPakanTernak extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     public String temp_id_kandang,temp_id_pakan;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,7 @@ public class AddPakanTernak extends AppCompatActivity {
 
         //Set Kandang Ternak---------------------------
         String urlParameter_kandang = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataKandang", urlParameter_kandang);
+        new GetTernakId().execute(url.getUrl_GetKandang(), urlParameter_kandang);
 
 
         //Set Date-------------------------------------
@@ -127,7 +131,7 @@ public class AddPakanTernak extends AppCompatActivity {
                                             "&sesimakan="+ spinner_addapakan_activity_sesimakan.getSelectedItem().toString().trim()+
                                             "&satuanpakan="+ "kilogram"+
                                             "&biaya="+ input_addpakan_activity_hargamakan.getText().toString().trim();
-                                    new InsertToDbPakan().execute("http://ternaku.com/index.php/C_HistoryMakan/InsertPemakaianPakan", urlParameters_insert);
+                                    new InsertToDbPakan().execute(url.getUrl_InsertPenggunaanPakan(), urlParameters_insert);
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -318,7 +322,7 @@ public class AddPakanTernak extends AppCompatActivity {
 
                 //Set Pakan Ternak---------------------------
                 String urlParameter_pakan = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-                new GetPakanId().execute("http://ternaku.com/index.php/C_HistoryMakan/getDataPakan", urlParameter_pakan);
+                new GetPakanId().execute(url.getUrl_GetPakan(), urlParameter_pakan);
             }
         }
     }

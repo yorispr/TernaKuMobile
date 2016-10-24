@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +63,9 @@ public class AddMasaSubur extends AppCompatActivity {
     boolean isHeat;
     int flag_radio=0;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +81,7 @@ public class AddMasaSubur extends AppCompatActivity {
 
         //Set Id Ternak Auto Complete-------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakIdTernak().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
+        new GetTernakIdTernak().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_addmasasubur_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addmasasubur_activity_idternak);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,list_addmasasubur_idternak);
@@ -169,7 +173,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                                         + "&diagnosis=" + diagnosis
                                                         + "&perawatan=" + perawatan
                                                         + "&biayaperiksa=" + biayaperiksa;
-                                                new UpdateMasaSubur().execute("http://ternaku.com/index.php/C_HistoryKesehatan/HeatMulai", urlParameters);
+                                                new UpdateMasaSubur().execute(url.getUrl_InsertHeatMulai(), urlParameters);
                                                 Log.d("TglMulai",urlParameters);
                                             } else {
                                                 new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
@@ -182,7 +186,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                                 String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                         + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
                                                         + "&tglselesaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString();
-                                                new UpdateMasaSubur().execute("http://ternaku.com/index.php/C_HistoryKesehatan/HeatSelesai", urlParameters);
+                                                new UpdateMasaSubur().execute(url.getUrl_InsertHeatSelesai(), urlParameters);
                                                 Log.d("TglSelesai",urlParameters);
                                             } else {
                                                 new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
@@ -193,7 +197,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                         }
                                         //Set Ternak Heat-------------------------------------------------
                                         String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                                        new GetTernakHeat().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakHeatByPeternakan", param_2);
+                                        new GetTernakHeat().execute(url.getUrl_GetHeat(), param_2);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -276,7 +280,7 @@ public class AddMasaSubur extends AppCompatActivity {
 
                 //Set Ternak Heat-------------------------------------------------
                 String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                new GetTernakHeat().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakHeatByPeternakan", param_2);
+                new GetTernakHeat().execute(url.getUrl_GetHeat(), param_2);
 
             }
         }

@@ -25,6 +25,7 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.ModelGetKawananAddBatasProduksi;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKawanan;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +42,9 @@ public class AddBatasProduksi extends AppCompatActivity {
     ArrayList<String> list_kawanan = new ArrayList<String>();
     public String temp_id_kawanan;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,7 @@ public class AddBatasProduksi extends AppCompatActivity {
 
         //Set Kawanan--------------------------------------------
         String urlParameter_kawanan = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetIdKawanan().execute("http://ternaku.com/index.php/C_BatasProduksi/getKawanan", urlParameter_kawanan);
+        new GetIdKawanan().execute(url.getUrl_GetKawanan(), urlParameter_kawanan);
 
         //Set Batas----------------------------------------------
         input_addbatasproduksi_activity_rendah = (EditText) findViewById(R.id.input_addbatasproduksi_activity_rendah);
@@ -84,7 +88,7 @@ public class AddBatasProduksi extends AppCompatActivity {
                                             "&rendah="+ input_addbatasproduksi_activity_rendah.getText().toString().trim()+
                                             "&sedang="+ input_addbatasproduksi_activity_sedang.getText().toString().trim()+
                                             "&tinggi="+ input_addbatasproduksi_activity_tinggi.getText().toString().trim();
-                                    new InsertToBatasProduksi().execute("http://ternaku.com/index.php/C_BatasProduksi/InsertBatasProduksiSusu", urlParameters_insert_batas_produksi);
+                                    new InsertToBatasProduksi().execute(url.getUrl_InsertBatasProduksi(), urlParameters_insert_batas_produksi);
 
                                 }
                             })

@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.ModelAddVaksin;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
@@ -62,6 +63,9 @@ public class AddVaksinasi extends AppCompatActivity {
     private boolean cekKarantina;
     private int selectedindex=-1;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +81,7 @@ public class AddVaksinasi extends AppCompatActivity {
 
         //Set Text Input Id----------------------------------------------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
+        new GetTernakId().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_addvaksinasi_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addvaksinasi_activity_idternak);
         input_addvaksinasi_activity_idternak.setEnabled(false);
         adp=new ArrayAdapter<String>(this,
@@ -127,7 +131,7 @@ public class AddVaksinasi extends AppCompatActivity {
         input_addvaksinasi_activity_pemberianke = (EditText)findViewById(R.id.input_addvaksinasi_activity_pemberianke);
 
         //Insert To Database------------------------------------------------------------------
-        new GetVaksin().execute("http://ternaku.com/index.php/C_Vaksinasi/getVaksin","");
+        new GetVaksin().execute(url.getUrl_GetVaksin(),"");
         button_addvaksinasi_activity_simpan = (Button)findViewById(R.id.button_addvaksinasi_activity_simpan);
         button_addvaksinasi_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +159,7 @@ public class AddVaksinasi extends AppCompatActivity {
                                                 + "&satuandosis=" + input_addvaksinasi_activity_satuan.getText().toString()
                                                 + "&repetisi=" + input_addvaksinasi_activity_pemberianke.getText().toString()
                                                 + "&tglvaksinasi=" + input_addvaksinasi_activity_tglvaksinasi.getText().toString();
-                                        new AddVaksinasitoDatabase().execute("http://ternaku.com/index.php/C_Vaksinasi/insertVaksinasi", param);
+                                        new AddVaksinasitoDatabase().execute(url.getUrl_InsertVaksinasi(), param);
                                         Log.d("Param",param);
                                     }
                                 })

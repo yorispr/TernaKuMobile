@@ -39,6 +39,7 @@ import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -58,6 +59,8 @@ public class AddInseminasi extends AppCompatActivity {
     ArrayList<String> list_addinseminasi_idternak = new ArrayList<String>();
     ArrayAdapter<String> myAdapter;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,7 @@ public class AddInseminasi extends AppCompatActivity {
 
         //Set Data Id Ternak-----------------------------------------------
         String urlParameters_idternak = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakHeat().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", urlParameters_idternak);
+        new GetTernakHeat().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters_idternak);
         input_addinseminasi_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addinseminasi_activity_idternak);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,list_addinseminasi_idternak);
@@ -136,7 +139,7 @@ public class AddInseminasi extends AppCompatActivity {
                                             + "&idsemen=" + idsemen.trim()
                                             + "&jumlahsemen=" + input_addinseminasi_activity_jumlah.getText().toString()
                                             + "&biayasemen=" + input_addinseminasi_activity_biaya.getText().toString();
-                                    new InsertInseminasi().execute("http://ternaku.com/index.php/C_HistoryInseminasi/insertInseminasi", urlParameters);
+                                    new InsertInseminasi().execute(url.getUrl_InsertInseminasi(), urlParameters);
                                     Log.d("Param", urlParameters.toString());
                                 }
                             })
@@ -213,7 +216,7 @@ public class AddInseminasi extends AppCompatActivity {
 
                 //Set Data Spinner----------------------------------------
                 String urlParameters_semen = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-                new GetSemen().execute("http://ternaku.com/index.php/C_HistoryInseminasi/GetSemen", urlParameters_semen);
+                new GetSemen().execute(url.getUrl_GetSemen(), urlParameters_semen);
             }
         }
     }

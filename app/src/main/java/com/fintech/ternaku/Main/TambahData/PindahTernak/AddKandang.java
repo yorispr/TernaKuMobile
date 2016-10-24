@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -28,6 +29,9 @@ public class AddKandang extends AppCompatActivity {
     private EditText input_addkandang_activity_nama,input_addkandang_activity_lokasi,
             input_addkandang_activity_kapasitas;
     private Button button_addkandang_activity_simpan;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class AddKandang extends AppCompatActivity {
                                             +"&lokasi=" + input_addkandang_activity_lokasi.getText().toString()
                                             +"&kapasitas=" + input_addkandang_activity_kapasitas.getText().toString()
                                             +"&statusaktif=Aktif";
-                                    new InsertKandangTask().execute("http://ternaku.com/index.php/C_Ternak/insertKandang", urlParameters);
+                                    new InsertKandangTask().execute(url.getUrl_GetKandang(), urlParameters);
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

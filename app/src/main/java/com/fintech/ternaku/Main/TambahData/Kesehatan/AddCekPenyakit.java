@@ -31,8 +31,14 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -51,6 +57,11 @@ public class AddCekPenyakit extends AppCompatActivity {
     private SimpleDateFormat dateFormatter_tglperiksa;
     private String datetime;
     int susuaman;
+    ArrayList<String> list_addpenyakit_idternak = new ArrayList<String>();
+    ArrayAdapter<String> adp;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +77,18 @@ public class AddCekPenyakit extends AppCompatActivity {
         }
 
         //Set Auto Text------------------------------------
+        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+        new GetTernakId().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_addcekpenyakit_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addcekpenyakit_activity_idternak);
+        input_addcekpenyakit_activity_idternak.setEnabled(false);
+        adp=new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,list_addpenyakit_idternak);
+        input_addcekpenyakit_activity_idternak.setAdapter(adp);
+        input_addcekpenyakit_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
 
         //Set Tanggal---------------------------------------
         setDateTimeField();
@@ -139,7 +161,7 @@ public class AddCekPenyakit extends AppCompatActivity {
                                                             + "&susuaman=" + susuaman
                                                             + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
                                                             + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
-                                                    new InsertCekPenyakit().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness", param);
+                                                    new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
                                                 }
                                             })
                                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -178,7 +200,7 @@ public class AddCekPenyakit extends AppCompatActivity {
                                                         + "&susuaman=" + susuaman
                                                         + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
                                                         + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
-                                                new InsertCekPenyakit().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness", param);
+                                                new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -202,6 +224,62 @@ public class AddCekPenyakit extends AppCompatActivity {
             }
         });
 
+    }
+
+    //Set AutoComplete-----------------------------------------------------------
+    private class GetTernakId extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            } else{
+                AddTernakToList(result);
+                input_addcekpenyakit_activity_idternak.setEnabled(true);
+            }
+        }
+    }
+    private void AddTernakToList(String result) {
+        list_addpenyakit_idternak.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_addpenyakit_idternak.add(jObj.getString("id_ternak"));
+            }
+            adp.notifyDataSetChanged();
+        }
+        catch (JSONException e){e.printStackTrace();}
     }
 
     //Insert To Database------------------------------

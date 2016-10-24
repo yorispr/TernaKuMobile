@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuangan;
+import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
 import com.fintech.ternaku.Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan;
 import com.fintech.ternaku.Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik;
 import com.fintech.ternaku.R;
@@ -68,7 +69,7 @@ public class LaporanFragment extends Fragment {
             txt_laporan_fragment_keuanganpenjualansusu,
             txt_laporan_fragment_keuanganpenjualanlainnya;
     private Button button_laporan_fragment_grafikkeuangan;
-    private String bln_selected,thn_selected;
+    private String bln_selected,thn_selected,bln_selected_angka;
 
 
     public LaporanFragment() {
@@ -111,7 +112,8 @@ public class LaporanFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putString("bln",bln_selected);
                 b.putString("thn",thn_selected);
-                Intent intent = new Intent(getActivity(),LaporanKeuangan.class);
+                b.putString("bln_angka",bln_selected_angka);
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -227,6 +229,7 @@ public class LaporanFragment extends Fragment {
                         + ", " + String.valueOf(numberPicker_laporan_tahun.getValue()).trim());
                 bln_selected = bulan[numberPicker_laporan_bulan.getValue()].toString().trim();
                 thn_selected = String.valueOf(numberPicker_laporan_tahun.getValue()).trim();
+                bln_selected_angka = String.valueOf(numberPicker_laporan_bulan.getValue()+1).trim();
 
                 //Set Data------------------------------------------------------------
                 String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
@@ -349,24 +352,35 @@ public class LaporanFragment extends Fragment {
                 }
             }
 
+            String currencyCode = "IDR";
+            Currency currency = Currency.getInstance(currencyCode);
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setMaximumFractionDigits(1);
+            format.setCurrency(currency);
             //Uang Keluar-------------------------------------------------------
-            txt_laporan_fragment_keuanganpembelianpakan.setText("Rp. " + String.valueOf(Pembelian_Pakan) + "0");
-            txt_laporan_fragment_keuanganpembelianobat.setText("Rp. " + String.valueOf(Pembelian_Obat) + "0");
-            txt_laporan_fragment_keuanganpembelianvaksin.setText("Rp. " + String.valueOf(Pembelian_Vaksin) + "0");
-            txt_laporan_fragment_keuanganpembeliansemen.setText("Rp. " + String.valueOf(Pembelian_Semen) + "0");
-            txt_laporan_fragment_keuanganpemeriksaankesehatan.setText("Rp. " + String.valueOf(Pemeriksaan_Kesehatan_Sapi) + "0");
-            txt_laporan_fragment_keuanganpembelianperlengkapan.setText("Rp. " + String.valueOf(Pembelian_Perlengkapan) + "0");
-            txt_laporan_fragment_keuanganpembelianternak.setText("Rp. " + String.valueOf(Pembelian_Ternak) + "0");
-            txt_laporan_fragment_keuanganpembelianlistrik.setText("Rp. " + String.valueOf(Pembayaran_Listrik) + "0");
-            txt_laporan_fragment_keuanganpembelianlainnya.setText("Rp. " + String.valueOf(Pembayaran_Lain_lain) + "0");
+            txt_laporan_fragment_keuanganpembelianpakan.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Pakan))) + ",00");
+            txt_laporan_fragment_keuanganpembelianobat.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Obat))) + ",00");
+            txt_laporan_fragment_keuanganpembelianvaksin.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Vaksin))) + ",00");
+            txt_laporan_fragment_keuanganpembeliansemen.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Semen))) + ",00");
+            txt_laporan_fragment_keuanganpemeriksaankesehatan.setText("Rp. " + SubString(String.valueOf(format.format(Pemeriksaan_Kesehatan_Sapi))) + ",00");
+            txt_laporan_fragment_keuanganpembelianperlengkapan.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Perlengkapan))) + ",00");
+            txt_laporan_fragment_keuanganpembelianternak.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Ternak))) + ",00");
+            txt_laporan_fragment_keuanganpembelianlistrik.setText("Rp. " + SubString(String.valueOf(format.format(Pembayaran_Listrik))) + ",00");
+            txt_laporan_fragment_keuanganpembelianlainnya.setText("Rp. " + SubString(String.valueOf(format.format(Pembayaran_Lain_lain))) + ",00");
             //Uang Masuk-------------------------------------------------------
-            txt_laporan_fragment_keuanganpenjualanternak.setText("Rp. " + String.valueOf(Penjualan_ternak) + "0");
-            txt_laporan_fragment_keuanganpenjualanpupuk.setText("Rp. " + String.valueOf(Penjualan_kompos) + "0");
-            txt_laporan_fragment_keuanganpenjualansusu.setText("Rp. " + String.valueOf(Penjualan_Susu) + "0");
-            txt_laporan_fragment_keuanganpenjualanlainnya.setText("Rp. " + String.valueOf(Pemasukan_Lain_lain) + "0");
+            txt_laporan_fragment_keuanganpenjualanternak.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_ternak))) + ",00");
+            txt_laporan_fragment_keuanganpenjualanpupuk.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_kompos))) + ",00");
+            txt_laporan_fragment_keuanganpenjualansusu.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_Susu))) + ",00");
+            txt_laporan_fragment_keuanganpenjualanlainnya.setText("Rp. " + SubString(String.valueOf(format.format(Pemasukan_Lain_lain))) + ",00");
         } catch (JSONException e){
             e.printStackTrace();
         }
     }
+
+    private String SubString(String value){
+        return value.substring(3, value.length()-2);
+    }
+
+
 
 }

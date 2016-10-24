@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,10 +24,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fintech.ternaku.DetailTernak.DetailTernakMain;
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
+import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
 import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
+import com.fintech.ternaku.Main.NavBar.CalendarToDoList.ToDoListCalendar;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingToolbar mFloatingToolbar;
     private int opentabs = 0;
     private boolean flag_log_out=false;
+    NavigationTabBar navigationTabBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         //Set Toolbar Floating Button-----------------------------
+        navigationTabBar = (NavigationTabBar) findViewById(R.id.navigation_main_activity);
         InitUI();
 
 
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
     public boolean getStatusLogOut(){
         return flag_log_out;
     }
@@ -147,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void InitUI()
     {
         final String[] colors = getResources().getStringArray(R.array.default_preview);
-        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.navigation_main_activity);
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
@@ -231,6 +233,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        navigationTabBar.setSelected(false);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -240,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_animal_list) {
             startActivity(new Intent(MainActivity.this,ListDetailTernakMain.class));
+        }else if(id == R.id.nav_reminder){
+            startActivity(new Intent(MainActivity.this,ToDoListCalendar.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -384,4 +394,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return mFragmentTitleList.get(position);
         }
     }
+
 }

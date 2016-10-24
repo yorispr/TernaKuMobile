@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -28,6 +29,9 @@ public class AddKawanan extends AppCompatActivity {
     private EditText input_addkawanan_activity_nama,input_addkawanan_activity_keterangan,
             input_addkawanan_activity_umur;
     private Button button_addkawanan_activity_simpan;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,7 @@ public class AddKawanan extends AppCompatActivity {
                                             +"&umur=" + umurtemp
                                             +"&keterangan=" + input_addkawanan_activity_keterangan.getText().toString();
 
-                                    new InsertKawananTask().execute("http://ternaku.com/index.php/C_Ternak/insertKawanan", urlParameters);
+                                    new InsertKawananTask().execute(url.getUrl_InsertKawanan(), urlParameters);
                                     Log.d("param",urlParameters);
                                 }
                             })

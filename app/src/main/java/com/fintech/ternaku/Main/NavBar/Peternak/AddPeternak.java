@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,9 @@ public class AddPeternak extends AppCompatActivity {
     private Button button_addpeternak_activity_simpan;
     String u,p;
     int getSpinnerValueJabatan=0;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     ArrayAdapter<String> myAdapter;
     ArrayList<String> spinner_addpeternak_jabatan = new ArrayList<>();
@@ -72,7 +76,7 @@ public class AddPeternak extends AppCompatActivity {
         //Set Spinner----------------------------------------------------
         spinner_addpeternak_activity_jabatan = (Spinner)findViewById(R.id.spinner_addpeternak_activity_jabatan);
         String urlParameters = "";
-        new GetJabatan().execute("http://ternaku.com/index.php/C_Pengguna/getListRole", urlParameters);
+        new GetJabatan().execute(url.getUrl_GetListJabatan(), urlParameters);
         myAdapter= new ArrayAdapter<String> (AddPeternak.this, android.R.layout.simple_spinner_dropdown_item,spinner_addpeternak_jabatan);
         spinner_addpeternak_activity_jabatan.setAdapter(myAdapter);
 
@@ -130,7 +134,7 @@ public class AddPeternak extends AppCompatActivity {
                                         u = output;
                                         p = input_addpeternak_activity_notelp.getText().toString();
                                         Log.d("data",urlParameters);
-                                        new InsertPeternak().execute("http://ternaku.com/index.php/C_Pengguna/insertPeternak", urlParameters);
+                                        new InsertPeternak().execute(url.getUrl_InsertPeternak(), urlParameters);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -275,7 +279,7 @@ public class AddPeternak extends AppCompatActivity {
                         .setTitleText("Berhasil!")
                         .setContentText("User Baru Berhasil Ditambahkan")
                         .setConfirmText("OK")
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 showCredential(u,p);

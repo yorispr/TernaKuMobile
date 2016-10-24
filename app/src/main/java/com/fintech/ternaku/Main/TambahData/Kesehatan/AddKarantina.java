@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +53,7 @@ public class AddKarantina extends AppCompatActivity {
     private RadioButton radiobutton_addkarantina_activity_mlai,radiobutton_addkarantina_activity_selesai;
     private TextView input_addkarantina_activity_tglpemeriksaan;
     private EditText input_addkarantina_activity_diagnosis,input_addkarantina_activity_perawatan;
-    private Spinner spinner_addkarantina_activity_kawanan;
+    private Spinner spinner_addkarantina_activity_kawanan,spinner_addkarantina_activity_kandang;
     private Button button_addkarantina_activity_simpan;
     private DatePickerDialog fromDatePickerDialog_tglperiksa;
     private TimePickerDialog mTimePicker;
@@ -58,14 +61,18 @@ public class AddKarantina extends AppCompatActivity {
     private String datetime;
     private LinearLayout linearLayout_addkarantina_activity_diagnosis;
 
+    ArrayList<String> list_addkarantina_kandang = new ArrayList<String>();
     ArrayList<String> list_addkarantina_kawanan = new ArrayList<String>();
     ArrayList<String> list_addkarantina_idternak = new ArrayList<String>();
     ArrayList<String> list_addkarantina_karantina = new ArrayList<String >();
     ArrayList<String> list_addkarantina_id_ternak_autocomplete = new ArrayList<String >();
     ArrayAdapter<String> adp;
-    ArrayAdapter<String> myAdapter;
+    ArrayAdapter<String> myAdapter_kawanan,myAdapter_kandang;
     private boolean cekKarantina;
     int flag_radio=0;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +89,11 @@ public class AddKarantina extends AppCompatActivity {
 
         //Set Auto Text-----------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
+        new GetTernakId().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_addkarantina_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addkarantina_activity_idternak);
         input_addkarantina_activity_idternak.setEnabled(false);
         adp=new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,list_addkarantina_id_ternak_autocomplete);
+                android.R.layout.simple_dropdown_item_1line,list_addkarantina_idternak);
         input_addkarantina_activity_idternak.setAdapter(adp);
         input_addkarantina_activity_idternak.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,9 +134,14 @@ public class AddKarantina extends AppCompatActivity {
         });
 
         //Set Kawanan----------------------------------------------------------
-        myAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,list_addkarantina_kawanan);
+        myAdapter_kawanan= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,list_addkarantina_kawanan);
         spinner_addkarantina_activity_kawanan = (Spinner)findViewById(R.id.spinner_addkarantina_activity_kawanan);
-        spinner_addkarantina_activity_kawanan.setAdapter(myAdapter);
+        spinner_addkarantina_activity_kawanan.setAdapter(myAdapter_kawanan);
+
+        //Set Kandang----------------------------------------------------------
+        myAdapter_kandang= new ArrayAdapter<String> (this, android.R.layout.simple_spinner_dropdown_item,list_addkarantina_kandang);
+        spinner_addkarantina_activity_kandang = (Spinner)findViewById(R.id.spinner_addkarantina_activity_kandang);
+        spinner_addkarantina_activity_kandang.setAdapter(myAdapter_kandang);
 
         //Insert To Database---------------------------------------------------
         button_addkarantina_activity_simpan = (Button)findViewById(R.id.button_addkarantina_activity_simpan);
@@ -142,8 +154,11 @@ public class AddKarantina extends AppCompatActivity {
                     if(flag_radio==1){
                         final String idkawanan = spinner_addkarantina_activity_kawanan.getSelectedItem().toString().trim();
                         final String idkawanan_2 = idkawanan.substring(idkawanan.indexOf("(") + 1, idkawanan.indexOf(")"));
+
+                        final String idkandang = spinner_addkarantina_activity_kandang.getSelectedItem().toString().trim();
+                        final String idkandang_2 = idkandang.substring(idkandang.indexOf("(") + 1, idkandang.indexOf(")"));
                         if(cekKarantina){
-                            if(isKarantina(input_addkarantina_activity_idternak.getText().toString().trim())){
+                            if(!isKarantina(input_addkarantina_activity_idternak.getText().toString().trim())){
                                 new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Simpan")
                                         .setContentText("Data Yang Dimasukkan Sudah Benar?")
@@ -166,9 +181,10 @@ public class AddKarantina extends AppCompatActivity {
                                                         + "&tglmulaikarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
                                                         + "&perawatan=" + perawatan
                                                         + "&diagnosis=" + diagnosis
-                                                        + "&idkawanan=" + idkawanan_2;
+                                                        + "&idkawanan=" + idkawanan_2
+                                                        + "&idkandang=" + idkandang_2;
 
-                                                new AddKarantinatoDatabase().execute("http://ternaku.com/index.php/C_HistoryKesehatan/KarantinaMulai", param);
+                                                new AddKarantinatoDatabase().execute(url.getUrl_InsertKarantinaMulai(), param);
 
                                             }
                                         })
@@ -200,8 +216,9 @@ public class AddKarantina extends AppCompatActivity {
                                                 String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                         + "&idternak=" + input_addkarantina_activity_idternak.getText().toString()
                                                         + "&TglSelesaiKarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
-                                                        + "&idkawanan=" + idkawanan_2;
-                                                new AddKarantinatoDatabase().execute("http://ternaku.com/index.php/C_HistoryKesehatan/KarantinaSelesai", param);
+                                                        + "&idkawanan=" + idkawanan_2
+                                                        + "&idkandang=" + idkandang_2;
+                                                new AddKarantinatoDatabase().execute(url.getUrl_InsertKarantinaSelesai(), param);
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -278,7 +295,7 @@ public class AddKarantina extends AppCompatActivity {
 
                 //Set Ternak Karantina-------------------------------------------------
                 String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                new GetTernakKarantina().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakKarantinaByPeternakan", param_2);
+                new GetTernakKarantina().execute(url.getUrl_GetKarantina(), param_2);
 
             }
         }
@@ -336,11 +353,10 @@ public class AddKarantina extends AppCompatActivity {
                         .show();
             }  else{
                 AddTernakKarantina(result);
-                AddTernakAutoComplete();
 
                 //Set Kawanan-------------------------------------------------
                 String param2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                new GetKawanan().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getKawanan", param2);
+                new GetKawanan().execute(url.getUrl_GetKawanan(), param2);
             }
         }
     }
@@ -357,22 +373,6 @@ public class AddKarantina extends AppCompatActivity {
             }
         }
         catch (JSONException e){e.printStackTrace();}
-    }
-
-    //Get Data to AutoComplete----------------------------------------------
-    private void AddTernakAutoComplete()
-    {
-        list_addkarantina_id_ternak_autocomplete.clear();
-
-        for(int i=0;i<list_addkarantina_idternak.size();i++)
-        {
-            for(int j=0;j<list_addkarantina_idternak.size();i++){
-                if(!list_addkarantina_idternak.get(i).toString().
-                        equalsIgnoreCase(list_addkarantina_karantina.get(j).toString())){
-                    list_addkarantina_id_ternak_autocomplete.add(list_addkarantina_idternak.get(i).toString());
-                }
-            }
-        }
     }
 
     //Get Data Kawanan------------------------------------------------------
@@ -435,6 +435,10 @@ public class AddKarantina extends AppCompatActivity {
             }
             else {
                 AddKawananToList(result);
+
+                //Get Data Kandang--------------------------------------------------
+                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                new GetKandang().execute(url.getUrl_GetKandang(), urlParameters);
             }
         }
     }
@@ -449,7 +453,86 @@ public class AddKarantina extends AppCompatActivity {
                 JSONObject jObj = jArray.getJSONObject(i);
                 list_addkarantina_kawanan.add("("+jObj.getString("id_kawanan")+") "+ jObj.getString("nama_kawanan"));
             }
-            myAdapter.notifyDataSetChanged();
+            myAdapter_kawanan.notifyDataSetChanged();
+        }
+        catch (JSONException e){e.printStackTrace();}
+    }
+
+    //Get Data Kandang------------------------------------------------------
+    private class GetKandang extends AsyncTask<String,Integer,String> {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Memuat Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            pDialog.dismiss();
+            if(result.trim().equals("kosong")){
+                new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Koneksi Terputus!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }else if (result.trim().equals("404")){
+                new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Gagal Memuat Data")
+                        .setContentText("Data Kandang Masih Kosong" + "\nApakah Ingin Memasukkan Data Kandang?")
+                        .setConfirmText("Ya")
+                        .setCancelText("Tidak")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                                finish();
+                                startActivity(new Intent(AddKarantina.this, AddKandang.class));
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+            else{
+                AddKandangToList(result);
+            }
+        }
+    }
+
+    private void AddKandangToList(String result) {
+        list_addkarantina_kandang.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                list_addkarantina_kandang.add("("+jObj.getString("ID_KANDANG")+") "+ jObj.getString("NAMA_KANDANG"));
+            }
+            myAdapter_kandang.notifyDataSetChanged();
         }
         catch (JSONException e){e.printStackTrace();}
     }

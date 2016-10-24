@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +44,9 @@ public class AddKeuangan extends AppCompatActivity {
     private DatePickerDialog fromDatePickerDialog;
     private SimpleDateFormat dateFormatter;
     int flag_radio_checked=0;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +148,7 @@ public class AddKeuangan extends AppCompatActivity {
                                                 "&kategori=" + radiobutton_addkeuangan_activity_kategori.getText().toString().trim()+
                                                 "&jumlah="+ input_addpakan_activity_harga.getText().toString().trim()+
                                                 "&keterangan="+ keterangan_transaksi.trim();
-                                        new insertToDbKeuangan().execute("http://ternaku.com/index.php/C_Keuangan/InsertKeuangan", urlParameters_insert);
+                                        new insertToDbKeuangan().execute(url.getUrl_InsertKeuangan(), urlParameters_insert);
                                         Log.d("tes",urlParameters_insert);
                                     }
                                 })

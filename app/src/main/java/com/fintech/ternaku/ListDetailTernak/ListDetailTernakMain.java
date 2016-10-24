@@ -36,6 +36,7 @@ import com.fintech.ternaku.DetailTernak.DetailTernakMain;
 import com.fintech.ternaku.ListDetailTernak.AdapterDetailTernakListDetailTernak;
 import com.fintech.ternaku.ListDetailTernak.ModelDetailTernalListDetailTernak;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ListHolder;
@@ -70,8 +71,12 @@ public class ListDetailTernakMain extends AppCompatActivity {
     boolean isFilter, isUrut;
     ArrayAdapter<String> adapterfilter,adapterurut;
      View mProgressBarFooter;
-    boolean isdashboardperiksa, isdashboardsubur, isdashboardmenyusui, isdashboardmelahirkan, isdashboardmengandung,
-            isdashboarddewasa,isdashboardmuda,isdashboardbayi;
+    boolean isdashboardperiksa,isdashboardbelumperiksa, isdashboardsubur, isdashboardtidaksubur,isdashboardkehamilanlainnya, isdashboardmenyusui, isdashboardmelahirkan, isdashboardmengandung,
+            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +97,10 @@ public class ListDetailTernakMain extends AppCompatActivity {
         isdashboarddewasa = false;
         isdashboardmuda = false;
         isdashboardbayi = false;
+        isdashboardbelumperiksa = false;
+        isdashboardtidaksubur = false;
+        isdashboardkehamilanlainnya = false;
+        iskawananlainnya = false;
 
         list = (ListView) findViewById(R.id.list_listdetailternak_activity);
         segment = 1;
@@ -133,16 +142,43 @@ public class ListDetailTernakMain extends AppCompatActivity {
                                 String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                                         + "&segment=" + segment;
                                 if(isdashboarddewasa){
-                                    new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakDewasaByPeternakan", urlParameters);
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakDewasa(), urlParameters);
+                                }
+                                else if(isdashboardsubur){
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaTernakHeat(), urlParameters);
+                                }
+                                else if(isdashboardtidaksubur){
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaTernakTidakHeat(), urlParameters);
                                 }
                                 else if(isdashboardmuda){
-                                    new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakHeifersByPeternakan", urlParameters);
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakHeifers(), urlParameters);
                                 }
                                 else if(isdashboardbayi){
-                                    new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakBayiByPeternakan", urlParameters);
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakBayi(), urlParameters);
+                                }
+                                else if(iskawananlainnya){
+                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakLainnya(), urlParameters);
+                                }
+                                else if(isdashboardperiksa){
+                                    new GetAllTernak().execute(url.getUrlGet_PeriksaHariIni(), urlParameters);
+                                }
+                                else if(isdashboardbelumperiksa){
+                                    new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
+                                }
+                                else if(isdashboardmengandung){
+                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMengandung(), urlParameters);
+                                }
+                                else if(isdashboardmenyusui){
+                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMenyusui(), urlParameters);
+                                }
+                                else if(isdashboardmelahirkan){
+                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMelahirkan(), urlParameters);
+                                }
+                                else if(isdashboardkehamilanlainnya){
+                                    new GetAllTernak().execute(url.getUrlGet_KehamilanLainnya(), urlParameters);
                                 }
                                 else{
-                                    new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakanOnSegment", urlParameters);
+                                    new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
                                 }
                                 Log.d("Scroll", "Bottom");
                             }
@@ -157,52 +193,77 @@ public class ListDetailTernakMain extends AppCompatActivity {
         if(getIntent().hasExtra("periksa")) {
             isdashboardperiksa = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    ;
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetPeriksaHariIni", urlParameters);
+                    + "&segment=" + segment;
+            new GetAllTernak().execute(url.getUrlGet_PeriksaHariIni(), urlParameters);
             getSupportActionBar().setTitle("Ternak sudah diperiksa");
+
+        }
+        else if(getIntent().hasExtra("belumperiksa")) {
+            isdashboardbelumperiksa = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
+            getSupportActionBar().setTitle("Ternak belum periksa");
 
         }
         else if(getIntent().hasExtra("masasubur")) {
             isdashboardsubur = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    ;
+                    + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakHeatByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SemuaTernakHeat(), urlParameters);
             getSupportActionBar().setTitle("Ternak sedang heat");
 
-        }else if(getIntent().hasExtra("menyusui")) {
+        }
+        else if(getIntent().hasExtra("tidakmasasubur")){
+            isdashboardtidaksubur = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            new GetAllTernak().execute(url.getUrlGet_SemuaTernakTidakHeat(), urlParameters);
+            getSupportActionBar().setTitle("Ternak tidak heat");
+        }
+        else if(getIntent().hasExtra("menyusui")) {
             isdashboardmenyusui = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    ;
+                    + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakMenyusuiByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_KehamilanMenyusui(), urlParameters);
             getSupportActionBar().setTitle("Ternak menyusui");
 
         }
         else if(getIntent().hasExtra("melahirkan")) {
             isdashboardmelahirkan = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    ;
+                    + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakMelahirkanByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_KehamilanMelahirkan(), urlParameters);
             getSupportActionBar().setTitle("Ternak melahirkan");
 
         }
         else if(getIntent().hasExtra("mengandung")) {
             isdashboardmengandung = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    ;
+                    + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakHamilByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_KehamilanMengandung(), urlParameters);
             getSupportActionBar().setTitle("Ternak mengandung");
 
+        }
+        else if(getIntent().hasExtra("kehamilanlainnya")) {
+            isdashboardkehamilanlainnya = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_KehamilanLainnya(), urlParameters);
+            getSupportActionBar().setTitle("Ternak Lainnya");
         }
         else if(getIntent().hasExtra("dewasa")) {
             isdashboarddewasa = true;
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                     + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakDewasaByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakDewasa(), urlParameters);
             getSupportActionBar().setTitle("Ternak Dewasa");
 
         }
@@ -211,7 +272,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                     + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakBayiByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakBayi(), urlParameters);
             getSupportActionBar().setTitle("Ternak Bayi");
 
         }
@@ -221,7 +282,17 @@ public class ListDetailTernakMain extends AppCompatActivity {
                     + "&segment=" + segment;
 
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakHeifersByPeternakan", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakHeifers(), urlParameters);
+            getSupportActionBar().setTitle("Ternak Muda");
+
+        }
+        else if(getIntent().hasExtra("kawananlainnya")) {
+            iskawananlainnya = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+
+            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakLainnya(), urlParameters);
             getSupportActionBar().setTitle("Ternak Muda");
 
         }
@@ -229,37 +300,12 @@ public class ListDetailTernakMain extends AppCompatActivity {
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                     + "&segment=" + segment;
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakanOnSegment", urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
 
         }
             initButton();
     }
 
-    private class GetDashboard extends AsyncTask<String,Integer,String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            Connection c = new Connection();
-            String json = c.GetJSONfromURL(params[0], params[1]);
-            return json;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("periksa",s);
-
-            if(s.trim().equals("404"))
-            {
-                Toast.makeText(getApplicationContext(), "Terjadi Kesalahan...", Toast.LENGTH_LONG).show();
-            }else{
-                //ShowDashboardList(s);
-            }
-        }
-    }
 
     private class GetAllTernak extends AsyncTask<String,Integer,String> {
         @Override
@@ -286,12 +332,12 @@ public class ListDetailTernakMain extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Terjadi Kesalahan...", Toast.LENGTH_LONG).show();
                 }
             }else{
-
+                /*
                 if(isdashboardsubur || isdashboardperiksa || isdashboardmelahirkan || isdashboardmenyusui || isdashboardmengandung){
                     showTernak(s);
                     list.removeFooterView(mProgressBarFooter);
                 }
-                else {
+                else {*/
                     if (segment == 1) {
                         showTernak(s);
                         Log.d("showternak", s);
@@ -302,7 +348,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
                         isloading = false;
                     }
                     segment++;
-                }
+                //}
             }
         }
     }

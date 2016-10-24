@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +65,8 @@ public class AddMelahirkan extends AppCompatActivity {
     ArrayList<String> list_addmelahirkan_tglinseminasi = new ArrayList<String>();
     ArrayAdapter<String> myAdapter;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class AddMelahirkan extends AppCompatActivity {
 
         //Set Auto Text Id Ternak---------------------------------------------
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakSedangHamil().execute("http://ternaku.com/index.php/C_HistoryInseminasi/GetTernakSudahHamil", urlParameters);
+        new GetTernakSedangHamil().execute(url.getUrl_GetHamil(), urlParameters);
         input_addmelahirkan_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addmelahirkan_activity_idternak);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,list_addmelahirkan_idternak);
@@ -187,7 +190,7 @@ public class AddMelahirkan extends AppCompatActivity {
                                                     + "&kondisimelahirkan="+input_addmelahirkan_activity_kondisi.getText().toString()
                                                     + "&tglmelahirkanreal="+input_addmelahirkan_activity_tglmelahirkan.getText().toString();
                                         }
-                                        new InsertTernakMelahirkan().execute("http://ternaku.com/index.php/C_HistoryInseminasi/UpdateStatusKelahiran", urlParameters);
+                                        new InsertTernakMelahirkan().execute(url.getUrl_InsertMelahirkan(), urlParameters);
 
                                     }
                                 })

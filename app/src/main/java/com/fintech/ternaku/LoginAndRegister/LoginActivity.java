@@ -27,6 +27,7 @@ import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Pakan.AddPakanTernak;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText input_login_activity_username,input_login_activity_password;
     private Button button_login_activity_masuk,button_login_activity_linktoregister;
     private int attempt = 0;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     private SharedPreferences shr;
     @Override
@@ -77,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             String password = generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString());
                             String urlParameters = "username=" + URLEncoder.encode(input_login_activity_username.getText().toString(), "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
-                            new LoginTask().execute("http://ternaku.com/index.php/C_Pengguna/cekLogin", urlParameters);
+                            new LoginTask().execute(url.getUrl_Login(), urlParameters);
                             Log.d("HASH",generateHash(input_login_activity_password.getText().toString()+input_login_activity_username.getText().toString()));
 
                         } catch (UnsupportedEncodingException u) {

@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -58,6 +59,9 @@ public class InsertTernak extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private RadioGroup radioKelaminGroup;
     private RadioButton radioKelamin;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +188,7 @@ public class InsertTernak extends AppCompatActivity {
                                 +"&jeniskelamin=" + radioKelamin.getText().toString()
                                 +"&tanggallahirternak=" + newFormat
                                 +"&rfidcode=" + txtRFID.getText().toString();
-                        new insertTernakTask().execute("http://ternaku.com/index.php/C_Ternak/insertTernak", urlParameters);}
+                        new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);}
                 })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override

@@ -44,6 +44,7 @@ import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -65,6 +66,9 @@ public class AddCekKesehatan extends AppCompatActivity {
     ArrayAdapter<String> adp;
     String datetime;
     int noOfTimesCalled = 0;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +84,7 @@ public class AddCekKesehatan extends AppCompatActivity {
 
         //Set AutoComplete--------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
+        new GetTernakId().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_addcekkesehatan_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addcekkesehatan_activity_idternak);
         input_addcekkesehatan_activity_idternak.setEnabled(false);
         adp=new ArrayAdapter<String>(this,
@@ -187,7 +191,7 @@ public class AddCekKesehatan extends AppCompatActivity {
                                                             + "&statusStress="+spinner_addcekkesehatan_activity_statusstress.getSelectedItem().toString()
                                                             + "&bodyscore="+input_addcekkesehatan_activity_conditionscore.getText().toString();
 
-                                                    new InsertKesehatan().execute("http://ternaku.com/index.php/C_HistoryKesehatan/InsertKesehatanUmum", urlParameters);
+                                                    new InsertKesehatan().execute(url.getUrl_InsertCekKesehatan(), urlParameters);
                                                     Log.d("param",urlParameters);
                                                 }
                                             })

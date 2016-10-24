@@ -65,6 +65,8 @@
     <string name="title_activity_insert_ternak">InsertTernak</string>
     <string name="title_activity_add_kandang">AddKandang</string>
     <string name="title_activity_add_kawanan">AddKawanan</string>
+    <string name="title_activity_laporan_keuangan_grafik">LaporanKeuanganGrafik</string>
+    <string name="title_activity_to_do_list_calendar">ToDoListCalendar</string>
 
 
 </resources>

@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -50,6 +51,9 @@ public class AddProduksiSusu extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private TimePickerDialog mTimePicker;
     String datetime;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +141,7 @@ public class AddProduksiSusu extends AppCompatActivity {
                                                 + "&sesiperah=" + spinner_addproduksisusu_activity_sesiperah.getSelectedItem().toString().trim()
                                                 + "&kapasitas=" + input_addproduksisusu_activity_kapasitas.getText().toString()
                                                 + "&durasi="+input_addproduksisusu_activity_durasiperah.getText().toString();
-                                        new AddProduksiSusuInsertToDatabase().execute("http://ternaku.com/index.php/C_HistoryProduksi/InsertProduksiSusu", param);
+                                        new AddProduksiSusuInsertToDatabase().execute(url.getUtl_InsertProduksiSusu(), param);
                                         Log.d("Param",param);
                                     }
                                 })

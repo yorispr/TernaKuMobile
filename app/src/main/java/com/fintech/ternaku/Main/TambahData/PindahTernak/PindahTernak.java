@@ -34,6 +34,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fintech.ternaku.UrlList;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import com.fintech.ternaku.Connection;
@@ -80,6 +82,9 @@ public class PindahTernak extends AppCompatActivity {
     int choosenindexkawanan;
     String idpeternakan;
     AutoCompleteTextView input_pindahternak_activity_idternak;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +144,7 @@ public class PindahTernak extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                    new GetKawanan().execute("http://ternaku.com/index.php/C_Ternak/GetKawananByIdPeternakan", urlParameters);
+                    new GetKawanan().execute(url.getUrl_GetKawanan(), urlParameters);
                     kawananclick = true;
 
             }
@@ -148,7 +153,7 @@ public class PindahTernak extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                    new GetKandang().execute("http://ternaku.com/index.php/C_Ternak/GetKandangByIdPeternakan", urlParameters);
+                    new GetKandang().execute(url.getUrl_GetKandang(), urlParameters);
 
             }
         });
@@ -213,7 +218,7 @@ public class PindahTernak extends AppCompatActivity {
                                             +"&idkawanan="+idkawanan
                                             +"&idkandang="+idkandang
                                             +"&statusaktif="+status;
-                                    new InsertPengelompokkanTask().execute("http://ternaku.com/index.php/C_Ternak/insertinsertHistoryPengelompokan", urlParameters);
+                                    new InsertPengelompokkanTask().execute(url.getUrl_InsertPindahTernak(), urlParameters);
                                     Log.d("param",urlParameters);
                                 }
                             })
@@ -258,7 +263,7 @@ public class PindahTernak extends AppCompatActivity {
         });
 
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetAllTernak().execute("http://ternaku.com/index.php/C_Ternak/GetTernakForPengelompokkan", urlParameters);
+        new GetAllTernak().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters);
     }
 
     private void setDetailToTextView(String idTernak) {

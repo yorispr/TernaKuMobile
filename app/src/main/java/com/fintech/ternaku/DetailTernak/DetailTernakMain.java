@@ -23,6 +23,7 @@ import com.facebook.internal.CollectionMapper;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Event.ModelDetailTernakEvent;
+import com.fintech.ternaku.UrlList;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.fintech.ternaku.R;
@@ -76,6 +77,9 @@ public class DetailTernakMain extends AppCompatActivity {
     private String id_ternak="",id_peternakan="FNT-P1";
     ListView lvItems;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,12 +103,12 @@ public class DetailTernakMain extends AppCompatActivity {
         //Get Data Profile--------------------------------------------
         String urlParameters_profile = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                 + "&id_ternak=" + id_ternak.trim();
-        new getDataProfile().execute("http://ternaku.com/index.php/C_Ternak/GetTernakUmum", urlParameters_profile);
+        new getDataProfile().execute(url.getUrlGet_TernakProfile(), urlParameters_profile);
 
         //Get Data Event Ternak---------------------------------------------------
         String urlParameters_events = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                 + "&idternak=" + id_ternak.trim();
-        new getDataEvent().execute("http://ternaku.com/index.php/C_Ternak/GetTernakUmumEvent", urlParameters_events);
+        new getDataEvent().execute(url.getUrlGet_TernakEvent(), urlParameters_events);
 
         initUI();
 

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +57,9 @@ public class AddMengandung extends AppCompatActivity {
     String datetime_tglperkiraanhamil;
     private SimpleDateFormat dateFormatter_tglpemeriksaan,dateFormatter_tglperkiraanhamil;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +76,7 @@ public class AddMengandung extends AppCompatActivity {
 
         //Set Data Id Ternak-----------------------------------------------
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
-        new GetTernakSudahInseminasi().execute("http://ternaku.com/index.php/C_HistoryInseminasi/GetTernakSudahInseminasi", urlParameters);
+        new GetTernakSudahInseminasi().execute(url.getUrl_GetTernakInseminasi(), urlParameters);
         input_addmengandung_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_addmengandung_activity_idternak);
         input_addmengandung_activity_idternak.setEnabled(false);
         ArrayAdapter<String> adp=new ArrayAdapter<String>(this,
@@ -147,7 +151,7 @@ public class AddMengandung extends AppCompatActivity {
                                                 +"&idternak="+idternak
                                                 +"&tglinseminasi="+tglinseminasi;
                                         Log.d("param",urlParameters);
-                                        new InsertStatusKehamilan().execute("http://ternaku.com/index.php/C_HistoryInseminasi/UpdateStatusKehamilan", urlParameters);
+                                        new InsertStatusKehamilan().execute(url.getUrl_InsertMengandung(), urlParameters);
 
                                     }
                                 })

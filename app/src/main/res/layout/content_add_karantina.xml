@@ -267,10 +267,33 @@
                                     android:textColor="@color/colorPrimary"/>
                             </LinearLayout>
                         </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pilih Kawanan"
+                            android:layout_marginLeft="15dp"
+                            android:textColor="#000"/>
                         <Spinner
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/spinner_addkarantina_activity_kawanan"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            android:spinnerMode="dropdown" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pilih Kandang"
+                            android:layout_marginLeft="15dp"
+                            android:textColor="#000"/>
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinner_addkarantina_activity_kandang"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="10dp"

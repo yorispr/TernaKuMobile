@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.Main.MainActivity;
+import com.fintech.ternaku.UrlList;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.numetriclabz.numandroidcharts.ChartData;
 import com.fintech.ternaku.Connection;
@@ -62,6 +63,9 @@ public class DashboardFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     //Set Expander---------------------
     private ExpandableRelativeLayout expanderlayout_dashboard_fragment_produsisusu, expanderlayout_dashboard_fragment_pemeriksaanhariini,
@@ -191,7 +195,7 @@ public class DashboardFragment extends Fragment {
         //Set Spinner Peternakan------------------------------------
         spinner_dashboard_fragment_namapeternakan = (Spinner) view.findViewById(R.id.spinner_dashboard_fragment_namapeternakan);
         String urlParameter_get_spinner_peternakan = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetPeternakan().execute("http://ternaku.com/index.php/C_Ternak/getPeternakanByUserID", urlParameter_get_spinner_peternakan);
+        new GetPeternakan().execute(url.getUrl_GetPeternakan(), urlParameter_get_spinner_peternakan);
 
         //Set Gauge Produksi Susu Hari Ini--------------------------
         txt_dashboard_fragment_produksisusuhariini = (TextView)view.findViewById(R.id.txt_dashboard_fragment_produksisusuhariini);
@@ -207,8 +211,9 @@ public class DashboardFragment extends Fragment {
                     Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
                     act.putExtra("periksa", "periksa");
                     startActivity(act);
-                }else{
+                } else if(i == 1) {
                     Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    act.putExtra("belumperiksa", "belumperiksa");
                     startActivity(act);
                 }
             }
@@ -226,8 +231,10 @@ public class DashboardFragment extends Fragment {
                     Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
                     act.putExtra("masasubur", "masasubur");
                     startActivity(act);
-                }else{
+                }else if (i==1){
                     Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    act.putExtra("tidakmasasubur", "tidakmasasubur");
+
                     startActivity(act);
                 }
             }
@@ -259,6 +266,11 @@ public class DashboardFragment extends Fragment {
                         act.putExtra("menyusui", "menyusui");
                         startActivity(act);
                         break;
+                    case 3:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("kehamilanlainnya", "kehamilanlainnya");
+                        startActivity(act);
+                        break;
                 }
             }
 
@@ -288,6 +300,11 @@ public class DashboardFragment extends Fragment {
                     case 2:
                         act = new Intent(getActivity(), ListDetailTernakMain.class);
                         act.putExtra("bayi", "bayi");
+                        startActivity(act);
+                        break;
+                    case 3:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("kawananlainnya", "kawananlainnya");
                         startActivity(act);
                         break;
                 }
@@ -397,8 +414,8 @@ public class DashboardFragment extends Fragment {
             }
             //Execute Dashboard Data-------------------------------------------
             String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
-            new GetDashboardData().execute("http://ternaku.com/index.php/C_Ternak/GetDashboardData",urlParameters);
-            Log.d("IDP",urlParameters);
+            new GetDashboardData().execute(url.getUrl_GetDashboardInformation(),urlParameters);
+            Log.d("IDP",url.getUrl_GetDashboardInformation());
 
             /*
             ArrayAdapter<String> adapter_peternakan = new ArrayAdapter<String>(
@@ -845,7 +862,7 @@ public class DashboardFragment extends Fragment {
             case R.id.refresh_menu:
                 Log.d("Tes","tes");
                 String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
-                new GetDashboardData().execute("http://ternaku.com/index.php/C_Ternak/GetDashboardData",urlParameters);
+                new GetDashboardData().execute(url.getUrl_GetDashboardInformation(),urlParameters);
                 Log.d("IDP",urlParameters);
                 return true;
             default:

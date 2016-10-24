@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,9 @@ public class UpdateMasaKering extends AppCompatActivity {
     private ArrayList<String> list_update_dryoff_dry = new ArrayList<>();
     ArrayAdapter<String> adp;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +81,7 @@ public class UpdateMasaKering extends AppCompatActivity {
 
         //Set Auto Text--------------------------------------------
         String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakId().execute("http://ternaku.com/index.php/C_Ternak/getTernakForPengelompokkan", param);
+        new GetTernakId().execute(url.getUrl_GetTernakPengelompokkan(), param);
         input_updatemasakering_activity_idternak = (AutoCompleteTextView)findViewById(R.id.input_updatemasakering_activity_idternak);
         input_updatemasakering_activity_idternak.setEnabled(false);
         adp=new ArrayAdapter<String>(this,
@@ -91,7 +95,7 @@ public class UpdateMasaKering extends AppCompatActivity {
 
         //Set Ternak Dry--------------------------------------------
         String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetTernakDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakDryByPeternakan", param_2);
+        new GetTernakDry().execute(url.getUrl_GetKering(), param_2);
 
 
         //Set Mulai Or Selesai--------------------------------------
@@ -146,7 +150,7 @@ public class UpdateMasaKering extends AppCompatActivity {
                                                 String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                         + "&idternak=" + idter
                                                         + "&tglmulaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                                                new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringMulai", param);
+                                                new AddDry().execute(url.getUrlInsertMasaKeringMulai(), param);
                                             } else {
                                                 new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
                                                         .setTitleText("Peringatan!")
@@ -158,7 +162,7 @@ public class UpdateMasaKering extends AppCompatActivity {
                                                 String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                         + "&idternak=" + idter
                                                         + "&tglselesaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                                                new AddDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/MasaKeringSelesai", param);
+                                                new AddDry().execute(url.getUrlInsertMasaKeringSelesai(), param);
                                             } else {
                                                 new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
                                                         .setTitleText("Peringatan!")
@@ -168,7 +172,7 @@ public class UpdateMasaKering extends AppCompatActivity {
                                         }
                                         //Set Ternak Dry--------------------------------------------
                                         String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                                        new GetTernakDry().execute("http://ternaku.com/index.php/C_HistoryKesehatan/getDataTernakDryByPeternakan", param_2);
+                                        new GetTernakDry().execute(url.getUrl_GetKering(), param_2);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
