@@ -38,4 +38,9 @@
         <item name="android:textColor">@color/error_appear</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="AppTheme_Calendar" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+    </style>
 </resources>

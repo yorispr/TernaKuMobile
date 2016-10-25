@@ -28,7 +28,7 @@ import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
 import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
-import com.fintech.ternaku.Main.NavBar.CalendarToDoList.ToDoListCalendar;
+import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
@@ -248,8 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_animal_list) {
             startActivity(new Intent(MainActivity.this,ListDetailTernakMain.class));
-        }else if(id == R.id.nav_reminder){
-            startActivity(new Intent(MainActivity.this,ToDoListCalendar.class));
+        }else if(id == R.id.nav_add){
+            startActivity(new Intent(MainActivity.this,CalendarToDoActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -233,9 +233,10 @@
             android:label="@string/title_activity_laporan_keuangan_grafik"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Main.NavBar.CalendarToDoList.ToDoListCalendar"
-            android:label="@string/title_activity_to_do_list_calendar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".Main.NavBar.CalendarToDoList.CalendarToDoActivity"
+            android:label="@string/title_activity_calendar_to_do"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Main.NavBar.CalendarToDoList.CalendarCellView"></activity>
     </application>
 
 </manifest>
