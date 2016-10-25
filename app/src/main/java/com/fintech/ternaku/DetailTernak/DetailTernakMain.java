@@ -1,6 +1,7 @@
 package com.fintech.ternaku.DetailTernak;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.facebook.internal.CollectionMapper;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Event.ModelDetailTernakEvent;
+import com.fintech.ternaku.DetailTernak.Task.AddTaskTernak;
 import com.fintech.ternaku.UrlList;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
@@ -76,6 +79,9 @@ public class DetailTernakMain extends AppCompatActivity {
     private int finish_attempt_event=0;
     private String id_ternak="",id_peternakan="FNT-P1";
     ListView lvItems;
+
+    //Task-----------------------------------------------------------------
+    public LinearLayout linearlayout_taskdetail_activity_tambahbaru;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -780,6 +786,16 @@ public class DetailTernakMain extends AppCompatActivity {
     public View getpageFour() {
         View view = LayoutInflater.from(
                 getBaseContext()).inflate(R.layout.layout_task, null, false);
+
+        linearlayout_taskdetail_activity_tambahbaru = (LinearLayout)view.findViewById(R.id.linearlayout_taskdetail_activity_tambahbaru);
+        linearlayout_taskdetail_activity_tambahbaru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailTernakMain.this, AddTaskTernak.class);
+                intent.putExtra("idternak", id_ternak);
+                startActivity(intent);
+            }
+        });
         return view;
     }
     //Set Page Task-------------------------------------------------------------

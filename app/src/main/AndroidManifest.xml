@@ -236,7 +236,11 @@
             android:name=".Main.NavBar.CalendarToDoList.CalendarToDoActivity"
             android:label="@string/title_activity_calendar_to_do"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Main.NavBar.CalendarToDoList.CalendarCellView"></activity>
+        <activity android:name=".Main.NavBar.CalendarToDoList.CalendarCellView" />
+        <activity
+            android:name=".DetailTernak.Task.AddTaskTernak"
+            android:label="@string/title_activity_add_task_ternak"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

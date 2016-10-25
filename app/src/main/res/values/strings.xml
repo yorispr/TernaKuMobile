@@ -67,6 +67,7 @@
     <string name="title_activity_add_kawanan">AddKawanan</string>
     <string name="title_activity_laporan_keuangan_grafik">LaporanKeuanganGrafik</string>
     <string name="title_activity_calendar_to_do">CalendarToDoActivity</string>
+    <string name="title_activity_add_task_ternak">AddTaskTernak</string>
 
 
 </resources>
