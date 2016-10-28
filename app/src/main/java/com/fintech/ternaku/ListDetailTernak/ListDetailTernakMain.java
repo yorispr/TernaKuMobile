@@ -76,7 +76,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
     ArrayAdapter<String> adapterfilter,adapterurut;
      View mProgressBarFooter;
     boolean isdashboardperiksa,isdashboardbelumperiksa, isdashboardsubur, isdashboardtidaksubur,isdashboardkehamilanlainnya, isdashboardmenyusui, isdashboardmelahirkan, isdashboardmengandung,
-            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya;
+            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya, isdashboardproduksi;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -105,6 +105,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
         isdashboardtidaksubur = false;
         isdashboardkehamilanlainnya = false;
         iskawananlainnya = false;
+        isdashboardproduksi = false;
 
         list = (GridView) findViewById(R.id.list_listdetailternak_activity);
         segment = 1;
@@ -180,6 +181,9 @@ public class ListDetailTernakMain extends AppCompatActivity {
                                 }
                                 else if(isdashboardkehamilanlainnya){
                                     new GetAllTernak().execute(url.getUrlGet_KehamilanLainnya(), urlParameters);
+                                }
+                                else if(isdashboardproduksi){
+                                    new GetAllTernak().execute("http://service.ternaku.com/C_Ternak/GetSemuaProduksiSusuTernakByPeternakan", urlParameters);
                                 }
                                 else{
                                     new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
@@ -300,6 +304,14 @@ public class ListDetailTernakMain extends AppCompatActivity {
             getSupportActionBar().setTitle("Ternak Muda");
 
         }
+        else if(getIntent().hasExtra("produksisusu")) {
+            isdashboardproduksi = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
+            new GetAllTernak().execute("http://service.ternaku.com/C_Ternak/GetSemuaProduksiSusuTernakByPeternakan", urlParameters);
+            getSupportActionBar().setTitle("Produksi Susu");
+        }
         else {
             String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                     + "&segment=" + segment;
@@ -327,6 +339,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("segment",String.valueOf(segment));
+            Log.d("Ternak2",s);
 
             if(s.trim().equals("404"))
             {
@@ -552,6 +565,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
     }
 
     private void showTernak(String result){
+
         try {
             JSONArray jArray = new JSONArray(result);
             Log.d("COUNT", String.valueOf(jArray.length()));
@@ -569,6 +583,11 @@ public class ListDetailTernakMain extends AppCompatActivity {
                 ter.setIs_menyusui(jObj.getInt("is_menyusui"));
                 ter.setBerat(jObj.getDouble("beratbadan"));
                 ter.setUmur(jObj.getString("usia"));
+                if(isdashboardproduksi){
+                    ter.setProduksisusu(jObj.getDouble("kapasitas_pagi")+jObj.getDouble("kapasitas_sore"));
+                }else{
+                    ter.setProduksisusu(0);
+                }
                 ternakList.add(ter);
             }
 
@@ -599,6 +618,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
                 ter.setIs_menyusui(jObj.getInt("is_menyusui"));
                 ter.setBerat(jObj.getDouble("beratbadan"));
                 ter.setUmur(jObj.getString("usia"));
+
                 ternakList.add(ter);
             }
 

@@ -73,7 +73,7 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
         holder.iskering = (TextView) view.findViewById(R.id.txtIsKering);
         holder.berat = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_berat);
         holder.umur = (TextView) view.findViewById(R.id.txtUmur);
-
+        holder.produksi_susu = (TextView) view.findViewById(R.id.txtProduksiSusu);
 
         ModelDetailTernalListDetailTernak ternak = new ModelDetailTernalListDetailTernak();
         ternak = data.get(position);
@@ -85,6 +85,12 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
         holder.rfid.setText(ternak.getRfid());
 
         holder.berat.setText(String.valueOf(ternak.getBerat()) + " Kg");
+
+        if(ternak.getProduksisusu() != 0){
+            holder.produksi_susu.setText("Produksi Susu : " + String.valueOf(ternak.getProduksisusu()));
+        }else{
+            holder.produksi_susu.setVisibility(View.GONE);
+        }
 
         String isheat = "";
         holder.isheat.setTextColor(Color.parseColor("#e74c3c"));
@@ -137,7 +143,7 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
     }
 
     public class ViewHolder {
-        public TextView id_ternak,kondisi_kesehatan, rfid, isheat,ismenyusui,iskering, berat, umur;
+        public TextView id_ternak,kondisi_kesehatan, rfid, isheat,ismenyusui,iskering, berat, umur,produksi_susu;
         public ImageView img_kondisi_tubuh;
     }
 
@@ -185,7 +191,7 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
                 if(constraint.toString().equals("heat")){
                     for (int i = 0; i < dataorigin.size(); i++) {
                         if (dataorigin.get(i).getIs_heat() == 1) {
-                            FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(),dataorigin.get(i).getNama_ternak(),dataorigin.get(i).getBody_condition_score(),dataorigin.get(i).getId_peternakan(),dataorigin.get(i).getTgl_lahir(),dataorigin.get(i).getRfid(),dataorigin.get(i).getIs_dry(),dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(),dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur()));
+                            FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(),dataorigin.get(i).getNama_ternak(),dataorigin.get(i).getBody_condition_score(),dataorigin.get(i).getId_peternakan(),dataorigin.get(i).getTgl_lahir(),dataorigin.get(i).getRfid(),dataorigin.get(i).getIs_dry(),dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(),dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur(),dataorigin.get(i).getProduksisusu()));
                         }
                     }
                     // set the Filtered result to return
@@ -195,7 +201,7 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
                 else if(constraint.toString().equals("menyusui")){
                     for (int i = 0; i < dataorigin.size(); i++) {
                         if (dataorigin.get(i).getIs_menyusui() == 1) {
-                            FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(),dataorigin.get(i).getNama_ternak(),dataorigin.get(i).getBody_condition_score(),dataorigin.get(i).getId_peternakan(),dataorigin.get(i).getTgl_lahir(),dataorigin.get(i).getRfid(),dataorigin.get(i).getIs_dry(),dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(),dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur()));
+                            FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(),dataorigin.get(i).getNama_ternak(),dataorigin.get(i).getBody_condition_score(),dataorigin.get(i).getId_peternakan(),dataorigin.get(i).getTgl_lahir(),dataorigin.get(i).getRfid(),dataorigin.get(i).getIs_dry(),dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(),dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur(),dataorigin.get(i).getProduksisusu()));
                         }
                     }
                     // set the Filtered result to return
@@ -216,7 +222,7 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
                             String filter_rfid = dataorigin.get(i).getRfid();
 
                             if (filter_idternak.toLowerCase().contains(constraint.toString()) || filter_rfid.toLowerCase().contains(constraint.toString())) {
-                                FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(), dataorigin.get(i).getNama_ternak(), dataorigin.get(i).getBody_condition_score(), dataorigin.get(i).getId_peternakan(), dataorigin.get(i).getTgl_lahir(), dataorigin.get(i).getRfid(), dataorigin.get(i).getIs_dry(), dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(), dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur()));
+                                FilteredArrList.add(new ModelDetailTernalListDetailTernak(dataorigin.get(i).getId_ternak(), dataorigin.get(i).getNama_ternak(), dataorigin.get(i).getBody_condition_score(), dataorigin.get(i).getId_peternakan(), dataorigin.get(i).getTgl_lahir(), dataorigin.get(i).getRfid(), dataorigin.get(i).getIs_dry(), dataorigin.get(i).getIs_heat(), dataorigin.get(i).getIs_menyusui(), dataorigin.get(i).getBerat(),dataorigin.get(i).getUmur(),dataorigin.get(i).getProduksisusu()));
                             }
                         }
                         // set the Filtered result to return

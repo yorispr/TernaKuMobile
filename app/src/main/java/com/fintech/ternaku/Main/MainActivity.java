@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
 
-        navigationTabBar.setSelected(false);
+        navigationTabBar.deselect();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

@@ -19,11 +19,13 @@ public class ModelDetailTernalListDetailTernak {
 
     private double berat;
     private String umur;
+
+    private double produksisusu;
     public ModelDetailTernalListDetailTernak() {
 
     }
 
-    public ModelDetailTernalListDetailTernak(String id_ternak, String nama_ternak, String body_condition_score,String id_peternakan,String tgl_lahir,String rfid, int is_dry, int is_heat, int is_menyusui, double berat, String umur) {
+    public ModelDetailTernalListDetailTernak(String id_ternak, String nama_ternak, String body_condition_score,String id_peternakan,String tgl_lahir,String rfid, int is_dry, int is_heat, int is_menyusui, double berat, String umur, double produksisusu) {
         this.setId_ternak(id_ternak);
         this.setNama_ternak(nama_ternak);
         this.setBody_condition_score(body_condition_score);
@@ -35,6 +37,7 @@ public class ModelDetailTernalListDetailTernak {
         this.setIs_menyusui(is_menyusui);
         this.setBerat(berat);
         this.setUmur(umur);
+        this.setProduksisusu(produksisusu);
     }
 
 
@@ -125,5 +128,13 @@ public class ModelDetailTernalListDetailTernak {
 
     public void setUmur(String umur) {
         this.umur = umur;
+    }
+
+    public double getProduksisusu() {
+        return produksisusu;
+    }
+
+    public void setProduksisusu(double produksisusu) {
+        this.produksisusu = produksisusu;
     }
 }
