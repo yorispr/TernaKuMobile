@@ -190,7 +190,6 @@ public class InsertTernak extends AppCompatActivity {
                         urlParameters2 = "rfid=" + txtRFID.getText().toString() +
                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
                         String json = c.GetJSONfromURL(url.getUrlGet_RFIDCek(), urlParameters2);
-                        Log.d("param2", urlParameters2);
                         if (json.trim().equals("0")) {
                             Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
                                     txtTgl.getText().toString()+radioKelamin.getText().toString());
@@ -203,7 +202,7 @@ public class InsertTernak extends AppCompatActivity {
                         }else{
                             new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Peringatan!")
-                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                    .setContentText("RFID Sudah Terpakai ")
                                     .show();
                         }
                     }

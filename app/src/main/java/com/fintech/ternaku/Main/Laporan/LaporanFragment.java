@@ -412,7 +412,8 @@ public class LaporanFragment extends Fragment {
     }
 
     private String SubString(String value){
-        return value.substring(3, value.length()-2);
+        //return value.substring(3, value.length()-2);
+        return value;
     }
 
 

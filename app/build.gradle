@@ -26,6 +26,7 @@ repositories {
 }
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -55,6 +56,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:9.4.0'
     compile 'com.p_v:flexiblecalendar:1.2.1'
     compile 'com.cuboid:cuboidcirclebutton:1.0.3'
+    compile 'com.github.markushi:circlebutton:1.1'
     testCompile 'junit:junit:4.12'
     compile 'commons-io:commons-io:2.4'
     compile project(':MPChartLib')

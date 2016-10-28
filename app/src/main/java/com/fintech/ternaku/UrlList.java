@@ -123,6 +123,9 @@ public class UrlList {
         private String UrlGet_TernakProfile = Url_Utama + "C_Ternak/GetTernakUmum";
     //Event+++++++++++++++++++++++
         private String UrlGet_TernakEvent = Url_Utama + "C_Ternak/GetTernakUmumEvent";
+    //Task++++++++++++++++++++++++
+        private String Url_InsertTask = Url_Utama + "C_Ternak/insertTask";
+        private String UrlGet_TernakTask = Url_Utama + "C_Ternak/GetTask";
 
     //Handling=====================================
     private String UrlGet_RFIDanIdCek = Url_Utama + "C_Handling/cekIDTernakTerdaftar";
@@ -131,6 +134,14 @@ public class UrlList {
 
     public UrlList(){
 
+    }
+
+    public String getUrl_InsertTask() {
+        return Url_InsertTask;
+    }
+
+    public String getUrlGet_TernakTask() {
+        return UrlGet_TernakTask;
     }
 
     public String getUrl_UpdatePeternakan() {

@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedpreferences = getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE);
         View hView = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
         TextView nav_user = (TextView) hView.findViewById(R.id.drawer_title);
         nav_user.setText(sharedpreferences.getString("keyNama", null));
         TextView nav_role = (TextView) hView.findViewById(R.id.drawer_subtitle);

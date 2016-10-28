@@ -4,25 +4,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/ic_search"
-            android:title="Pencarian" />
+            android:id="@+id/nav_add_peternak"
+            android:icon="@drawable/ic_action_user_black"
+            android:title="Tambah Peternak" />
         <item
-            android:id="@+id/nav_farmboard"
-            android:icon="@drawable/ic_timeline"
-            android:title="Farmboard" />
-        <item
-            android:id="@+id/nav_add"
-            android:icon="@drawable/ic_action_add_black"
-            android:title="Record" />
-        <item
-            android:id="@+id/nav_reminder"
-            android:icon="@drawable/ic_notifications_active"
-            android:title="Pengingat" />
-        <item
-            android:id="@+id/nav_animal_list"
-            android:icon="@drawable/ic_clear_all"
-            android:title="Data Ternak" />
+            android:id="@+id/nav_add_batas_produksi"
+            android:icon="@drawable/ic_action_database"
+            android:title="Tambah Batas Produksi" />
     </group>
 
     <group
@@ -30,25 +18,9 @@
         android:checkableBehavior="none">
 
         <item
-            android:id="@+id/nav_scheduled"
-            android:icon="@drawable/ic_check"
-            android:title="Scheduled Task" />
-        <item
-            android:id="@+id/nav_today"
-            android:icon="@drawable/ic_star"
-            android:title="Today" />
-        <item
-            android:id="@+id/nav_fertility"
-            android:icon="@drawable/ic_action_heart_black"
-            android:title="Fertility" />
-        <item
-            android:id="@+id/nav_production"
-            android:icon="@drawable/ic_action_line_chart_black"
-            android:title="Production" />
-        <item
-            android:id="@+id/nav_health"
-            android:icon="@drawable/ic_action_emo_shame"
-            android:title="Health" />
+            android:id="@+id/nav_tambah_pambayaran"
+            android:icon="@drawable/ic_attach_money"
+            android:title="Pembayaran" />
 
     </group>
 
