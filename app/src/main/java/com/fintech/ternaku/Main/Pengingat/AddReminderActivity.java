@@ -277,6 +277,10 @@ public class AddReminderActivity extends AppCompatActivity {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
+
+        final String hour2 = String.valueOf(mcurrentTime.get(Calendar.HOUR_OF_DAY));
+        final  String minute2 = String.valueOf(mcurrentTime.get(Calendar.MINUTE));
+
         mTimePicker = new TimePickerDialog(AddReminderActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {

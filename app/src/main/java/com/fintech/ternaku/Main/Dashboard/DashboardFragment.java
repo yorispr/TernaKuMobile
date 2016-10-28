@@ -202,6 +202,20 @@ public class DashboardFragment extends Fragment {
         gauge_dashboard_fragment_produksisusuhariini = (GaugeView) view.findViewById(R.id.gauge_dashboard_fragment_produksisusuhariini);
         gauge_dashboard_fragment_produksisusuhariini.setRotateDegree(degree);
 
+        gauge_dashboard_fragment_produksisusuhariini.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!txt_dashboard_fragment_produksisusuhariini.getText().equals("0.0")) {
+                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
+                    act.putExtra("produksisusu", "produksisusu");
+                    startActivity(act);
+                }else{
+                    Toast.makeText(getContext(),"Tidak ada produksi susu hari ini!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
         //Set Pie Chart --------------------------------------------
         chart_dashboard_fragment_pemeriksaanhariini = (PieChartView) view.findViewById(R.id.chart_dashboard_fragment_pemeriksaanhariini);
         chart_dashboard_fragment_pemeriksaanhariini.setOnValueTouchListener(new PieChartOnValueSelectListener() {

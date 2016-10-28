@@ -35,13 +35,7 @@ public class ReminderModel {
         this.setSchedule_time(schedule_time);
     }
 
-    public String getSchedule_time() {
-        return schedule_time;
-    }
 
-    public void setSchedule_time(String schedule_time) {
-        this.schedule_time = schedule_time;
-    }
 
     public String getId_protocol() {
         return id_protocol;
@@ -105,5 +99,13 @@ public class ReminderModel {
 
     public void setIsread(int isread) {
         this.isread = isread;
+    }
+
+    public String getSchedule_time() {
+        return schedule_time;
+    }
+
+    public void setSchedule_time(String schedule_time) {
+        this.schedule_time = schedule_time;
     }
 }
