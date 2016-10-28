@@ -3,6 +3,7 @@ package com.fintech.ternaku.ListDetailTernak;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -117,7 +119,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Click!!" + i, Toast.LENGTH_LONG).show();
                 String id_ternak = ternakList.get(i).getId_ternak();
                 Intent intent = new Intent(ListDetailTernakMain.this, DetailTernakMain.class);
-                intent.putExtra("idternak", id_ternak);
+                intent.putExtra("idternak",id_ternak);
                 startActivity(intent);
             }
         });
@@ -645,6 +647,12 @@ public class ListDetailTernakMain extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         searchView = (SearchView) searchItem.getActionView();
+        searchView.setBackgroundColor(Color.WHITE);
+        searchView.setQueryHint("Ketik RFID atau ID Ternak");
+
+        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.BLACK);
+        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
+                .setHintTextColor(Color.GRAY);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

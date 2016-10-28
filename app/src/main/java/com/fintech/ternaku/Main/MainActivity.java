@@ -23,16 +23,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.Main.NavBar.ProduksiSusu.AddProduksiSusu;
-import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
 import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
-import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.Main.Pengingat.ShowReminderFragment;
+import com.fintech.ternaku.RequestTransactionActivity;
 import com.fintech.ternaku.Setting.SetPrefs;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
@@ -358,6 +356,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+        } else if(id == R.id.action_pembayaran){
+            Intent i = new Intent(MainActivity.this, RequestTransactionActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

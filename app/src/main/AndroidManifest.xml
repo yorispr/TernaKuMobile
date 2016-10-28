@@ -230,6 +230,11 @@
             android:label="@string/title_activity_add_task_ternak"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
+        <activity
+            android:name=".RequestTransactionActivity"
+            android:label="Request Pembayaran"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <service android:name=".FCM.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
