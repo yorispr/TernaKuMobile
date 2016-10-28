@@ -21,12 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
-import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
-import com.fintech.ternaku.Main.NavBar.AddProduksiSusu;
+import com.fintech.ternaku.Main.NavBar.ProduksiSusu.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
 import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         //Drawer and Toolbar-------------------------------------
@@ -153,14 +154,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_action_user),
+                        getResources().getDrawable(R.drawable.ic_cow),
                         Color.parseColor(colors[0]))
-                        .title("Peternak")
+                        .title("Daftar Ternak")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_cow),
+                        getResources().getDrawable(R.drawable.ic_action_add),
                         Color.parseColor(colors[0]))
                         .title("Ternak")
                         .build()
@@ -181,18 +182,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_action_line_chart_white),
+                        getResources().getDrawable(R.drawable.ic_action_calendar_month),
                         Color.parseColor(colors[0]))
-                        .title("Batas Produksi")
+                        .title("Kalender")
                         .build()
         );
-        models.add(
+        /*models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_calculator),
                         Color.parseColor(colors[0]))
                         .title("Keuangan")
                         .build()
-        );
+        );*/
         navigationTabBar.setModels(models);
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent i = new Intent();
                 switch (navigationTabBar.getModelIndex()){
                     case 0 :
-                        i = new Intent(MainActivity.this,AddPeternak.class);
+                        i = new Intent(MainActivity.this,ListDetailTernakMain.class);
                         startActivity(i);
                         break;
                     case 1 :
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         startActivity(i);
                         break;
                     case 4:
-                        i = new Intent(MainActivity.this,AddBatasProduksi.class);
+                        i = new Intent(MainActivity.this,CalendarToDoActivity.class);
                         startActivity(i);
                         break;
                     case 5:
@@ -246,11 +247,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_animal_list) {
+        /*if (id == R.id.nav_animal_list) {
             startActivity(new Intent(MainActivity.this,ListDetailTernakMain.class));
         }else if(id == R.id.nav_add){
             startActivity(new Intent(MainActivity.this,CalendarToDoActivity.class));
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -259,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new DashboardFragment(), "DASHBOARD");
+        adapter.addFrag(new DashboardFragment(), "FARMBOARD");
         adapter.addFrag(new AddDataFragment(), "TAMBAH DATA");
         adapter.addFrag(new ShowReminderFragment(), "PENGINGAT");
         adapter.addFrag(new LaporanFragment(), "LAPORAN");
@@ -347,20 +348,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
             return true;
         } else if(id == R.id.action_logout){
-            if(flag_log_out){
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
                 SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.apply();
-                Toast.makeText(getApplicationContext(),"Log Out",Toast.LENGTH_LONG).show();
 
-
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(i);
                 finish();
-
-            }
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

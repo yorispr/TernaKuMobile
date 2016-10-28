@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,9 @@ public class UpdatePeternakanActivity extends AppCompatActivity {
     String idpeternakan,nama,alamat,telpon, jumlahternak;
 
     private TextInputLayout inputnama,inputalamat,inputtelpon,inputjumlah;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +75,7 @@ public class UpdatePeternakanActivity extends AppCompatActivity {
         });fab.hide();
 
         String urlParameters = "idpeternakan=" + idpeternakan;
-        new GetPeternakan().execute("http://ternaku.com/index.php/C_Peternakan/getPeternakan", urlParameters);
+        new GetPeternakan().execute(url.getUrl_GetPeternakanSetting(), urlParameters);
 
         btnSimpan = (Button)findViewById(R.id.btnUbah);
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +88,7 @@ public class UpdatePeternakanActivity extends AppCompatActivity {
                             + "&teleponpeternakan=" + edttelpon.getText().toString()
                             + "&jumlahternak=" + edtjumlah.getText().toString();
 
-                    new UpdatePeternakan().execute("http://ternaku.com/index.php/C_Peternakan/editPeternakan", urlParameters);
+                    new UpdatePeternakan().execute(url.getUrl_UpdatePeternakan(), urlParameters);
                 }
             }
         });

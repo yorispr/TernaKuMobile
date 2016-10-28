@@ -142,17 +142,27 @@ public class AddMengandung extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
-                                        String idternak = input_addmengandung_activity_idternak.getText().toString().trim();
-                                        String tglinseminasi = getTglInseminasi(idternak);
-                                        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
-                                                +"&tglcekkeberhasilan="+input_addmengandung_activity_tglpemeriksaan.getText().toString().trim()
-                                                +"&statuskeberhasilan="+spinner_addmengandung_activity_statuskeberhasilan.getSelectedItem().toString()
-                                                +"&tglperkiraanmelahirkan="+input_addmengandung_activity_tglperkiraanhamil.getText().toString()
-                                                +"&idternak="+idternak
-                                                +"&tglinseminasi="+tglinseminasi;
-                                        Log.d("param",urlParameters);
-                                        new InsertStatusKehamilan().execute(url.getUrl_InsertMengandung(), urlParameters);
 
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addmengandung_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            String idternak = input_addmengandung_activity_idternak.getText().toString().trim();
+                                            String tglinseminasi = getTglInseminasi(idternak);
+                                            String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
+                                                    +"&tglcekkeberhasilan="+input_addmengandung_activity_tglpemeriksaan.getText().toString().trim()
+                                                    +"&statuskeberhasilan="+spinner_addmengandung_activity_statuskeberhasilan.getSelectedItem().toString()
+                                                    +"&tglperkiraanmelahirkan="+input_addmengandung_activity_tglperkiraanhamil.getText().toString()
+                                                    +"&idternak="+idternak
+                                                    +"&tglinseminasi="+tglinseminasi;
+                                            Log.d("param",urlParameters);
+                                            new InsertStatusKehamilan().execute(url.getUrl_InsertMengandung(), urlParameters);
+                                        }else{
+                                            new SweetAlertDialog(AddMengandung.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
+                                        }
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

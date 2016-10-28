@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetKandangAddPakan;
 import com.fintech.ternaku.Main.NavBar.Pakan.ModelGetPakanAddPakan;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
@@ -67,7 +69,7 @@ public class AddPakanTernak extends AppCompatActivity {
         if(getSupportActionBar()!=null)
         {
             ActionBar actionbar = getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(false);
             actionbar.setTitle("Penggunaan Pakan");
         }
         hideSoftKeyboard();
@@ -422,15 +424,27 @@ public class AddPakanTernak extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home) {
+            Intent i = new Intent(AddPakanTernak.this, MainActivity.class);
+            startActivity(i);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void cleartext(){

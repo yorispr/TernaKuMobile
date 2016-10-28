@@ -174,23 +174,33 @@ public class AddMelahirkan extends AppCompatActivity {
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
 
-                                        String urlParameters;
-                                        String idternak = input_addmelahirkan_activity_idternak.getText().toString().trim();
-                                        String tglinseminasi = getTglInseminasi(idternak);
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addmelahirkan_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            String urlParameters;
+                                            String idternak = input_addmelahirkan_activity_idternak.getText().toString().trim();
+                                            String tglinseminasi = getTglInseminasi(idternak);
 
-                                        if(isAborsi) {
-                                            urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                    + "&tglinseminasi="+tglinseminasi
-                                                    + "&penyebababorsi="+input_addmelahirkan_activity_kondisi.getText().toString()
-                                                    + "&tglaborsi="+input_addmelahirkan_activity_tglmelahirkan.getText().toString();
+                                            if(isAborsi) {
+                                                urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                        + "&tglinseminasi="+tglinseminasi
+                                                        + "&penyebababorsi="+input_addmelahirkan_activity_kondisi.getText().toString()
+                                                        + "&tglaborsi="+input_addmelahirkan_activity_tglmelahirkan.getText().toString();
+                                            }else{
+                                                urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                        + "&tglinseminasi="+tglinseminasi
+                                                        + "&jumlahanak="+input_addmelahirkan_activity_jumlahanak.getText().toString()
+                                                        + "&kondisimelahirkan="+input_addmelahirkan_activity_kondisi.getText().toString()
+                                                        + "&tglmelahirkanreal="+input_addmelahirkan_activity_tglmelahirkan.getText().toString();
+                                            }
+                                            new InsertTernakMelahirkan().execute(url.getUrl_InsertMelahirkan(), urlParameters);
                                         }else{
-                                            urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                    + "&tglinseminasi="+tglinseminasi
-                                                    + "&jumlahanak="+input_addmelahirkan_activity_jumlahanak.getText().toString()
-                                                    + "&kondisimelahirkan="+input_addmelahirkan_activity_kondisi.getText().toString()
-                                                    + "&tglmelahirkanreal="+input_addmelahirkan_activity_tglmelahirkan.getText().toString();
+                                            new SweetAlertDialog(AddMelahirkan.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
                                         }
-                                        new InsertTernakMelahirkan().execute(url.getUrl_InsertMelahirkan(), urlParameters);
 
                                     }
                                 })

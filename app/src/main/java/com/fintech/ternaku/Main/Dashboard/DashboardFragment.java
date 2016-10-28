@@ -648,6 +648,9 @@ public class DashboardFragment extends Fragment {
             public void run() {
                 for (int i = 0; i < 300; i++) {
                     try {
+                        if (getActivity() == null) {
+                            return;
+                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

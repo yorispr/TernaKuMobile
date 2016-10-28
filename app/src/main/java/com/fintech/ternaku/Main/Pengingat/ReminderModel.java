@@ -17,12 +17,13 @@ public class ReminderModel {
     private String creator_id;
     private String creator;
     private String timestamp;
+    private String schedule_time;
     private int isread;
 
     public ReminderModel() {
     }
 
-    public ReminderModel(String id_protocol, String judul, String isi, boolean isImportant, String creator_id, String creator, String timestamp, int isread) {
+    public ReminderModel(String id_protocol, String judul, String isi, boolean isImportant, String creator_id, String creator, String timestamp, int isread,String schedule_time) {
         this.setId_protocol(id_protocol);
         this.setJudul(judul);
         this.setIsi(isi);
@@ -31,6 +32,15 @@ public class ReminderModel {
         this.setCreator_id(creator_id);
         this.setTimestamp(timestamp);
         this.setIsread(isread);
+        this.setSchedule_time(schedule_time);
+    }
+
+    public String getSchedule_time() {
+        return schedule_time;
+    }
+
+    public void setSchedule_time(String schedule_time) {
+        this.schedule_time = schedule_time;
     }
 
     public String getId_protocol() {

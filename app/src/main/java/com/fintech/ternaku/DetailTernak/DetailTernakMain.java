@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Event.ModelDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Task.AddTaskTernak;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.UrlList;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
@@ -96,7 +98,7 @@ public class DetailTernakMain extends AppCompatActivity {
             getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
                     | ActionBar.DISPLAY_SHOW_TITLE
                     | ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         //Get Data Id Ternak-------------------------------------
@@ -121,15 +123,27 @@ public class DetailTernakMain extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home) {
+            Intent i = new Intent(DetailTernakMain.this, MainActivity.class);
+            startActivity(i);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -169,23 +169,32 @@ public class AddKarantina extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.cancel();
 
-                                                String diagnosis = "N/A", perawatan = "N/A";
-                                                if (!input_addkarantina_activity_diagnosis.getText().toString().matches("")) {
-                                                    diagnosis = input_addkarantina_activity_diagnosis.getText().toString();
-                                                }
-                                                if (!input_addkarantina_activity_perawatan.getText().toString().matches("")) {
-                                                    perawatan = input_addkarantina_activity_perawatan.getText().toString();
-                                                }
-                                                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                        + "&idternak=" + input_addkarantina_activity_idternak.getText().toString()
-                                                        + "&tglmulaikarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
-                                                        + "&perawatan=" + perawatan
-                                                        + "&diagnosis=" + diagnosis
-                                                        + "&idkawanan=" + idkawanan_2
-                                                        + "&idkandang=" + idkandang_2;
+                                                //Cek RFID---------------------------------
+                                                Connection c = new Connection();
+                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addkarantina_activity_idternak.getText().toString());
+                                                if(json.trim().equals("1")) {
+                                                    String diagnosis = "N/A", perawatan = "N/A";
+                                                    if (!input_addkarantina_activity_diagnosis.getText().toString().matches("")) {
+                                                        diagnosis = input_addkarantina_activity_diagnosis.getText().toString();
+                                                    }
+                                                    if (!input_addkarantina_activity_perawatan.getText().toString().matches("")) {
+                                                        perawatan = input_addkarantina_activity_perawatan.getText().toString();
+                                                    }
+                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addkarantina_activity_idternak.getText().toString()
+                                                            + "&tglmulaikarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
+                                                            + "&perawatan=" + perawatan
+                                                            + "&diagnosis=" + diagnosis
+                                                            + "&idkawanan=" + idkawanan_2
+                                                            + "&idkandang=" + idkandang_2;
 
-                                                new AddKarantinatoDatabase().execute(url.getUrl_InsertKarantinaMulai(), param);
-
+                                                    new AddKarantinatoDatabase().execute(url.getUrl_InsertKarantinaMulai(), param);
+                                                }else{
+                                                    new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
+                                                            .setTitleText("Peringatan!")
+                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .show();
+                                                }
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -213,12 +222,22 @@ public class AddKarantina extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.cancel();
 
+                                                //Cek RFID---------------------------------
+                                                Connection c = new Connection();
+                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addkarantina_activity_idternak.getText().toString());
+                                                if(json.trim().equals("1")) {
                                                 String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                         + "&idternak=" + input_addkarantina_activity_idternak.getText().toString()
                                                         + "&TglSelesaiKarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
                                                         + "&idkawanan=" + idkawanan_2
                                                         + "&idkandang=" + idkandang_2;
                                                 new AddKarantinatoDatabase().execute(url.getUrl_InsertKarantinaSelesai(), param);
+                                                }else{
+                                                    new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
+                                                            .setTitleText("Peringatan!")
+                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .show();
+                                                }
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

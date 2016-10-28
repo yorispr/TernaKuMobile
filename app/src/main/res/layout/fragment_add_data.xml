@@ -303,6 +303,7 @@
                     android:text="Berat Badan"
                     android:id="@+id/button_adddata_fragment_produksi_beratbadan"
                     android:background="#2980b9"
+                    android:visibility="gone"
                     android:textColor="#FFFFFF"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"

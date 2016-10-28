@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -52,8 +53,10 @@ import java.util.List;
  */
 public class ShowReminderFragment extends Fragment {
     ListView l ;
-    ArrayList<ModelAddProtokolInjeksi> protocolList = new ArrayList<ModelAddProtokolInjeksi>();
-    AdapterListProtokolInjeksi adapter;
+    ArrayList<ReminderModel> protocolList = new ArrayList<ReminderModel>();
+    ArrayList<ReminderModel> protocolListtemp = new ArrayList<ReminderModel>();
+
+    AdapterReminderListProtocol adapter;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseDatabase = database.getReference("reminder");
     Button btnTambah;
@@ -61,6 +64,9 @@ public class ShowReminderFragment extends Fragment {
     String idpeternakan;
     List<ReminderModel> ReminderList;
     DatabaseHandler db;
+    private DatabaseReference mDatabase;
+
+
     public ShowReminderFragment() {
         // Required empty public constructor
     }
@@ -73,15 +79,53 @@ public class ShowReminderFragment extends Fragment {
         // Inflate the layout for this fragment
         idpengguna = getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         idpeternakan = getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
-
         l = (ListView) view.findViewById(R.id.reminder_list);
+        adapter = new AdapterReminderListProtocol(getContext(), protocolList);
+        l.setAdapter(adapter);
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                protocolList.clear();
+                // Get Post object and use the values to update the UI
+                for (DataSnapshot imageSnapshot: dataSnapshot.getChildren()) {
+                   ReminderModel r = new ReminderModel();
+                    r = imageSnapshot.getValue(ReminderModel.class);
+                   protocolList.add(r);
+                   Log.d("Loads",  r.getJudul());
+                }
+
+                protocolListtemp = db.getReminder();
+                Log.d("IsiSQLLite", String.valueOf(protocolListtemp.size()));
+                Log.d("IsiFirebase", String.valueOf(protocolList.size()));
+                if(protocolListtemp.size() != protocolList.size()){
+                    db.ClearReminder();
+                    for(int i=0;i<protocolList.size();i++){
+                        db.addReminder(protocolList.get(i));
+                    }
+                }
+                Collections.reverse(protocolList);
+
+                adapter.notifyDataSetChanged();
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Load", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        firebaseDatabase.child(idpeternakan).orderByChild("timestamp").addListenerForSingleValueEvent(postListener);
+
+
         db = new DatabaseHandler(getContext());
-        protocolList = db.getReminder();
+        //protocolList = db.getReminder();
 
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ModelAddProtokolInjeksi pm = protocolList.get(i);
+                ReminderModel pm = protocolList.get(i);
                 db.updateRead(pm.getId_protocol());
                 Intent act = new Intent(getContext(), ViewReminderActivity.class);
                 act.putExtra("id",pm.getId_protocol());
@@ -91,8 +135,7 @@ public class ShowReminderFragment extends Fragment {
 
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter("com.tutorialspoint.CUSTOM_INTENT"));
 
-        adapter = new AdapterListProtokolInjeksi(getContext(), protocolList);
-        l.setAdapter(adapter);
+
 
         btnTambah = (Button)view.findViewById(R.id.btnTambahProtokol);
         btnTambah.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +154,7 @@ public class ShowReminderFragment extends Fragment {
     public  void updateList(){
         protocolList.clear();
         protocolList = db.getReminder();
-        adapter = new AdapterListProtokolInjeksi(getContext(), protocolList);
+        adapter = new AdapterReminderListProtocol(getContext(), protocolList);
         l.setAdapter(adapter);
     }
 

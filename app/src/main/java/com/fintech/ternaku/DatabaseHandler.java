@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.fintech.ternaku.Main.Pengingat.ReminderModel;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ModelAddProtokolInjeksi;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TBL_REMINDER = "CREATE TABLE TBL_REMINDER (ID_REMINDER TEXT , JUDUL TEXT, ISI TEXT, ISIMPORTANT INTEGER, CREATOR_ID TEXT, CREATOR TEXT, TIMESTAMP TEXT, ISREAD INTEGER)";
+        String CREATE_TBL_REMINDER = "CREATE TABLE TBL_REMINDER (ID_REMINDER TEXT , JUDUL TEXT, ISI TEXT, ISIMPORTANT INTEGER, CREATOR_ID TEXT, CREATOR TEXT, TIMESTAMP TEXT, ISREAD INTEGER, SCHEDULETIME TEXT)";
         db.execSQL(CREATE_TBL_REMINDER);
     }
 
@@ -36,7 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addReminder(ModelAddProtokolInjeksi reminder) {
+    public void addReminder(ReminderModel reminder) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.setForeignKeyConstraintsEnabled(false);
         ContentValues values = new ContentValues();
@@ -53,6 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put("CREATOR", reminder.getCreator());
         values.put("TIMESTAMP", reminder.getTimestamp());
         values.put("ISREAD", 0);
+        values.put("SCHEDULETIME",reminder.getSchedule_time());
 
         // Inserting Row
         db.insert("TBL_REMINDER", null, values);
@@ -60,8 +62,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    public ArrayList<ModelAddProtokolInjeksi> getReminder() {
-        ArrayList<ModelAddProtokolInjeksi> reminderList = new ArrayList<ModelAddProtokolInjeksi>();
+    public ArrayList<ReminderModel> getReminder() {
+        ArrayList<ReminderModel> reminderList = new ArrayList<ReminderModel>();
         // Select All Query
         String selectQuery = "SELECT * FROM TBL_REMINDER ORDER BY TIMESTAMP DESC";
         Log.d("QUERY", selectQuery);
@@ -72,7 +74,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
                 do {
-                    ModelAddProtokolInjeksi r = new ModelAddProtokolInjeksi();
+                    ReminderModel r = new ReminderModel();
                     r.setId_protocol(cursor.getString(cursor.getColumnIndex("ID_REMINDER")));
                     r.setJudul(cursor.getString(cursor.getColumnIndex("JUDUL")));
                     r.setIsi(cursor.getString(cursor.getColumnIndex("ISI")));
@@ -84,6 +86,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         r.setImportant(false);
                     }
                    r.setTimestamp(cursor.getString(cursor.getColumnIndex("TIMESTAMP")));
+                    r.setSchedule_time(cursor.getString(cursor.getColumnIndex("SCHEDULETIME")));
                     Log.d("REMINDERDATA", cursor.getString(cursor.getColumnIndex("ID_REMINDER")));
 
                     // Adding contact to list
@@ -95,11 +98,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return reminderList;
     }
 
-    public ModelAddProtokolInjeksi GetReminderById(String id) {
+    public ReminderModel GetReminderById(String id) {
         String selectQuery = "SELECT * FROM TBL_REMINDER WHERE ID_REMINDER = '"+id+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        ModelAddProtokolInjeksi r = new ModelAddProtokolInjeksi();
+        ReminderModel r = new ReminderModel();
 
         if (cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
@@ -115,6 +118,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         r.setImportant(false);
                     }
                     r.setTimestamp(cursor.getString(cursor.getColumnIndex("TIMESTAMP")));
+                    r.setSchedule_time(cursor.getString(cursor.getColumnIndex("SCHEDULETIME")));
                 } while (cursor.moveToNext());
             }
         }
@@ -126,6 +130,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void DropTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE TBL_REMINDER");
+    }
+
+    public void ClearReminder() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM TBL_REMINDER");
     }
 
     public void updateRead(String id) {

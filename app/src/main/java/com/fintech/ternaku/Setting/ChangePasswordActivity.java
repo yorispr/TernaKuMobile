@@ -23,6 +23,7 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekKesehatan;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +36,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private EditText passlama, passbaru, konfirmasipassbaru;
     private TextInputLayout lama,baru,konfirmasi;
     private Button btnUbah;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +80,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         String urlParameters = "idpengguna=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                 + "&passlama=" + passwordlama
                                 + "&passbaru=" + passwordbaru;
-                        new UpdatePassword().execute("http://ternaku.com/index.php/C_Pengguna/updatePasswordPeternak", urlParameters);
+                        new UpdatePassword().execute(url.getUrl_ChangePassword(), urlParameters);
                         Log.d("param", urlParameters);
                     }
             }

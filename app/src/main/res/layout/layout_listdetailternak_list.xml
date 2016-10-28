@@ -211,7 +211,6 @@
             android:id="@+id/textView11"
             android:layout_marginStart="15dp"
             android:layout_alignBottom="@+id/img_listdetailternak_activity_kondisitubuh"
-            android:layout_alignStart="@+id/tableLayout5"
             android:layout_marginBottom="24dp" />
 
         <TextView

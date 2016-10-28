@@ -152,15 +152,26 @@ public class AddVaksinasi extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
-                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                + "&idternak=" + input_addvaksinasi_activity_idternak.getText().toString()
-                                                + "&idvaksin=" + list_addvaksinasi_namavaksin.get(selectedindex).getId()
-                                                + "&dosis=" + input_addvaksinasi_activity_dosis.getText().toString()
-                                                + "&satuandosis=" + input_addvaksinasi_activity_satuan.getText().toString()
-                                                + "&repetisi=" + input_addvaksinasi_activity_pemberianke.getText().toString()
-                                                + "&tglvaksinasi=" + input_addvaksinasi_activity_tglvaksinasi.getText().toString();
-                                        new AddVaksinasitoDatabase().execute(url.getUrl_InsertVaksinasi(), param);
-                                        Log.d("Param",param);
+
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addvaksinasi_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                    + "&idternak=" + input_addvaksinasi_activity_idternak.getText().toString()
+                                                    + "&idvaksin=" + list_addvaksinasi_namavaksin.get(selectedindex).getId()
+                                                    + "&dosis=" + input_addvaksinasi_activity_dosis.getText().toString()
+                                                    + "&satuandosis=" + input_addvaksinasi_activity_satuan.getText().toString()
+                                                    + "&repetisi=" + input_addvaksinasi_activity_pemberianke.getText().toString()
+                                                    + "&tglvaksinasi=" + input_addvaksinasi_activity_tglvaksinasi.getText().toString();
+                                            new AddVaksinasitoDatabase().execute(url.getUrl_InsertVaksinasi(), param);
+                                            Log.d("Param",param);
+                                        }else{
+                                            new SweetAlertDialog(AddVaksinasi.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
+                                        }
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

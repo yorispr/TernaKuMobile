@@ -144,24 +144,34 @@ public class AddCekPenyakit extends AppCompatActivity {
                                                 public void onClick(SweetAlertDialog sDialog) {
                                                     sDialog.cancel();
 
-                                                    String diagnosis = "N/A", perawatan = "N/A";
-                                                    if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
-                                                        diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                    //Cek RFID---------------------------------
+                                                    Connection c = new Connection();
+                                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addcekpenyakit_activity_idternak.getText().toString());
+                                                    if(json.trim().equals("1")) {
+                                                        String diagnosis = "N/A", perawatan = "N/A";
+                                                        if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
+                                                            diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                        }
+                                                        if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
+                                                            perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
+                                                        }
+                                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                                + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
+                                                                + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
+                                                                + "&perawatan=" + perawatan
+                                                                + "&diagnosis=" + diagnosis
+                                                                + "&tglperiksaberikutnya=0000-00-00 00:00:00"
+                                                                + "&biayaperiksa=0"
+                                                                + "&susuaman=" + susuaman
+                                                                + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
+                                                                + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
+                                                        new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
+                                                    }else{
+                                                        new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.WARNING_TYPE)
+                                                                .setTitleText("Peringatan!")
+                                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                                .show();
                                                     }
-                                                    if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
-                                                        perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
-                                                    }
-                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
-                                                            + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
-                                                            + "&perawatan=" + perawatan
-                                                            + "&diagnosis=" + diagnosis
-                                                            + "&tglperiksaberikutnya=0000-00-00 00:00:00"
-                                                            + "&biayaperiksa=0"
-                                                            + "&susuaman=" + susuaman
-                                                            + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
-                                                            + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
-                                                    new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
                                                 }
                                             })
                                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -183,24 +193,34 @@ public class AddCekPenyakit extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.cancel();
 
-                                                String diagnosis = "N/A", perawatan = "N/A";
-                                                if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
-                                                    diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                //Cek RFID---------------------------------
+                                                Connection c = new Connection();
+                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addcekpenyakit_activity_idternak.getText().toString());
+                                                if(json.trim().equals("1")) {
+                                                    String diagnosis = "N/A", perawatan = "N/A";
+                                                    if (!input_addcekpenyakit_activity_diagnosis.getText().toString().matches("")) {
+                                                        diagnosis = input_addcekpenyakit_activity_diagnosis.getText().toString();
+                                                    }
+                                                    if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
+                                                        perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
+                                                    }
+                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
+                                                            + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
+                                                            + "&perawatan=" + perawatan
+                                                            + "&diagnosis=" + diagnosis
+                                                            + "&tglperiksaberikutnya=0000-00-00 00:00:00"
+                                                            + "&biayaperiksa=0"
+                                                            + "&susuaman=" + susuaman
+                                                            + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
+                                                            + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
+                                                    new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
+                                                }else{
+                                                    new SweetAlertDialog(AddCekPenyakit.this, SweetAlertDialog.WARNING_TYPE)
+                                                            .setTitleText("Peringatan!")
+                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .show();
                                                 }
-                                                if (!input_addcekpenyakit_activity_perawatan.getText().toString().matches("")) {
-                                                    perawatan = input_addcekpenyakit_activity_perawatan.getText().toString();
-                                                }
-                                                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                        + "&idternak=" + input_addcekpenyakit_activity_idternak.getText().toString()
-                                                        + "&tglperiksa=" + input_addcekpenyakit_activity_tglpemeriksaan.getText().toString()
-                                                        + "&perawatan=" + perawatan
-                                                        + "&diagnosis=" + diagnosis
-                                                        + "&tglperiksaberikutnya=0000-00-00 00:00:00"
-                                                        + "&biayaperiksa=0"
-                                                        + "&susuaman=" + susuaman
-                                                        + "&statusfisik=" + spinner_addcekpenyakit_activity_kondisi.getSelectedItem().toString()
-                                                        + "&jenisperiksa=" + spinner_addcekpenyakit_activity_jenisperiksa.getSelectedItem().toString().toUpperCase();
-                                                new InsertCekPenyakit().execute(url.getUrl_InsertPenyakit(), param);
                                             }
                                         })
                                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

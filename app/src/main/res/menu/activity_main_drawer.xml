@@ -25,7 +25,8 @@
             android:title="Data Ternak" />
     </group>
 
-    <group         android:id="@+id/menu_bottom"
+    <group
+        android:id="@+id/menu_bottom"
         android:checkableBehavior="none">
 
         <item

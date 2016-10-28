@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
@@ -51,6 +52,9 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
     String jsonMasuk, jsonKeluar;
     ArrayList<Float> uangListMasuk = new ArrayList<Float>();
     ArrayList<Float> uangListKeluar = new ArrayList<Float>();
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,7 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
         String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                 +"&bulan=" + bln.trim()
                 +"&tahun=" + thn.trim();
-        new GetDataKeuanganMasuk().execute("http://ternaku.com/index.php/C_Laporan/UangMasuk_PETERNAKAN_BULAN_TERTENTU",param);
+        new GetDataKeuanganMasuk().execute(url.getUrlGetLaporanKeuanganGrafik_Masuk(),param);
         Log.d("Url",param);
 
         mChart.animateX(3500);
@@ -162,7 +166,7 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
             String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                     +"&bulan=" + bln.trim()
                     +"&tahun=" + thn.trim();
-            new GetDataKeuanganKeluar().execute("http://ternaku.com/index.php/C_Laporan/UangKeluar_PETERNAKAN_BULAN_TERTENTU",param);
+            new GetDataKeuanganKeluar().execute(url.getUrlGetLaporanKeuanganGrafik_Keluar(),param);
         }
     }
     private class GetDataKeuanganKeluar extends AsyncTask<String,Integer,String> {

@@ -116,12 +116,23 @@ public class UpdateCulling extends AppCompatActivity {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.cancel();
-                                    String idter = input_updateculling_activity_idternak.getText().toString();
-                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                            + "&idternak=" + idter
-                                            + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
-                                            + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
-                                    new AddCulling().execute(url.getUrlInsertCulling(), param);
+
+                                    //Cek RFID---------------------------------
+                                    Connection c = new Connection();
+                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_updateculling_activity_idternak.getText().toString());
+                                    if(json.trim().equals("1")) {
+                                        String idter = input_updateculling_activity_idternak.getText().toString();
+                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                + "&idternak=" + idter
+                                                + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
+                                                + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
+                                        new AddCulling().execute(url.getUrlInsertCulling(), param);
+                                    }else{
+                                        new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.WARNING_TYPE)
+                                                .setTitleText("Peringatan!")
+                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                .show();
+                                    }
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

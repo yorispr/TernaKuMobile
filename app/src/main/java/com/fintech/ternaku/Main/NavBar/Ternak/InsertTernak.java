@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
 
@@ -72,7 +74,7 @@ public class InsertTernak extends AppCompatActivity {
         if(getSupportActionBar()!=null)
         {
             ActionBar actionbar = getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(false);
             actionbar.setTitle("Ternak Baru");
         }
 
@@ -161,7 +163,7 @@ public class InsertTernak extends AppCompatActivity {
         int selectedId=radioKelaminGroup.getCheckedRadioButtonId();
         radioKelamin=(RadioButton) findViewById(selectedId);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+       /* SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
         Date testDate = null;
         try {
             testDate = sdf.parse(txtTgl.getText().toString());
@@ -169,7 +171,7 @@ public class InsertTernak extends AppCompatActivity {
             ex.printStackTrace();
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        final String newFormat = formatter.format(testDate);
+        final String newFormat = formatter.format(testDate);*/
 
         //Insert Database--
         new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
@@ -181,14 +183,30 @@ public class InsertTernak extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.cancel();
-                        Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
-                                newFormat+radioKelamin.getText().toString());
-                        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null).trim()
-                                +"&namaternak=" + txtNama.getText().toString()
-                                +"&jeniskelamin=" + radioKelamin.getText().toString()
-                                +"&tanggallahirternak=" + newFormat
-                                +"&rfidcode=" + txtRFID.getText().toString();
-                        new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);}
+
+                        //Cek RFID---------------------------------
+                        Connection c = new Connection();
+                        String urlParameters2;
+                        urlParameters2 = "rfid=" + txtRFID.getText().toString() +
+                                "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDCek(), urlParameters2);
+                        Log.d("param2", urlParameters2);
+                        if (json.trim().equals("0")) {
+                            Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
+                                    txtTgl.getText().toString()+radioKelamin.getText().toString());
+                            String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null).trim()
+                                    +"&namaternak=" + txtNama.getText().toString()
+                                    +"&jeniskelamin=" + radioKelamin.getText().toString()
+                                    +"&tanggallahirternak=" + txtTgl.getText().toString()
+                                    +"&rfidcode=" + txtRFID.getText().toString();
+                            new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);
+                        }else{
+                            new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Peringatan!")
+                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                    .show();
+                        }
+                    }
                 })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -234,7 +252,7 @@ public class InsertTernak extends AppCompatActivity {
                                 sweetAlertDialog.dismiss();
                                 new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Tambah Peternak")
-                                        .setContentText("Apakah Ingin Menambah Data Peternak Lagi?")
+                                        .setContentText("Apakah Ingin Menambah Data Ternak Lagi?")
                                         .setConfirmText("Ya")
                                         .setCancelText("Tidak")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -422,13 +440,26 @@ public class InsertTernak extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home) {
+            Intent i = new Intent(InsertTernak.this, MainActivity.class);
+            startActivity(i);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

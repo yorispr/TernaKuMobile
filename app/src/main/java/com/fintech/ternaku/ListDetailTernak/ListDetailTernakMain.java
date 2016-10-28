@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.DetailTernakMain;
 import com.fintech.ternaku.ListDetailTernak.AdapterDetailTernakListDetailTernak;
 import com.fintech.ternaku.ListDetailTernak.ModelDetailTernalListDetailTernak;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -59,7 +61,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
     AdapterDetailTernakListDetailTernak adapter;
     List<ModelDetailTernalListDetailTernak> ternakList = new ArrayList<ModelDetailTernalListDetailTernak>();
     List<String> melahirkanList = new ArrayList<>();
-    ListView list;
+    GridView list;
     SearchView searchView = null;
     private Button btnUrutkan,btnFilter, btnclearfilter;
     String[] listItems = {"Heat", "Menyusui", "Kering"};
@@ -87,7 +89,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
             getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP
                     | ActionBar.DISPLAY_SHOW_TITLE
                     | ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setTitle("Data Ternak");
         }
         isdashboardsubur = false;
@@ -102,7 +104,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
         isdashboardkehamilanlainnya = false;
         iskawananlainnya = false;
 
-        list = (ListView) findViewById(R.id.list_listdetailternak_activity);
+        list = (GridView) findViewById(R.id.list_listdetailternak_activity);
         segment = 1;
 
         animateList();
@@ -125,7 +127,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
             isloading = false;
             mProgressBarFooter = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                     .inflate(R.layout.footer_listview, null, false);
-            list.addFooterView(mProgressBarFooter);
+            //list.addFooterView(mProgressBarFooter);
             list.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -327,7 +329,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
             if(s.trim().equals("404"))
             {
                 if(segment>1){
-                    list.removeFooterView(mProgressBarFooter);
+                    //list.removeFooterView(mProgressBarFooter);
                 }else {
                     Toast.makeText(getApplicationContext(), "Terjadi Kesalahan...", Toast.LENGTH_LONG).show();
                 }
@@ -623,14 +625,16 @@ public class ListDetailTernakMain extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home) {
+            Intent i = new Intent(ListDetailTernakMain.this, MainActivity.class);
+            startActivity(i);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -656,6 +660,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
                 return false;
             }
         });
+
 
         return true;
     }

@@ -30,6 +30,7 @@ import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
 import com.fintech.ternaku.Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan;
 import com.fintech.ternaku.Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
@@ -71,6 +72,8 @@ public class LaporanFragment extends Fragment {
     private Button button_laporan_fragment_grafikkeuangan;
     private String bln_selected,thn_selected,bln_selected_angka;
 
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
 
     public LaporanFragment() {
         // Required empty public constructor
@@ -124,6 +127,7 @@ public class LaporanFragment extends Fragment {
 
         //Set All Action---------------------------------------------------------
         initiate();
+        InitiateData();
         dialog_datepicker_laporan_initiate();
         linearLayout_laporan_fragment_pilihtgl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +183,36 @@ public class LaporanFragment extends Fragment {
     private void initiate(){
         prog_laporan_fragment.setVisibility(View.GONE);
         linearLayout_laporan_fragment_laporankeuangan.setVisibility(View.GONE);
+    }
+    private void InitiateData(){
+        String[] bulan_array = {
+                "Januari",
+                "Februari",
+                "Maret",
+                "April",
+                "Mei",
+                "Juni",
+                "Juli",
+                "Agustus",
+                "September",
+                "Oktober",
+                "November",
+                "Desember"};
+        Calendar cal = Calendar.getInstance();
+        String bulan = bulan_array[cal.get(Calendar.MONTH)-1];
+        String tahun = String.valueOf(cal.get(Calendar.YEAR));
+        txt_laporan_fragment_pilihbulan.setText(bulan.trim()
+                + ", " + String.valueOf(tahun.trim()));
+        bln_selected = bulan_array[cal.get(Calendar.MONTH)-1];
+        thn_selected = String.valueOf(cal.get(Calendar.YEAR));
+        bln_selected_angka = String.valueOf(cal.get(Calendar.MONTH)-1);
+
+        //Set Data------------------------------------------------------------
+        String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                +"&bulan=" + bulan.trim()
+                +"&tahun=" + tahun.trim();
+        Log.d("CekUrl",param);
+        new GetDataKeuanganLaporan().execute(url.getUrlGetLaporanKeuanganList(), param);
     }
 
     //DialogBox Initiate--------------------------------------------------------
@@ -236,7 +270,7 @@ public class LaporanFragment extends Fragment {
                         +"&bulan=" + bulan[numberPicker_laporan_bulan.getValue()].toString().trim()
                         +"&tahun=" + String.valueOf(numberPicker_laporan_tahun.getValue()).trim();
                 Log.d("CekUrl",param);
-                new GetDataKeuanganLaporan().execute("http://ternaku.com/index.php/C_Laporan/UangKeluarMasuk_PETERNAKAN_HARI", param);
+                new GetDataKeuanganLaporan().execute(url.getUrlGetLaporanKeuanganList(), param);
             }
         });
         dialog_pilih_tanggal_laporan.findViewById(R.id.button_laporan_fragment_pickercancel).setOnClickListener(new View.OnClickListener() {

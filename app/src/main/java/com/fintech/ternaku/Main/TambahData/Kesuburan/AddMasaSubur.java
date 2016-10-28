@@ -152,52 +152,63 @@ public class AddMasaSubur extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
-                                        if(isHeat) {
-                                            String perawatan = "N/A";
-                                            String diagnosis = "N/A";
-                                            String biayaperiksa = "0";
 
-                                            if (!isSedangHeat(idter)) {
-                                                if (!input_addmasasubur_activity_biaya.getText().toString().matches("")) {
-                                                    biayaperiksa = input_addmasasubur_activity_biaya.getText().toString();
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addmasasubur_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            if(isHeat) {
+                                                String perawatan = "N/A";
+                                                String diagnosis = "N/A";
+                                                String biayaperiksa = "0";
+
+                                                if (!isSedangHeat(idter)) {
+                                                    if (!input_addmasasubur_activity_biaya.getText().toString().matches("")) {
+                                                        biayaperiksa = input_addmasasubur_activity_biaya.getText().toString();
+                                                    }
+                                                    if (!input_addmasasubur_activity_diagnosis.getText().toString().matches("")) {
+                                                        diagnosis = input_addmasasubur_activity_diagnosis.getText().toString();
+                                                    }
+                                                    if (!input_addmasasubur_activity_perawatan.getText().toString().matches("")) {
+                                                        perawatan = input_addmasasubur_activity_perawatan.getText().toString();
+                                                    }
+                                                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
+                                                            + "&tglmulaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString()
+                                                            + "&diagnosis=" + diagnosis
+                                                            + "&perawatan=" + perawatan
+                                                            + "&biayaperiksa=" + biayaperiksa;
+                                                    new UpdateMasaSubur().execute(url.getUrl_InsertHeatMulai(), urlParameters);
+                                                    Log.d("TglMulai",urlParameters);
+                                                } else {
+                                                    new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
+                                                            .setTitleText("Peringatan!")
+                                                            .setContentText("Ternak Sedang Masa Subur")
+                                                            .show();
                                                 }
-                                                if (!input_addmasasubur_activity_diagnosis.getText().toString().matches("")) {
-                                                    diagnosis = input_addmasasubur_activity_diagnosis.getText().toString();
+                                            }else{
+                                                if (isSedangHeat(idter)) {
+                                                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                            + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
+                                                            + "&tglselesaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString();
+                                                    new UpdateMasaSubur().execute(url.getUrl_InsertHeatSelesai(), urlParameters);
+                                                    Log.d("TglSelesai",urlParameters);
+                                                } else {
+                                                    new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
+                                                            .setTitleText("Peringatan!")
+                                                            .setContentText("Ternak Tidak Sedang Masa Subur")
+                                                            .show();
                                                 }
-                                                if (!input_addmasasubur_activity_perawatan.getText().toString().matches("")) {
-                                                    perawatan = input_addmasasubur_activity_perawatan.getText().toString();
-                                                }
-                                                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                        + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
-                                                        + "&tglmulaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString()
-                                                        + "&diagnosis=" + diagnosis
-                                                        + "&perawatan=" + perawatan
-                                                        + "&biayaperiksa=" + biayaperiksa;
-                                                new UpdateMasaSubur().execute(url.getUrl_InsertHeatMulai(), urlParameters);
-                                                Log.d("TglMulai",urlParameters);
-                                            } else {
-                                                new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
-                                                        .setTitleText("Peringatan!")
-                                                        .setContentText("Ternak Sedang Masa Subur")
-                                                        .show();
                                             }
+                                            //Set Ternak Heat-------------------------------------------------
+                                            String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                                            new GetTernakHeat().execute(url.getUrl_GetHeat(), param_2);
                                         }else{
-                                            if (isSedangHeat(idter)) {
-                                                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                        + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
-                                                        + "&tglselesaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString();
-                                                new UpdateMasaSubur().execute(url.getUrl_InsertHeatSelesai(), urlParameters);
-                                                Log.d("TglSelesai",urlParameters);
-                                            } else {
-                                                new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
-                                                        .setTitleText("Peringatan!")
-                                                        .setContentText("Ternak Tidak Sedang Masa Subur")
-                                                        .show();
-                                            }
+                                            new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
                                         }
-                                        //Set Ternak Heat-------------------------------------------------
-                                        String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                                        new GetTernakHeat().execute(url.getUrl_GetHeat(), param_2);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

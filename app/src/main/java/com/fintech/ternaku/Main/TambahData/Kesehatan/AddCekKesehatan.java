@@ -179,20 +179,30 @@ public class AddCekKesehatan extends AppCompatActivity {
                                                 public void onClick(SweetAlertDialog sDialog) {
                                                     sDialog.cancel();
 
-                                                    String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + input_addcekkesehatan_activity_idternak.getText().toString().trim()
-                                                            + "&tglperiksa=" + input_addcekkesehatan_activity_tglpemeriksaan.getText().toString()
-                                                            + "&suhubadan="+input_addcekkesehatan_activity_suhubadan.getText().toString()
-                                                            + "&beratbadan="+input_addcekkesehatan_activity_beratbadan.getText().toString()
-                                                            + "&tinggiternak="+input_addcekkesehatan_activity_tinggibadan.getText().toString()
-                                                            + "&aktivitas="+spinner_addcekkesehatan_activity_aktivitas.getSelectedItem().toString()
-                                                            + "&produksisusu="+spinner_addcekkesehatan_activity_produksisusu.getSelectedItem().toString()
-                                                            + "&statusfisik="+spinner_addcekkesehatan_activity_statusfisik.getSelectedItem().toString()
-                                                            + "&statusStress="+spinner_addcekkesehatan_activity_statusstress.getSelectedItem().toString()
-                                                            + "&bodyscore="+input_addcekkesehatan_activity_conditionscore.getText().toString();
+                                                    //Cek RFID---------------------------------
+                                                    Connection c = new Connection();
+                                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addcekkesehatan_activity_idternak.getText().toString());
+                                                    if(json.trim().equals("1")) {
+                                                        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                                + "&idternak=" + input_addcekkesehatan_activity_idternak.getText().toString().trim()
+                                                                + "&tglperiksa=" + input_addcekkesehatan_activity_tglpemeriksaan.getText().toString()
+                                                                + "&suhubadan="+input_addcekkesehatan_activity_suhubadan.getText().toString()
+                                                                + "&beratbadan="+input_addcekkesehatan_activity_beratbadan.getText().toString()
+                                                                + "&tinggiternak="+input_addcekkesehatan_activity_tinggibadan.getText().toString()
+                                                                + "&aktivitas="+spinner_addcekkesehatan_activity_aktivitas.getSelectedItem().toString()
+                                                                + "&produksisusu="+spinner_addcekkesehatan_activity_produksisusu.getSelectedItem().toString()
+                                                                + "&statusfisik="+spinner_addcekkesehatan_activity_statusfisik.getSelectedItem().toString()
+                                                                + "&statusStress="+spinner_addcekkesehatan_activity_statusstress.getSelectedItem().toString()
+                                                                + "&bodyscore="+input_addcekkesehatan_activity_conditionscore.getText().toString();
 
-                                                    new InsertKesehatan().execute(url.getUrl_InsertCekKesehatan(), urlParameters);
-                                                    Log.d("param",urlParameters);
+                                                        new InsertKesehatan().execute(url.getUrl_InsertCekKesehatan(), urlParameters);
+                                                        Log.d("param",urlParameters);
+                                                    }else{
+                                                        new SweetAlertDialog(AddCekKesehatan.this, SweetAlertDialog.WARNING_TYPE)
+                                                                .setTitleText("Peringatan!")
+                                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                                .show();
+                                                    }
                                                 }
                                             })
                                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

@@ -189,37 +189,47 @@ public class PindahTernak extends AppCompatActivity {
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.cancel();
 
-                                    //Insert To Database------------------------------------------------
-                                    String idternak = TernakList.get(choosenindex).getId_ternak();
-                                    String idkawanan= input_pindahternak_activity_namakawanan.getText().toString();
-                                    String idkandang= input_pindahternak_activity_namakandang.getText().toString();
+                                    //Cek RFID---------------------------------
+                                    Connection c = new Connection();
+                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_pindahternak_activity_idternak.getText().toString());
+                                    if(json.trim().equals("1")) {
+                                        //Insert To Database------------------------------------------------
+                                        String idternak = TernakList.get(choosenindex).getId_ternak();
+                                        String idkawanan= input_pindahternak_activity_namakawanan.getText().toString();
+                                        String idkandang= input_pindahternak_activity_namakandang.getText().toString();
 
-                                    if(choosenindexkawanan != -1) {
-                                        idkawanan = KawananList.get(choosenindexkawanan).getId_kawanan();
-                                        Log.d("res"," index kawanan != -1  choosenindex = " + String.valueOf(choosenindex) );
+                                        if(choosenindexkawanan != -1) {
+                                            idkawanan = KawananList.get(choosenindexkawanan).getId_kawanan();
+                                            Log.d("res"," index kawanan != -1  choosenindex = " + String.valueOf(choosenindex) );
 
-                                    }else if (choosenindexkawanan == -1){
-                                        idkawanan = TernakList.get(choosenindex).getId_kawanan();
-                                        Log.d("res"," index kawanan == -1  choosenindex = " + String.valueOf(choosenindex) );
+                                        }else if (choosenindexkawanan == -1){
+                                            idkawanan = TernakList.get(choosenindex).getId_kawanan();
+                                            Log.d("res"," index kawanan == -1  choosenindex = " + String.valueOf(choosenindex) );
 
+                                        }
+                                        if(choosenindexkandang != -1) {
+                                            idkandang = KandangList.get(choosenindexkandang).getId_kandang();
+                                            Log.d("res"," index kandang != -1 choosenindex = " + String.valueOf(choosenindex));
+
+                                        }else if(choosenindexkandang == -1){
+                                            idkandang = TernakList.get(choosenindex).getId_kandang();
+                                            Log.d("res"," index kandang == -1 choosenindex = " + String.valueOf(choosenindex));
+
+                                        }
+                                        String status = "Aktif";
+                                        String urlParameters = "idternak="+idternak
+                                                +"&idpeternakan="+idpeternakan
+                                                +"&idkawanan="+idkawanan
+                                                +"&idkandang="+idkandang
+                                                +"&statusaktif="+status;
+                                        new InsertPengelompokkanTask().execute(url.getUrl_InsertPindahTernak(), urlParameters);
+                                        Log.d("param",urlParameters);
+                                    }else{
+                                        new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.WARNING_TYPE)
+                                                .setTitleText("Peringatan!")
+                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                .show();
                                     }
-                                    if(choosenindexkandang != -1) {
-                                        idkandang = KandangList.get(choosenindexkandang).getId_kandang();
-                                        Log.d("res"," index kandang != -1 choosenindex = " + String.valueOf(choosenindex));
-
-                                    }else if(choosenindexkandang == -1){
-                                        idkandang = TernakList.get(choosenindex).getId_kandang();
-                                        Log.d("res"," index kandang == -1 choosenindex = " + String.valueOf(choosenindex));
-
-                                    }
-                                    String status = "Aktif";
-                                    String urlParameters = "idternak="+idternak
-                                            +"&idpeternakan="+idpeternakan
-                                            +"&idkawanan="+idkawanan
-                                            +"&idkandang="+idkandang
-                                            +"&statusaktif="+status;
-                                    new InsertPengelompokkanTask().execute(url.getUrl_InsertPindahTernak(), urlParameters);
-                                    Log.d("param",urlParameters);
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

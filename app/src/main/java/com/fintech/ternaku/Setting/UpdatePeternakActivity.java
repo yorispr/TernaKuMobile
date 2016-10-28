@@ -21,12 +21,17 @@ import android.widget.Toast;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 public class UpdatePeternakActivity extends AppCompatActivity {
 
     private EditText edtnama,edtalamat,edttelpon;
     private Button btnSimpan;
     String idpeternak,nama,alamat,telpon;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +95,7 @@ public class UpdatePeternakActivity extends AppCompatActivity {
                             + "&alamat=" + alamat
                             + "&telepon=" + telpon;
 
-                    new UpdateProfil().execute("http://ternaku.com/index.php/C_Pengguna/updatePeternak", urlParameters);
+                    new UpdateProfil().execute(url.getUrl_UpdatePeternak(), urlParameters);
                     Log.d("param", urlParameters);
                 }else{
                     Toast.makeText(getApplication(),"Lengkapi Data!",Toast.LENGTH_LONG).show();

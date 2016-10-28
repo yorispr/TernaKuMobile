@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!shr.contains("keyUsername") || shr.getString("keyUsername",null)==null) {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
             setContentView(R.layout.activity_login);
 

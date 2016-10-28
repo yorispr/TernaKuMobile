@@ -166,23 +166,34 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
-                                        String perawatan = "N/A";
-                                        String diagnosis = "N/A";
 
-                                        if (isSehat == 0) {
-                                            diagnosis = input_addpemeriksaansubur_activity_diagnosis.getText().toString();
-                                            perawatan = input_addpemeriksaansubur_activity_perawatan.getText().toString();
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addpemeriksaansubur_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            String perawatan = "N/A";
+                                            String diagnosis = "N/A";
+
+                                            if (isSehat == 0) {
+                                                diagnosis = input_addpemeriksaansubur_activity_diagnosis.getText().toString();
+                                                perawatan = input_addpemeriksaansubur_activity_perawatan.getText().toString();
+                                            }
+                                            String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                    + "&idternak=" + input_addpemeriksaansubur_activity_idternak.getText().toString().trim()
+                                                    + "&tglperiksa=" + input_addpemeriksaansubur_activity_tglpemeriksaan.getText().toString()
+                                                    + "&perawatan=" + perawatan
+                                                    + "&diagnosis=" + diagnosis
+                                                    + "&tglperiksaberikutnya=" + input_addpemeriksaansubur_activity_tglperiksaberikut.getText().toString()
+                                                    + "&statusreproduksi=" + String.valueOf(isSehat)
+                                                    + "&biayaperiksa=" + input_addpemeriksaansubur_activity_biaya.getText().toString();
+                                            new InsertPeriksaReproduksi().execute(url.getUrl_InsertPemeriksaanReproduksi(), urlParameters);
+                                            Log.d("Param",urlParameters);
+                                        }else{
+                                            new SweetAlertDialog(AddPemeriksaanReproduksi.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
                                         }
-                                        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                + "&idternak=" + input_addpemeriksaansubur_activity_idternak.getText().toString().trim()
-                                                + "&tglperiksa=" + input_addpemeriksaansubur_activity_tglpemeriksaan.getText().toString()
-                                                + "&perawatan=" + perawatan
-                                                + "&diagnosis=" + diagnosis
-                                                + "&tglperiksaberikutnya=" + input_addpemeriksaansubur_activity_tglperiksaberikut.getText().toString()
-                                                + "&statusreproduksi=" + String.valueOf(isSehat)
-                                                + "&biayaperiksa=" + input_addpemeriksaansubur_activity_biaya.getText().toString();
-                                        new InsertPeriksaReproduksi().execute(url.getUrl_InsertPemeriksaanReproduksi(), urlParameters);
-                                        Log.d("Param",urlParameters);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

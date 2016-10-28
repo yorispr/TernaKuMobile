@@ -32,20 +32,12 @@ public class ViewReminderActivity extends AppCompatActivity {
             actionbar.setTitle("");
         }
         db = new DatabaseHandler(this);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         if(!getIntent().getStringExtra("id").isEmpty()){
             idreminder = getIntent().getStringExtra("id");
         }
 
-        ModelAddProtokolInjeksi reminder = db.GetReminderById(idreminder);
+        ReminderModel reminder = db.GetReminderById(idreminder);
 
         judul = (TextView)findViewById(R.id.txtJudul);
         isi = (TextView)findViewById(R.id.txtIsi);

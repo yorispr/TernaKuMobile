@@ -159,7 +159,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.AddProduksiSusu"
+            android:name=".Main.NavBar.ProduksiSusu.AddProduksiSusu"
             android:label="@string/title_activity_add_produksi_susu"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -217,6 +217,19 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
+        <activity
+            android:name=".Main.Laporan.Keuangan.LaporanKeuanganGrafik"
+            android:label="@string/title_activity_laporan_keuangan_grafik"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main.NavBar.CalendarToDoList.CalendarToDoActivity"
+            android:label="@string/title_activity_calendar_to_do"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DetailTernak.Task.AddTaskTernak"
+            android:label="@string/title_activity_add_task_ternak"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <service android:name=".FCM.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -227,20 +240,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name=".Main.Laporan.Keuangan.LaporanKeuanganGrafik"
-            android:label="@string/title_activity_laporan_keuangan_grafik"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Main.NavBar.CalendarToDoList.CalendarToDoActivity"
-            android:label="@string/title_activity_calendar_to_do"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Main.NavBar.CalendarToDoList.CalendarCellView" />
-        <activity
-            android:name=".DetailTernak.Task.AddTaskTernak"
-            android:label="@string/title_activity_add_task_ternak"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

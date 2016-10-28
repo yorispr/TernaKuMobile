@@ -1,10 +1,10 @@
-package com.fintech.ternaku.Main.NavBar;
+package com.fintech.ternaku.Main.NavBar.ProduksiSusu;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,18 +22,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
 
@@ -64,7 +64,7 @@ public class AddProduksiSusu extends AppCompatActivity {
         if(getSupportActionBar()!=null)
         {
             ActionBar actionbar = getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(false);
             actionbar.setTitle("Tambah Produksi Susu");
         }
 
@@ -135,14 +135,25 @@ public class AddProduksiSusu extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
-                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                + "&idternak=" + input_addproduksisusu_activity_idternak.getText().toString()
-                                                + "&tglperah=" + input_addproduksisusu_activity_tglpemeriksaan.getText().toString()
-                                                + "&sesiperah=" + spinner_addproduksisusu_activity_sesiperah.getSelectedItem().toString().trim()
-                                                + "&kapasitas=" + input_addproduksisusu_activity_kapasitas.getText().toString()
-                                                + "&durasi="+input_addproduksisusu_activity_durasiperah.getText().toString();
-                                        new AddProduksiSusuInsertToDatabase().execute(url.getUtl_InsertProduksiSusu(), param);
-                                        Log.d("Param",param);
+
+                                        //Cek RFID---------------------------------
+                                        Connection c = new Connection();
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addproduksisusu_activity_idternak.getText().toString());
+                                        if(json.trim().equals("1")) {
+                                            String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                                    + "&idternak=" + input_addproduksisusu_activity_idternak.getText().toString()
+                                                    + "&tglperah=" + input_addproduksisusu_activity_tglpemeriksaan.getText().toString()
+                                                    + "&sesiperah=" + spinner_addproduksisusu_activity_sesiperah.getSelectedItem().toString().trim()
+                                                    + "&kapasitas=" + input_addproduksisusu_activity_kapasitas.getText().toString()
+                                                    + "&durasi="+input_addproduksisusu_activity_durasiperah.getText().toString();
+                                            new AddProduksiSusuInsertToDatabase().execute(url.getUtl_InsertProduksiSusu(), param);
+                                            Log.d("Param",param);
+                                        }else{
+                                            new SweetAlertDialog(AddProduksiSusu.this, SweetAlertDialog.WARNING_TYPE)
+                                                    .setTitleText("Peringatan!")
+                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                    .show();
+                                        }
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -270,13 +281,26 @@ public class AddProduksiSusu extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_home) {
+            Intent i = new Intent(AddProduksiSusu.this, MainActivity.class);
+            startActivity(i);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

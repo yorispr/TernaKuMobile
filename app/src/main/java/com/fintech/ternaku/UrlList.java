@@ -26,6 +26,13 @@ public class UrlList {
     //Login========================================
     private String Url_Login = Url_Utama + "C_Pengguna/cekLogin";
 
+    //Setting======================================
+    private String Url_GetPeternakanSetting = Url_Utama + "C_Peternakan/getPeternakan";
+    private String Url_ChangePassword = Url_Utama + "C_Pengguna/updatePasswordPeternak";
+    private String Url_UpdatePeternak = Url_Utama + "C_Pengguna/updatePeternak";
+    private String Url_UpdatePeternakan = Url_Utama + "C_Peternakan/editPeternakan";
+
+
     //NavBar=======================================
     //Tambah Peternak++++++++++++++
     private String Url_InsertPeternak = Url_Utama + "C_Pengguna/insertPeternak";
@@ -82,6 +89,15 @@ public class UrlList {
         //Tambah Culling-----------
         private String UrlInsertCulling = Url_Utama + "C_HistoryKesehatan/UpdateCulling";
 
+    //Pengingat====================================
+    private String UrlInsert_Reminder = Url_Utama + "C_Fcm/send_message";
+
+    //Laporan====================================
+    private String UrlGetLaporanKeuanganList = Url_Utama + "C_Laporan/UangKeluarMasuk_PETERNAKAN_HARI";
+    private String UrlGetLaporanKeuanganGrafik_Masuk = Url_Utama + "C_Laporan/UangMasuk_PETERNAKAN_BULAN_TERTENTU";
+    private String UrlGetLaporanKeuanganGrafik_Keluar = Url_Utama + "C_Laporan/UangKeluar_PETERNAKAN_BULAN_TERTENTU";
+
+
     //ListDetailTernak=============================
     //Pemeriksaan+++++++++++++++++
         private String UrlGet_PeriksaHariIni = Url_Utama + "C_Ternak/GetPeriksaHariIni";
@@ -108,9 +124,53 @@ public class UrlList {
     //Event+++++++++++++++++++++++
         private String UrlGet_TernakEvent = Url_Utama + "C_Ternak/GetTernakUmumEvent";
 
+    //Handling=====================================
+    private String UrlGet_RFIDanIdCek = Url_Utama + "C_Handling/cekIDTernakTerdaftar";
+    private String UrlGet_RFIDCek = Url_Utama + "C_Handling/cekRFIdTerdaftar";
+
 
     public UrlList(){
 
+    }
+
+    public String getUrl_UpdatePeternakan() {
+        return Url_UpdatePeternakan;
+    }
+
+    public String getUrl_UpdatePeternak() {
+        return Url_UpdatePeternak;
+    }
+
+    public String getUrl_ChangePassword() {
+        return Url_ChangePassword;
+    }
+
+    public String getUrl_GetPeternakanSetting() {
+        return Url_GetPeternakanSetting;
+    }
+
+    public String getUrlGet_RFIDanIdCek() {
+        return UrlGet_RFIDanIdCek;
+    }
+
+    public String getUrlGet_RFIDCek() {
+        return UrlGet_RFIDCek;
+    }
+
+    public String getUrlGetLaporanKeuanganList() {
+        return UrlGetLaporanKeuanganList;
+    }
+
+    public String getUrlGetLaporanKeuanganGrafik_Masuk() {
+        return UrlGetLaporanKeuanganGrafik_Masuk;
+    }
+
+    public String getUrlGetLaporanKeuanganGrafik_Keluar() {
+        return UrlGetLaporanKeuanganGrafik_Keluar;
+    }
+
+    public String getUrlInsert_Reminder() {
+        return UrlInsert_Reminder;
     }
 
     public String getUrlGet_TernakEvent() {

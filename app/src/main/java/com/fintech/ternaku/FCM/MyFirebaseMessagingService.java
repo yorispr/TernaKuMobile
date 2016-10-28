@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.Main.MainActivity;
+import com.fintech.ternaku.Main.Pengingat.ReminderModel;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ModelAddProtokolInjeksi;
 import com.fintech.ternaku.R;
 import com.google.firebase.database.FirebaseDatabase;
@@ -51,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            ModelAddProtokolInjeksi reminder = new ModelAddProtokolInjeksi();
+            ReminderModel reminder = new ReminderModel();
             reminder.setId_protocol(remoteMessage.getData().get("id_reminder"));
             reminder.setJudul(remoteMessage.getData().get("judul"));
             reminder.setIsi(remoteMessage.getData().get("isi"));
@@ -62,6 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             reminder.setCreator_id(remoteMessage.getData().get("creator_id"));
             reminder.setTimestamp(remoteMessage.getData().get("timestamp"));
             reminder.setIsread(0);
+            reminder.setSchedule_time(remoteMessage.getData().get("scheduletime"));
             db.addReminder(reminder);
             String idpengguna = getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
 
@@ -90,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Create and show a simple notification containing the received FCM message.
      *
      */
-    private void sendNotification(ModelAddProtokolInjeksi pm) {
+    private void sendNotification(ReminderModel pm) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("position","2");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
