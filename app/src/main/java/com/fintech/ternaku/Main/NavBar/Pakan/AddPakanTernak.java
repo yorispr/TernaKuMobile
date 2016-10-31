@@ -439,6 +439,7 @@ public class AddPakanTernak extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
+            finish();
             Intent i = new Intent(AddPakanTernak.this, MainActivity.class);
             startActivity(i);
             return true;

@@ -138,7 +138,10 @@ public class AddProduksiSusu extends AppCompatActivity {
 
                                         //Cek RFID---------------------------------
                                         Connection c = new Connection();
-                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addproduksisusu_activity_idternak.getText().toString());
+                                        String urlParameters2;
+                                        urlParameters2 = "id=" + input_addproduksisusu_activity_idternak.getText().toString() +
+                                                "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                         if(json.trim().equals("1")) {
                                             String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                     + "&idternak=" + input_addproduksisusu_activity_idternak.getText().toString()
@@ -296,6 +299,7 @@ public class AddProduksiSusu extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
+            finish();
             Intent i = new Intent(AddProduksiSusu.this, MainActivity.class);
             startActivity(i);
             return true;

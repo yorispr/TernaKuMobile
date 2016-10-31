@@ -50,6 +50,7 @@ import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
+import me.wangyuwei.loadingview.LoadingView;
 import pl.pawelkleczkowski.customgauge.CustomGauge;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -130,6 +131,9 @@ public class DashboardFragment extends Fragment {
     RelativeLayout relativeLayout_dashboard_fragment;
     View view;
 
+    //Loading------------------------------------------------------------
+    private LoadingView loading_view_dashboard;
+
     public DashboardFragment() {
         // Required empty public constructor
     }
@@ -141,6 +145,12 @@ public class DashboardFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         relativeLayout_dashboard_fragment = (RelativeLayout)view.findViewById(R.id.relativeLayout_dashboard_fragment);
         setHasOptionsMenu(true);
+
+        //Loading UI--------------------------------------------------------
+        loading_view_dashboard = (LoadingView) view.findViewById(R.id.loading_view_dashboard);
+
+        //Initiate-----------------------------------------------------------
+        InitiateFragment();
 
         //Set Expander--------------------------------------------------------
         buttonexpander_dashboard_fragment_produksisusu=(Button)view.findViewById(R.id.buttonexpander_dashboard_fragment_produksisusu);
@@ -344,16 +354,23 @@ public class DashboardFragment extends Fragment {
         return view;
     }
 
+    //Initiate Fragment----------------------------------------------------
+    private void InitiateFragment(){
+        loading_view_dashboard.setVisibility(View.VISIBLE);
+        relativeLayout_dashboard_fragment.setVisibility(View.GONE);
+    }
+    private void RefreshFragment(){
+        loading_view_dashboard.setVisibility(View.GONE);
+        relativeLayout_dashboard_fragment.setVisibility(View.VISIBLE);
+    }
+
     //Get Data Dashboard---------------------------------------------------
     private class GetDashboardData extends AsyncTask<String, Integer, String> {
         ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Harap tunggu...");
-            //mLoadingView.start();
-            // pDialog.show();
+            loading_view_dashboard.start();
         }
 
         @Override
@@ -365,12 +382,9 @@ public class DashboardFragment extends Fragment {
 
         protected void onPostExecute(String result2) {
             temp_result = result2;
-            Log.d("PET", result2);
-            //mLoadingView.stop();
             SetDataDashboard();
-            //pDialog.dismiss();
-            //layout.setVisibility(View.VISIBLE);
-            //SetDataDashboard(result);
+            loading_view_dashboard.stop();
+            RefreshFragment();
 
         }
     }
@@ -381,11 +395,7 @@ public class DashboardFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Harap tunggu...");
-            //pDialog.show();
-            //layout.setVisibility(View.INVISIBLE);
-            //mLoadingView.start();
+            loading_view_dashboard.start();
 
         }
 
@@ -877,7 +887,7 @@ public class DashboardFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.refresh_menu:
-                Log.d("Tes","tes");
+                InitiateFragment();
                 String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
                 new GetDashboardData().execute(url.getUrl_GetDashboardInformation(),urlParameters);
                 Log.d("IDP",urlParameters);

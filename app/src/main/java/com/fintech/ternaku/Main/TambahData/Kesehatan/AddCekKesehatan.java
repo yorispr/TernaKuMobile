@@ -181,7 +181,10 @@ public class AddCekKesehatan extends AppCompatActivity {
 
                                                     //Cek RFID---------------------------------
                                                     Connection c = new Connection();
-                                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addcekkesehatan_activity_idternak.getText().toString());
+                                                    String urlParameters2;
+                                                    urlParameters2 = "id=" + input_addcekkesehatan_activity_idternak.getText().toString() +
+                                                            "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                                     if(json.trim().equals("1")) {
                                                         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                                                                 + "&idternak=" + input_addcekkesehatan_activity_idternak.getText().toString().trim()

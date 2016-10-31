@@ -1,36 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/colorPrimary"
-        android:elevation="10dp"
-        android:orientation="horizontal"
-        android:weightSum="7"
-        android:id="@+id/linearlayout_taskdetail_activity_tambahbaru">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_margin="10dp"
-            android:text="TAMBAH"
-            android:textColor="#fff"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:textAlignment="center"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="6"
-            android:fontFamily="serif"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add_white"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"/>
+            android:weightSum="6">
+            <com.cuboid.cuboidcirclebutton.CuboidButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="+"
+                android:id="@+id/button_taskdetail_activity_tambahbaru"
+                android:textColor="#000"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical|center_horizontal"
+                app:cub_border_color="#c0c0c0"
+                app:cub_border_radius="4dp"
+                app:cub_color="#fff"
+                app:cub_hover_color="@color/colorPrimaryDark"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="5">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Task"
+                    android:textColor="#000"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:background="#c0c0c0"
+                    android:layout_marginRight="40dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:weightSum="6">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="5">
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:scrollbars="none"
+                    android:id="@+id/list_taskdetail_activity_tambahbaru"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

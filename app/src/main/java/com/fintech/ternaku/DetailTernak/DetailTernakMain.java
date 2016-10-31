@@ -22,11 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cuboid.cuboidcirclebutton.CuboidButton;
 import com.facebook.internal.CollectionMapper;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
 import com.fintech.ternaku.DetailTernak.Event.ModelDetailTernakEvent;
+import com.fintech.ternaku.DetailTernak.Task.AdapterDetailTernakTask;
 import com.fintech.ternaku.DetailTernak.Task.AddTaskTernak;
+import com.fintech.ternaku.DetailTernak.Task.ModelDetailTernakTask;
 import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.UrlList;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
@@ -44,6 +47,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import at.markushi.ui.CircleButton;
 
 public class DetailTernakMain extends AppCompatActivity {
     ExpandableRelativeLayout expander_profile_layout_fertility, expander_profile_layout_production, expander_profile_layout_health,
@@ -79,11 +84,14 @@ public class DetailTernakMain extends AppCompatActivity {
     List<ModelDetailTernakEvent> temp_list = new ArrayList <ModelDetailTernakEvent>();
     AdapterDetailTernakEvent adapterEventTernak;
     private int finish_attempt_event=0;
-    private String id_ternak="",id_peternakan="FNT-P1";
+    private String id_ternak="",id_peternakan="";
     ListView lvItems;
 
     //Task-----------------------------------------------------------------
-    public LinearLayout linearlayout_taskdetail_activity_tambahbaru;
+    public CuboidButton button_taskdetail_activity_tambahbaru;
+    public ListView list_taskdetail_activity_tambahbaru;
+    List<ModelDetailTernakTask> list_task = new ArrayList <ModelDetailTernakTask>();
+    AdapterDetailTernakTask adapterTaskTernak;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -99,6 +107,7 @@ public class DetailTernakMain extends AppCompatActivity {
                     | ActionBar.DISPLAY_SHOW_TITLE
                     | ActionBar.DISPLAY_SHOW_CUSTOM);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle("Detail Ternak");
         }
 
         //Get Data Id Ternak-------------------------------------
@@ -117,6 +126,11 @@ public class DetailTernakMain extends AppCompatActivity {
         String urlParameters_events = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
                 + "&idternak=" + id_ternak.trim();
         new getDataEvent().execute(url.getUrlGet_TernakEvent(), urlParameters_events);
+
+        //Get Data Task Ternak---------------------------------------------------
+        String urlParameters_task = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null)
+                + "&idternak=" + id_ternak.trim();
+        new getDataTask().execute(url.getUrlGet_TernakTask(), urlParameters_task);
 
         initUI();
 
@@ -461,8 +475,6 @@ public class DetailTernakMain extends AppCompatActivity {
                 getBaseContext()).inflate(R.layout.layout_event, null, false);
         lvItems = (ListView) view.findViewById(R.id.lv_items);
 
-
-
         return view;
     }
 
@@ -801,8 +813,10 @@ public class DetailTernakMain extends AppCompatActivity {
         View view = LayoutInflater.from(
                 getBaseContext()).inflate(R.layout.layout_task, null, false);
 
-        linearlayout_taskdetail_activity_tambahbaru = (LinearLayout)view.findViewById(R.id.linearlayout_taskdetail_activity_tambahbaru);
-        linearlayout_taskdetail_activity_tambahbaru.setOnClickListener(new View.OnClickListener() {
+        list_taskdetail_activity_tambahbaru = (ListView)view.findViewById(R.id.list_taskdetail_activity_tambahbaru);
+
+        button_taskdetail_activity_tambahbaru = (CuboidButton) view.findViewById(R.id.button_taskdetail_activity_tambahbaru);
+        button_taskdetail_activity_tambahbaru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailTernakMain.this, AddTaskTernak.class);
@@ -810,7 +824,50 @@ public class DetailTernakMain extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
         return view;
+    }
+
+    //Get Data Task-------------------------------------------------------
+    private class getDataTask extends AsyncTask<String,Integer,String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0], params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            Log.d("Detail_Ternak_Json",res);
+            SetTernakTask(res);
+        }
+    }
+
+    private void SetTernakTask(String result){
+        list_task.clear();
+        Log.d("PET",result);
+        try{
+            JSONArray jArray = new JSONArray(result);
+            for(int i=0;i<jArray.length();i++)
+            {
+                JSONObject jObj = jArray.getJSONObject(i);
+                ModelDetailTernakTask mTask = new ModelDetailTernakTask();
+                mTask.setTgl_task_schedule(jObj.getString("tgl_task"));
+                mTask.setIsi_task(jObj.getString("isi"));
+
+                list_task.add(mTask);
+            }
+        }
+        catch (JSONException e){e.printStackTrace();}
+        adapterTaskTernak = new AdapterDetailTernakTask(DetailTernakMain.this, R.layout.holder_list_task, list_task);
+        list_taskdetail_activity_tambahbaru.setAdapter(adapterTaskTernak);
     }
     //Set Page Task-------------------------------------------------------------
 }

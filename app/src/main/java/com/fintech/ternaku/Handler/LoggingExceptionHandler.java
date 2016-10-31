@@ -50,7 +50,7 @@ public class LoggingExceptionHandler implements Thread.UncaughtExceptionHandler 
             public void run() {
                 Looper.prepare();
                 // we cant start a dialog here, as the context is maybe just a background activity ...
-                //FirebaseCrash.report(ex);
+                FirebaseCrash.report(ex);
                 Toast.makeText(context, ex.getMessage() + " Application will close!", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }

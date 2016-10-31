@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.fintech.ternaku.DatabaseHandler;
+import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.ProtocolKesehatan.ModelAddProtokolKesehatan;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.AdapterListProtokolInjeksi;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ModelAddProtokolInjeksi;
@@ -46,6 +47,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.wangyuwei.loadingview.LoadingView;
 
 
 /**
@@ -65,6 +69,7 @@ public class ShowReminderFragment extends Fragment {
     List<ReminderModel> ReminderList;
     DatabaseHandler db;
     private DatabaseReference mDatabase;
+    private LoadingView loading_view_reminder;
 
 
     public ShowReminderFragment() {
@@ -79,9 +84,16 @@ public class ShowReminderFragment extends Fragment {
         // Inflate the layout for this fragment
         idpengguna = getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         idpeternakan = getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
+
+        //Set ListView-------------------------------------------------------
         l = (ListView) view.findViewById(R.id.reminder_list);
         adapter = new AdapterReminderListProtocol(getContext(), protocolList);
         l.setAdapter(adapter);
+
+        //Set Fragment-------------------------------------------------------
+        loading_view_reminder = (LoadingView) view.findViewById(R.id.loading_view_reminder);
+        InitiateFragment();
+
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -106,7 +118,7 @@ public class ShowReminderFragment extends Fragment {
                 Collections.reverse(protocolList);
 
                 adapter.notifyDataSetChanged();
-                // ...
+                RefreshFragment();
             }
 
             @Override
@@ -133,6 +145,50 @@ public class ShowReminderFragment extends Fragment {
             }
         });
 
+        l.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> adapterView, View view, int post, long l) {
+                final int position = post;
+                if(idpengguna.equalsIgnoreCase(protocolList.get(post).getCreator_id())) {
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Peringatan")
+                            .setContentText("Apakah Ingin Menghapus Pengingat Ini?")
+                            .setConfirmText("Ya")
+                            .setCancelText("Tidak")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                    firebaseDatabase.child(idpeternakan).child(idpengguna).child(protocolList.get(position).getId_protocol()).removeValue();
+                                    protocolList.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.cancel();
+                                }
+                            })
+                            .show();
+                }
+                else{
+                   new SweetAlertDialog(getActivity(),SweetAlertDialog.WARNING_TYPE)
+                           .setTitleText("Error")
+                           .setContentText("Pengingat Tidak Dapat Dihapus")
+                           .setConfirmText("Ok")
+                           .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                               @Override
+                               public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                   sweetAlertDialog.dismiss();
+                               }
+                           })
+                           .show();
+                }
+                return true;
+            }
+        });
+
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter("com.tutorialspoint.CUSTOM_INTENT"));
 
 
@@ -147,9 +203,21 @@ public class ShowReminderFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
+    //Initiate Fragment----------------------------------------------------
+    private void InitiateFragment(){
+        loading_view_reminder.setVisibility(View.VISIBLE);
+        l.setVisibility(View.GONE);
+        loading_view_reminder.start();
+    }
+    private void RefreshFragment(){
+        loading_view_reminder.setVisibility(View.GONE);
+        l.setVisibility(View.VISIBLE);
+        loading_view_reminder.stop();
+    }
 
     public  void updateList(){
         protocolList.clear();

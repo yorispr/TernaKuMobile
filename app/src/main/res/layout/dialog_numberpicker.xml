@@ -1,40 +1,57 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="3">
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/btnAdd"
-            android:textSize="30dp" />
-
-        <EditText
-            android:id="@+id/txtBerat"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
+            android:layout_weight="1"></LinearLayout>
+        <NumberPicker
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="fill_horizontal|center|center_horizontal"
-            android:textColor="#000000"
-            android:cursorVisible="false"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:background="@android:color/transparent"
-
-            android:textSize="35dp" />
-
-        <Button
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/numberPicker_all"
+            android:scaleX="1.0"
+            android:layout_gravity="center_horizontal"
+            android:divider="@color/colorPrimary"/>
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="-"
-            android:id="@+id/btnMin"
-            android:textSize="30dp"
-            android:textStyle="bold" />
+            android:layout_weight="1"></LinearLayout>
     </LinearLayout>
-</ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_date_picker_laporan"
+            android:text="SET"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="5dp"
+            android:id="@+id/button_numberpicker_all_set" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_date_picker_laporan"
+            android:text="CANCEL"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="5dp"
+            android:id="@+id/button_numberpicker_all_cancel"/>
+    </LinearLayout>
+</LinearLayout>

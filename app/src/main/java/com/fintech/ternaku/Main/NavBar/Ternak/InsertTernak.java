@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -38,7 +40,10 @@ import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -61,6 +66,7 @@ public class InsertTernak extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private RadioGroup radioKelaminGroup;
     private RadioButton radioKelamin;
+    private DialogPlus dialog_picker_berat;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -77,6 +83,9 @@ public class InsertTernak extends AppCompatActivity {
             actionbar.setDisplayHomeAsUpEnabled(false);
             actionbar.setTitle("Ternak Baru");
         }
+
+        //Initiate All------------------------------------
+        dialog_picker_berat();
 
 
         txtRFID = (TextView)findViewById(R.id.txtRFID);
@@ -126,7 +135,7 @@ public class InsertTernak extends AppCompatActivity {
         txtBrt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showinputberat();
+                dialog_picker_berat.show();
             }
         });
         setDateTimeField();
@@ -158,20 +167,12 @@ public class InsertTernak extends AppCompatActivity {
         });
     }
 
+
+
     private void insertDB(){
 
         int selectedId=radioKelaminGroup.getCheckedRadioButtonId();
         radioKelamin=(RadioButton) findViewById(selectedId);
-
-       /* SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
-        Date testDate = null;
-        try {
-            testDate = sdf.parse(txtTgl.getText().toString());
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        final String newFormat = formatter.format(testDate);*/
 
         //Insert Database--
         new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
@@ -190,7 +191,6 @@ public class InsertTernak extends AppCompatActivity {
                         urlParameters2 = "rfid=" + txtRFID.getText().toString() +
                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
                         String json = c.GetJSONfromURL(url.getUrlGet_RFIDCek(), urlParameters2);
-                        Log.d("param2", urlParameters2);
                         if (json.trim().equals("0")) {
                             Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
                                     txtTgl.getText().toString()+radioKelamin.getText().toString());
@@ -203,7 +203,7 @@ public class InsertTernak extends AppCompatActivity {
                         }else{
                             new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Peringatan!")
-                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                    .setContentText("RFID Sudah Terpakai ")
                                     .show();
                         }
                     }
@@ -328,70 +328,62 @@ public class InsertTernak extends AppCompatActivity {
         alert.show();
     }
 
-    protected void showinputberat() {
+    //Dialog Box Set Berat------------------------------------
+    private void dialog_picker_berat(){
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.dialog_numberpicker,null);
 
-        // get prompts.xml view
+        //Set Picker Tahun------------------------------
+        final NumberPicker numberPicker_all = (NumberPicker) view.findViewById(R.id.numberPicker_all);
+        numberPicker_all.setMinValue(50);
+        numberPicker_all.setMaxValue(500);
+        numberPicker_all.setWrapSelectorWheel(true);
+        setNumberPickerDividerColour(numberPicker_all,view);
 
-        LayoutInflater layoutInflater = LayoutInflater.from(InsertTernak.this);
-        View promptView = layoutInflater.inflate(R.layout.dialog_numberpicker, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InsertTernak.this);
-        alertDialogBuilder.setView(promptView);
+        dialog_picker_berat = DialogPlus.newDialog(this)
+                .setContentHolder(new ViewHolder(view))
+                .setGravity(Gravity.CENTER)
+                .setCancelable(false)
+                .create();
 
-        final EditText txtBerat = (EditText) promptView.findViewById(R.id.txtBerat);
-        final Button btnAdd = (Button) promptView.findViewById(R.id.btnAdd);
-        final Button btnMin = (Button) promptView.findViewById(R.id.btnMin);
-        txtBerat.setGravity(Gravity.CENTER);
-        final DecimalFormat df = new DecimalFormat("#.#");
-
-        txtBerat.setText(String.valueOf(df.format(counter)));
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        dialog_picker_berat.findViewById(R.id.button_numberpicker_all_set).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                counter+=1;
-                txtBerat.setGravity(Gravity.CENTER);
-                txtBerat.setText(String.valueOf(df.format(counter)));
+            public void onClick(View v) {
+                dialog_picker_berat.dismiss();
+                txtBrt.setText(String.valueOf(numberPicker_all.getValue()).trim());
             }
         });
-
-        btnMin.setOnClickListener(new View.OnClickListener() {
+        dialog_picker_berat.findViewById(R.id.button_numberpicker_all_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                counter-=1;
-                txtBerat.setGravity(Gravity.CENTER);
-
-                txtBerat.setText(String.valueOf(df.format(counter)));
+            public void onClick(View v) {
+                dialog_picker_berat.dismiss();
             }
         });
+    }
+    private void setNumberPickerDividerColour(NumberPicker number_picker,View mContext){
+        final int count = number_picker.getChildCount();
 
-        final InputMethodManager imgr = (InputMethodManager) InsertTernak.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        for(int i = 0; i < count; i++){
 
+            try{
+                Field dividerField = number_picker.getClass().getDeclaredField("mSelectionDivider");
+                dividerField.setAccessible(true);
+                ColorDrawable colorDrawable = new ColorDrawable(mContext.getResources().getColor(R.color
+                        .colorPrimary));
+                dividerField.set(number_picker,colorDrawable);
 
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        txtBrt.setText(txtBerat.getText());
-                        InputMethodManager imm = (InputMethodManager) getSystemService(
-                                INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtBerat.getWindowToken(), 0);
-                    }
-                })
-                .setNegativeButton("Batal",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //imgr.toggleSoftInput(0,InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                InputMethodManager imm = (InputMethodManager) getSystemService(
-                                        INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(txtBerat.getWindowToken(), 0);
-                                dialog.cancel();
-                            }
-                        });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+                number_picker.invalidate();
+            }
+            catch(NoSuchFieldException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+            catch(IllegalAccessException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+            catch(IllegalArgumentException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+        }
     }
 
     public boolean checkform(){
@@ -455,6 +447,7 @@ public class InsertTernak extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
+            finish();
             Intent i = new Intent(InsertTernak.this, MainActivity.class);
             startActivity(i);
             return true;
