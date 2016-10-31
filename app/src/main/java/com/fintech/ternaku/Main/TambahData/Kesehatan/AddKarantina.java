@@ -171,7 +171,10 @@ public class AddKarantina extends AppCompatActivity {
 
                                                 //Cek RFID---------------------------------
                                                 Connection c = new Connection();
-                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addkarantina_activity_idternak.getText().toString());
+                                                String urlParameters2;
+                                                urlParameters2 = "id=" + input_addkarantina_activity_idternak.getText().toString() +
+                                                        "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                                 if(json.trim().equals("1")) {
                                                     String diagnosis = "N/A", perawatan = "N/A";
                                                     if (!input_addkarantina_activity_diagnosis.getText().toString().matches("")) {
@@ -415,7 +418,7 @@ public class AddKarantina extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESKawanan",result);
             pDialog.dismiss();
 
             if(result.trim().equals("kosong")){
@@ -470,7 +473,7 @@ public class AddKarantina extends AppCompatActivity {
             for(int i=0;i<jArray.length();i++)
             {
                 JSONObject jObj = jArray.getJSONObject(i);
-                list_addkarantina_kawanan.add("("+jObj.getString("id_kawanan")+") "+ jObj.getString("nama_kawanan"));
+                list_addkarantina_kawanan.add("("+jObj.getString("ID_KAWANAN")+") "+ jObj.getString("NAMA_KAWANAN"));
             }
             myAdapter_kawanan.notifyDataSetChanged();
         }

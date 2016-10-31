@@ -53,7 +53,7 @@ public class AdapterReminderListProtocol extends BaseAdapter implements Filterab
         if (convertView == null) {
 
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.holder_list_protocol, null);
+            convertView = inflater.inflate(R.layout.holder_list_reminder, null);
             holder.txtJudul = (TextView) convertView.findViewById(R.id.txtJudul);
             holder.txtIsi = (TextView) convertView.findViewById(R.id.txtIsi);
             holder.txtTgl = (TextView)convertView.findViewById(R.id.txtTgl);

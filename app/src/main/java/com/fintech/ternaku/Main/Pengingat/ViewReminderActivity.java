@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fintech.ternaku.DatabaseHandler;
@@ -16,7 +17,8 @@ import com.fintech.ternaku.R;
 
 public class ViewReminderActivity extends AppCompatActivity {
 
-    private TextView judul,isi,penting;
+    private TextView isi,txtTglBuat,txtNamaPembuat,txtTglEvent;
+    private ImageView penting;
     String idreminder;
     DatabaseHandler db;
     @Override
@@ -39,16 +41,22 @@ public class ViewReminderActivity extends AppCompatActivity {
 
         ReminderModel reminder = db.GetReminderById(idreminder);
 
-        judul = (TextView)findViewById(R.id.txtJudul);
+
         isi = (TextView)findViewById(R.id.txtIsi);
-        penting = (TextView)findViewById(R.id.txtIsPenting);
-        penting.setVisibility(View.GONE);
+        txtTglBuat = (TextView)findViewById(R.id.txtTglBuat);
+        txtNamaPembuat = (TextView)findViewById(R.id.txtNamaPembuat);
+        txtTglEvent = (TextView)findViewById(R.id.txtTglEvent);
+        penting = (ImageView)findViewById(R.id.imgIsPenting);
 
         if(reminder != null){
-            judul.setText(reminder.getJudul());
+            getSupportActionBar().setTitle(reminder.getJudul());
             isi.setText(reminder.getIsi());
+            txtTglBuat.setText(reminder.getTimestamp());
+            txtNamaPembuat.setText(reminder.getCreator());
+            txtTglEvent.setText(reminder.getSchedule_time());
+            penting.setBackgroundResource(R.drawable.ic_not_important_reminder);
             if(reminder.isImportant()) {
-                penting.setVisibility(View.VISIBLE);
+                penting.setBackgroundResource(R.drawable.ic_important_reminder);
             }
         }
     }

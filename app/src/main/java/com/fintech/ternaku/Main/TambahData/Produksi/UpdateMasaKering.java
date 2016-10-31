@@ -147,7 +147,10 @@ public class UpdateMasaKering extends AppCompatActivity {
                                         sDialog.cancel();
                                         //Cek RFID---------------------------------
                                         Connection c = new Connection();
-                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_updatemasakering_activity_idternak.getText().toString());
+                                        String urlParameters2;
+                                        urlParameters2 = "id=" + input_updatemasakering_activity_idternak.getText().toString() +
+                                                "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                         if(json.trim().equals("1")) {
                                             if(isMulai) {
                                                 if (!isDry(idter)) {

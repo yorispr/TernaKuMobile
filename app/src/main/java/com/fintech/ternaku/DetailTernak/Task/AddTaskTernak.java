@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.UrlList;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,6 +45,9 @@ public class AddTaskTernak extends AppCompatActivity {
 
 
     private TextView input_addtask_activity_tanggaltask;
+
+    //Get Url Link---------------------------------------------------------
+    UrlList url = new UrlList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +92,7 @@ public class AddTaskTernak extends AppCompatActivity {
                         +"&tgltask="+input_addtask_activity_tanggaltask.getText().toString()
                         ;
 
-                new InsertTask().execute("http://service.ternaku.com/C_Ternak/insertTask", urlParameters_ref);
+                new InsertTask().execute(url.getUrl_InsertTask(), urlParameters_ref);
 
             }
         });

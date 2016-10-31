@@ -38,7 +38,7 @@ public class DayAxisValueFormatter implements IAxisValueFormatter {
         int year = determineYear(days);
 
         int month = determineMonth(days);
-        String monthName = mMonths[Bulan-1];
+        String monthName = mMonths[Bulan];
         String yearName = String.valueOf(year);
 
         if (chart.getVisibleXRange() > 30 * 6) {
