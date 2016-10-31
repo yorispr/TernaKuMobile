@@ -135,7 +135,14 @@ public class AddMenyusui extends AppCompatActivity {
                 if(checkForm()){
                     if(flag_radio==1) {
                         if(cekMenyusui){
-                            if(!isMenyusui(input_addmenyusui_activity_idternak.getText().toString().trim())){
+
+                            Connection c = new Connection();
+                            String urlParametersRFID;
+                            urlParametersRFID = "idternak=" + input_addmenyusui_activity_idternak.getText().toString().trim() +
+                                    "&uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                            final String idter = c.GetJSONfromURL(url.getUrl_GetIdRFID(), urlParametersRFID);
+                            Log.d("IdTer",idter);
+                            if(!isMenyusui(idter.trim())){
                                 new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Simpan")
                                         .setContentText("Data Yang Dimasukkan Sudah Benar?")
@@ -149,7 +156,7 @@ public class AddMenyusui extends AppCompatActivity {
                                                 //Cek RFID---------------------------------
                                                 Connection c = new Connection();
                                                 String urlParameters2;
-                                                urlParameters2 = "id=" + input_addmenyusui_activity_idternak.getText().toString() +
+                                                urlParameters2 = "id=" + input_addmenyusui_activity_idternak.getText().toString().trim() +
                                                         "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
                                                 String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                                 if(json.trim().equals("1")) {
@@ -182,7 +189,13 @@ public class AddMenyusui extends AppCompatActivity {
                                         .show();
                             }
                         }else{
-                            if(isMenyusui(input_addmenyusui_activity_idternak.getText().toString().trim())){
+                            Connection c = new Connection();
+                            String urlParametersRFID;
+                            urlParametersRFID = "idternak=" + input_addmenyusui_activity_idternak.getText().toString().trim() +
+                                    "&uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                            final String idter = c.GetJSONfromURL(url.getUrl_GetIdRFID(), urlParametersRFID);
+                            Log.d("IdTer",idter);
+                            if(isMenyusui(idter.trim())){
                                 new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Simpan")
                                         .setContentText("Data Yang Dimasukkan Sudah Benar?")
@@ -434,8 +447,8 @@ public class AddMenyusui extends AppCompatActivity {
 
     private boolean isMenyusui(String id){
         boolean cek=false;
-        for(int i=0;i<list_addmenyusui_idternak.size();i++){
-            if(id.equals(list_addmenyusui_menyusui.get(i))){
+        for(int i=0;i<list_addmenyusui_menyusui.size();i++){
+            if(id.equalsIgnoreCase(list_addmenyusui_menyusui.get(i))){
                 cek = true;
             }
         }

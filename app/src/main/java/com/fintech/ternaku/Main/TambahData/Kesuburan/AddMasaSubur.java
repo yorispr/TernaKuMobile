@@ -66,6 +66,8 @@ public class AddMasaSubur extends AppCompatActivity {
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
 
+    private String GetIdRFID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +158,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                         //Cek RFID---------------------------------
                                         Connection c = new Connection();
                                         String urlParameters2;
-                                        urlParameters2 = "id=" + input_addmasasubur_activity_idternak.getText().toString() +
+                                        urlParameters2 = "id=" + input_addmasasubur_activity_idternak.getText().toString().trim() +
                                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
                                         String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                         if(json.trim().equals("1")) {
@@ -165,7 +167,14 @@ public class AddMasaSubur extends AppCompatActivity {
                                                 String diagnosis = "N/A";
                                                 String biayaperiksa = "0";
 
-                                                if (!isSedangHeat(idter)) {
+
+                                                String urlParametersRFID;
+                                                urlParametersRFID = "idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim() +
+                                                        "&uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                                                String idter = c.GetJSONfromURL(url.getUrl_GetIdRFID(), urlParametersRFID);
+                                                Log.d("IdTer",idter);
+
+                                                if (!isSedangHeat(idter.trim())) {
                                                     if (!input_addmasasubur_activity_biaya.getText().toString().matches("")) {
                                                         biayaperiksa = input_addmasasubur_activity_biaya.getText().toString();
                                                     }
@@ -176,7 +185,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                                         perawatan = input_addmasasubur_activity_perawatan.getText().toString();
                                                     }
                                                     String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
+                                                            + "&idternak=" + idter.trim()
                                                             + "&tglmulaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString()
                                                             + "&diagnosis=" + diagnosis
                                                             + "&perawatan=" + perawatan
@@ -190,9 +199,14 @@ public class AddMasaSubur extends AppCompatActivity {
                                                             .show();
                                                 }
                                             }else{
-                                                if (isSedangHeat(idter)) {
+                                                String urlParametersRFID;
+                                                urlParametersRFID = "idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim() +
+                                                        "&uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                                                String idter = c.GetJSONfromURL(url.getUrl_GetIdRFID(), urlParametersRFID);
+
+                                                if (isSedangHeat(idter.trim())) {
                                                     String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + input_addmasasubur_activity_idternak.getText().toString().trim()
+                                                            + "&idternak=" + idter.trim()
                                                             + "&tglselesaiheat=" + input_addmasasubur_activity_tglpemeriksaan.getText().toString();
                                                     new UpdateMasaSubur().execute(url.getUrl_InsertHeatSelesai(), urlParameters);
                                                     Log.d("TglSelesai",urlParameters);
@@ -392,7 +406,7 @@ public class AddMasaSubur extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESRFID",result);
             pDialog.dismiss();
             if (result.trim().equals("1")){
                 new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.SUCCESS_TYPE)
@@ -475,7 +489,7 @@ public class AddMasaSubur extends AppCompatActivity {
     private boolean isSedangHeat(String id){
         boolean cek=false;
         for(int i=0;i<list_addmasasubur_ternakheat.size();i++){
-            if(id.equals(list_addmasasubur_ternakheat.get(i))){
+            if(id.equalsIgnoreCase(list_addmasasubur_ternakheat.get(i))){
                 cek = true;
             }
         }
