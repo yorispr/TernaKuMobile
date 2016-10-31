@@ -6,6 +6,8 @@ package com.fintech.ternaku.Main.TambahData.PindahTernak;
 
 public class ModelTernakPindahTernak {
         private String id_ternak;
+        private String rfid;
+
         private String nama_ternak;
         private float berat_badan;
         private int hari_produksi_susu;
@@ -29,7 +31,7 @@ public class ModelTernakPindahTernak {
         public ModelTernakPindahTernak() {
 
         }
-        public ModelTernakPindahTernak(String id_ternak, String nama_ternak, float berat_badan, int hari_produksi_susu, String status_kesuburan, String diagnosis, String tgl_subur, String tgl_lahir, String aktivitas, String jenis, String breed, float total_susu, float jml_susu, String kawanan, String kandang, String id_kawanan, String id_kandang) {
+        public ModelTernakPindahTernak(String id_ternak, String nama_ternak, float berat_badan, int hari_produksi_susu, String status_kesuburan, String diagnosis, String tgl_subur, String tgl_lahir, String aktivitas, String jenis, String breed, float total_susu, float jml_susu, String kawanan, String kandang, String id_kawanan, String id_kandang, String rfid) {
             this.setId_ternak(id_ternak);
             this.setNama_ternak(nama_ternak);
             this.setBerat_badan(berat_badan);
@@ -50,6 +52,7 @@ public class ModelTernakPindahTernak {
             this.setKawanan(kawanan);
             this.setId_kawanan(kawanan);
             this.setId_kandang(id_kandang);
+            this.setRfid(rfid);
         }
 
         public String getId_ternak() {
@@ -211,4 +214,12 @@ public class ModelTernakPindahTernak {
         public void setId_kandang(String id_kandang) {
             this.id_kandang = id_kandang;
         }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
+    }
 }
