@@ -15,6 +15,18 @@
         android:orientation="vertical"
         android:background="#e2e8e9">
 
+        <me.wangyuwei.loadingview.LoadingView
+            android:id="@+id/loading_view_dashboard"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:visibility="gone"
+            app:lv_duration="3"
+            app:lv_start_color="#e67e22"
+            app:lv_end_color="#e67e22"
+            app:lv_internal_radius="5dp"
+            app:lv_external_radius="30dp" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

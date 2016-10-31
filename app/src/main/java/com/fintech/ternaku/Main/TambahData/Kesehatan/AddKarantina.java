@@ -418,7 +418,7 @@ public class AddKarantina extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESKawanan",result);
             pDialog.dismiss();
 
             if(result.trim().equals("kosong")){
@@ -473,7 +473,7 @@ public class AddKarantina extends AppCompatActivity {
             for(int i=0;i<jArray.length();i++)
             {
                 JSONObject jObj = jArray.getJSONObject(i);
-                list_addkarantina_kawanan.add("("+jObj.getString("id_kawanan")+") "+ jObj.getString("nama_kawanan"));
+                list_addkarantina_kawanan.add("("+jObj.getString("ID_KAWANAN")+") "+ jObj.getString("NAMA_KAWANAN"));
             }
             myAdapter_kawanan.notifyDataSetChanged();
         }

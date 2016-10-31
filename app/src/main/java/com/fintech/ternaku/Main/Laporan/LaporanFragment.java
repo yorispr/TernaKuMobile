@@ -385,27 +385,29 @@ public class LaporanFragment extends Fragment {
                     Pemasukan_Lain_lain = Pemasukan_Lain_lain + Float.valueOf(obj_getPemasukan.getString("JumlahUangKeluar"));
                 }
             }
+            Log.d("Bahasa",Locale.getDefault().getDisplayLanguage());
 
             String currencyCode = "IDR";
             Currency currency = Currency.getInstance(currencyCode);
-            NumberFormat format = NumberFormat.getCurrencyInstance();
-            format.setMaximumFractionDigits(1);
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.ROOT);
+            format.setMaximumFractionDigits(0);
+            format.setGroupingUsed(true);
             format.setCurrency(currency);
             //Uang Keluar-------------------------------------------------------
-            txt_laporan_fragment_keuanganpembelianpakan.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Pakan))) + ",00");
-            txt_laporan_fragment_keuanganpembelianobat.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Obat))) + ",00");
-            txt_laporan_fragment_keuanganpembelianvaksin.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Vaksin))) + ",00");
-            txt_laporan_fragment_keuanganpembeliansemen.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Semen))) + ",00");
-            txt_laporan_fragment_keuanganpemeriksaankesehatan.setText("Rp. " + SubString(String.valueOf(format.format(Pemeriksaan_Kesehatan_Sapi))) + ",00");
-            txt_laporan_fragment_keuanganpembelianperlengkapan.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Perlengkapan))) + ",00");
-            txt_laporan_fragment_keuanganpembelianternak.setText("Rp. " + SubString(String.valueOf(format.format(Pembelian_Ternak))) + ",00");
-            txt_laporan_fragment_keuanganpembelianlistrik.setText("Rp. " + SubString(String.valueOf(format.format(Pembayaran_Listrik))) + ",00");
-            txt_laporan_fragment_keuanganpembelianlainnya.setText("Rp. " + SubString(String.valueOf(format.format(Pembayaran_Lain_lain))) + ",00");
+            txt_laporan_fragment_keuanganpembelianpakan.setText(format.format(Pembelian_Pakan));
+            txt_laporan_fragment_keuanganpembelianobat.setText(format.format(Pembelian_Obat));
+            txt_laporan_fragment_keuanganpembelianvaksin.setText(format.format(Pembelian_Vaksin));
+            txt_laporan_fragment_keuanganpembeliansemen.setText(format.format(Pembelian_Semen));
+            txt_laporan_fragment_keuanganpemeriksaankesehatan.setText(format.format(Pemeriksaan_Kesehatan_Sapi));
+            txt_laporan_fragment_keuanganpembelianperlengkapan.setText(format.format(Pembelian_Perlengkapan));
+            txt_laporan_fragment_keuanganpembelianternak.setText(format.format(Pembelian_Ternak));
+            txt_laporan_fragment_keuanganpembelianlistrik.setText(format.format(Pembayaran_Listrik));
+            txt_laporan_fragment_keuanganpembelianlainnya.setText(format.format(Pembayaran_Lain_lain));
             //Uang Masuk-------------------------------------------------------
-            txt_laporan_fragment_keuanganpenjualanternak.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_ternak))) + ",00");
-            txt_laporan_fragment_keuanganpenjualanpupuk.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_kompos))) + ",00");
-            txt_laporan_fragment_keuanganpenjualansusu.setText("Rp. " + SubString(String.valueOf(format.format(Penjualan_Susu))) + ",00");
-            txt_laporan_fragment_keuanganpenjualanlainnya.setText("Rp. " + SubString(String.valueOf(format.format(Pemasukan_Lain_lain))) + ",00");
+            txt_laporan_fragment_keuanganpenjualanternak.setText(format.format(Penjualan_ternak));
+            txt_laporan_fragment_keuanganpenjualanpupuk.setText(format.format(Penjualan_kompos));
+            txt_laporan_fragment_keuanganpenjualansusu.setText(format.format(Penjualan_Susu));
+            txt_laporan_fragment_keuanganpenjualanlainnya.setText(format.format(Pemasukan_Lain_lain));
         } catch (JSONException e){
             e.printStackTrace();
         }

@@ -1,73 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_margin="10dp"
+    android:background="#80FFFFFF"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    android:weightSum="9">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="#fff"
         android:elevation="5dp"
-        android:background="#FFFFFF"
-
-        android:layout_height="70dp"
-        android:id="@+id/relativeLayout2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true">
-
+        android:layout_weight="2"
+        android:weightSum="2">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Tanggal"
+            android:id="@+id/txtTglEvent"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_date_reminder"
+            android:drawableRight="@drawable/ic_date_reminder"
+            android:layout_margin="10dp"
+            android:textAlignment="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:weightSum="2"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imgIsPenting"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/ic_not_important_reminder"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Penting"
+                    android:id="@+id/txtIsPenting"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_marginRight="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="01/01/1990"
+                    android:textSize="10dp"
+                    android:id="@+id/txtTglBuat"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="textEnd" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="N/A"
+                    android:id="@+id/txtNamaPembuat"
+                    android:textSize="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#fff"
+        android:elevation="5dp"
+        android:layout_weight="7">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
             android:id="@+id/txtIsi"
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:hint="Isi"
-            android:layout_marginRight="10dp"
-            android:background="#FFFFFF"
             android:maxLines="100"
-            android:minLines="1"
-            android:gravity="left"
-            android:layout_below="@+id/txtJudul"
-            android:layout_alignStart="@+id/txtJudul"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="7dp"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:text="Penting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtIsPenting"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:background="#e67e22"
-            android:textColor="#FFFFFF"
-            android:padding="2dp"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:hint="Judul"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="#FFFFFF"
-            android:textStyle="bold"
-            android:id="@+id/txtJudul"
-            android:layout_below="@+id/txtIsPenting"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
-
-</RelativeLayout>
+            android:minLines="1"/>
+    </LinearLayout>
+</LinearLayout>

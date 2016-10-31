@@ -299,6 +299,7 @@ public class AddProduksiSusu extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
+            finish();
             Intent i = new Intent(AddProduksiSusu.this, MainActivity.class);
             startActivity(i);
             return true;

@@ -25,6 +25,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
+import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
+import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.ProduksiSusu.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
@@ -246,11 +248,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_animal_list) {
-            startActivity(new Intent(MainActivity.this,ListDetailTernakMain.class));
-        }else if(id == R.id.nav_add){
-            startActivity(new Intent(MainActivity.this,CalendarToDoActivity.class));
-        }*/
+        if (id == R.id.nav_add_batas_produksi) {
+            startActivity(new Intent(MainActivity.this,AddBatasProduksi.class));
+        }else if(id == R.id.nav_add_peternak){
+            startActivity(new Intent(MainActivity.this,AddPeternak.class));
+        }else if(id == R.id.nav_tambah_pambayaran){
+            startActivity(new Intent(MainActivity.this,RequestTransactionActivity.class));
+        }else if(id == R.id.nav_add_keuangan){
+            startActivity(new Intent(MainActivity.this,AddKeuangan.class));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -291,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.cancel();
                                 finish();
+                                System.exit(0);
                             }
                         })
                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -312,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.cancel();
                                 finish();
+                                System.exit(0);
                             }
                         })
                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
