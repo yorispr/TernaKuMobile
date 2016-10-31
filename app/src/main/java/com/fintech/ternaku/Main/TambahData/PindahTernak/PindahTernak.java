@@ -60,6 +60,8 @@ public class PindahTernak extends AppCompatActivity {
     AdapterKandangPindahTernak adapter;
     AdapterKawananPindahTernak adapter2;
 
+    boolean isRFID = false;
+
     ArrayAdapter<String> adp;
     boolean kandangclick = false;
     boolean kawananclick = false;
@@ -275,13 +277,36 @@ public class PindahTernak extends AppCompatActivity {
             }
         });
 
+        input_pindahternak_activity_idternak.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().trim().length() == 10){
+                    isRFID = true;
+                    setDetailToTextView(charSequence.toString().trim());
+                    Log.d("rfid",charSequence.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetAllTernak().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters);
     }
 
     private void setDetailToTextView(String idTernak) {
+        int counter = 0;
+        boolean isexist = false;
         for(ModelTernakPindahTernak t : TernakList){
-            if(t.getId_ternak().contains(idTernak))
+            if(t.getId_ternak().contains(idTernak) || t.getRfid().contains(idTernak))
             {
                 linearLayout_pindahternak_activity_informsapi.setVisibility(View.VISIBLE);
                 input_pindahternak_activity_iddetail.setText(t.getId_ternak());
@@ -296,7 +321,19 @@ public class PindahTernak extends AppCompatActivity {
                 input_pindahternak_activity_kandang.setText(t.getKandang());
                 input_pindahternak_activity_kandang.setEnabled(true);
                 input_pindahternak_activity_kawanan.setEnabled(true);
+                if(isRFID) {
+                    choosenindex = counter;
+                }
+                isexist = true;
             }
+            counter++;
+        }
+        if(!isexist){
+            new SweetAlertDialog(PindahTernak.this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Peringatan!")
+                    .setContentText("RFID Tidak Terdaftar")
+                    .show();
+            input_pindahternak_activity_idternak.setText("");
         }
     }
 
@@ -661,6 +698,7 @@ public class PindahTernak extends AppCompatActivity {
                 t.setKawanan(jObj.getString("nama_kawanan"));
                 t.setId_kandang(jObj.getString("id_kandang"));
                 t.setId_kawanan(jObj.getString("id_kawanan"));
+                t.setRfid(jObj.getString("rfid_code"));
 
                 namaList.add(jObj.getString("id_ternak"));
                 //Log.d("RESP",jObj.getString("NAMA_KAWANAN"));
