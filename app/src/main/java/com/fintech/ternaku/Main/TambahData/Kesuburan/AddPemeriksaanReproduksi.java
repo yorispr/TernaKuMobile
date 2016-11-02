@@ -172,31 +172,7 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
                                         String urlParameters2;
                                         urlParameters2 = "id=" + input_addpemeriksaansubur_activity_idternak.getText().toString().trim() +
                                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
-                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
-                                        if(json.trim().equals("1")) {
-                                            String perawatan = "N/A";
-                                            String diagnosis = "N/A";
-
-                                            if (isSehat == 0) {
-                                                diagnosis = input_addpemeriksaansubur_activity_diagnosis.getText().toString();
-                                                perawatan = input_addpemeriksaansubur_activity_perawatan.getText().toString();
-                                            }
-                                            String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                    + "&idternak=" + input_addpemeriksaansubur_activity_idternak.getText().toString().trim()
-                                                    + "&tglperiksa=" + input_addpemeriksaansubur_activity_tglpemeriksaan.getText().toString()
-                                                    + "&perawatan=" + perawatan
-                                                    + "&diagnosis=" + diagnosis
-                                                    + "&tglperiksaberikutnya=" + input_addpemeriksaansubur_activity_tglperiksaberikut.getText().toString()
-                                                    + "&statusreproduksi=" + String.valueOf(isSehat)
-                                                    + "&biayaperiksa=" + input_addpemeriksaansubur_activity_biaya.getText().toString();
-                                            new InsertPeriksaReproduksi().execute(url.getUrl_InsertPemeriksaanReproduksi(), urlParameters);
-                                            Log.d("Param",urlParameters);
-                                        }else{
-                                            new SweetAlertDialog(AddPemeriksaanReproduksi.this, SweetAlertDialog.WARNING_TYPE)
-                                                    .setTitleText("Peringatan!")
-                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
-                                                    .show();
-                                        }
+                                        new CheckRFID().execute(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -273,6 +249,55 @@ public class AddPemeriksaanReproduksi extends AppCompatActivity {
             }
         }
         catch (JSONException e){e.printStackTrace();}
+    }
+
+    private class CheckRFID extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddPemeriksaanReproduksi.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES_Insert",result);
+            pDialog.dismiss();
+            if(result.trim().equals("1")) {
+                String perawatan = "N/A";
+                String diagnosis = "N/A";
+
+                if (isSehat == 0) {
+                    diagnosis = input_addpemeriksaansubur_activity_diagnosis.getText().toString();
+                    perawatan = input_addpemeriksaansubur_activity_perawatan.getText().toString();
+                }
+                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                        + "&idternak=" + input_addpemeriksaansubur_activity_idternak.getText().toString().trim()
+                        + "&tglperiksa=" + input_addpemeriksaansubur_activity_tglpemeriksaan.getText().toString()
+                        + "&perawatan=" + perawatan
+                        + "&diagnosis=" + diagnosis
+                        + "&tglperiksaberikutnya=" + input_addpemeriksaansubur_activity_tglperiksaberikut.getText().toString()
+                        + "&statusreproduksi=" + String.valueOf(isSehat)
+                        + "&biayaperiksa=" + input_addpemeriksaansubur_activity_biaya.getText().toString();
+                new InsertPeriksaReproduksi().execute(url.getUrl_InsertPemeriksaanReproduksi(), urlParameters);
+                Log.d("Param",urlParameters);
+            }else{
+                new SweetAlertDialog(AddPemeriksaanReproduksi.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                        .show();
+            }
+        }
     }
 
     //Insert To Database----------------------------------------

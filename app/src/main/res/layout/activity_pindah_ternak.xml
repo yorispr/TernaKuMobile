@@ -29,42 +29,4 @@
 
         <include layout="@layout/content_pindah_ternak" />
     </LinearLayout>
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/multiple_actions_down"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        fab:fab_addButtonColorNormal="@color/colorPrimary"
-        fab:fab_addButtonColorPressed="@color/white_pressed"
-        fab:fab_addButtonSize="normal"
-        fab:fab_addButtonPlusIconColor="#FFFFFF"
-        fab:fab_expandDirection="up"
-
-        fab:fab_labelStyle="@style/menu_labels_style"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/relativeLayout">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabTambah_pindahternak_activity_kandang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add_white"
-            fab:fab_colorNormal="#3498db"
-            fab:fab_colorPressed="#2980b9"
-            fab:fab_title="Tambah Kandang Baru"
-            fab:fab_size="normal"/>
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabTambah_pindahternak_activity_kawanan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add_white"
-            fab:fab_colorNormal="#3498db"
-            fab:fab_colorPressed="#2980b9"
-            fab:fab_title="Tambah Kawanan Baru"
-            fab:fab_size="normal"/>
-
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </android.support.design.widget.CoordinatorLayout>

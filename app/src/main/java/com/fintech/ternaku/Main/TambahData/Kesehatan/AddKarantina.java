@@ -195,7 +195,7 @@ public class AddKarantina extends AppCompatActivity {
                                                 }else{
                                                     new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
                                                             .setTitleText("Peringatan!")
-                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .setContentText("Tidak Ada RFID Ditemukan")
                                                             .show();
                                                 }
                                             }
@@ -233,7 +233,7 @@ public class AddKarantina extends AppCompatActivity {
                                                 String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                                 if(json.trim().equals("1")) {
                                                 String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                        + "&idternak=" + input_addkarantina_activity_idternak.getText().toString()
+                                                        + "&idternak=" + input_addkarantina_activity_idternak.getText().toString().trim()
                                                         + "&TglSelesaiKarantina=" + input_addkarantina_activity_tglpemeriksaan.getText().toString()
                                                         + "&idkawanan=" + idkawanan_2
                                                         + "&idkandang=" + idkandang_2;
@@ -241,7 +241,7 @@ public class AddKarantina extends AppCompatActivity {
                                                 }else{
                                                     new SweetAlertDialog(AddKarantina.this, SweetAlertDialog.WARNING_TYPE)
                                                             .setTitleText("Peringatan!")
-                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .setContentText("Tidak Ada RFID Ditemukan")
                                                             .show();
                                                 }
                                             }

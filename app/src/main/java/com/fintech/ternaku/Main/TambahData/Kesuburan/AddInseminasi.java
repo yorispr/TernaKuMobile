@@ -131,30 +131,11 @@ public class AddInseminasi extends AppCompatActivity {
                                     sDialog.cancel();
 
                                     //Cek RFID---------------------------------
-                                    Connection c = new Connection();
                                     String urlParameters2;
                                     urlParameters2 = "id=" + input_addinseminasi_activity_idternak.getText().toString().trim() +
                                             "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
-                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
-                                    if(json.trim().equals("1")) {
-                                        String urlParameters;
-                                        String spinstr = spinner_addinseminasi_activity_semen.getSelectedItem().toString();
-                                        String idsemen = spinstr.substring(spinstr.indexOf("(") + 1, spinstr.indexOf(")"));
-                                        urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                + "&idternak=" + input_addinseminasi_activity_idternak.getText().toString().trim()
-                                                + "&tglinseminasi=" + input_addinseminasi_activity_tglinseminasi.getText().toString()
-                                                + "&metodeinseminasi=" + input_addinseminasi_activity_metode.getText().toString()
-                                                + "&idsemen=" + idsemen.trim()
-                                                + "&jumlahsemen=" + input_addinseminasi_activity_jumlah.getText().toString()
-                                                + "&biayasemen=" + input_addinseminasi_activity_biaya.getText().toString();
-                                        new InsertInseminasi().execute(url.getUrl_InsertInseminasi(), urlParameters);
-                                        Log.d("Param", urlParameters.toString());
-                                    }else{
-                                        new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.WARNING_TYPE)
-                                                .setTitleText("Peringatan!")
-                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
-                                                .show();
-                                    }
+                                    new CheckRFID().execute(url.getUrlGet_RFIDanIdCek(), urlParameters2);
+
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -342,6 +323,50 @@ public class AddInseminasi extends AppCompatActivity {
         mTimePicker.setTitle("Select Time");
     }
 
+    private class CheckRFID extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES_Insert",result);
+            pDialog.dismiss();
+            if(result.trim().equals("1")) {
+                String urlParameters;
+                String spinstr = spinner_addinseminasi_activity_semen.getSelectedItem().toString();
+                String idsemen = spinstr.substring(spinstr.indexOf("(") + 1, spinstr.indexOf(")"));
+                urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                        + "&idternak=" + input_addinseminasi_activity_idternak.getText().toString().trim()
+                        + "&tglinseminasi=" + input_addinseminasi_activity_tglinseminasi.getText().toString()
+                        + "&metodeinseminasi=" + input_addinseminasi_activity_metode.getText().toString()
+                        + "&idsemen=" + idsemen.trim()
+                        + "&jumlahsemen=" + input_addinseminasi_activity_jumlah.getText().toString()
+                        + "&biayasemen=" + input_addinseminasi_activity_biaya.getText().toString();
+                new InsertInseminasi().execute(url.getUrl_InsertInseminasi(), urlParameters);
+                Log.d("Param", urlParameters.toString());
+            }else{
+                new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("Tidak Ada RFID Ditemukan")
+                        .show();
+            }
+        }
+    }
+
     //Insert Inseminasi-----------------------------------------
     private class InsertInseminasi extends AsyncTask<String,Integer,String> {
         SweetAlertDialog pDialog = new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.PROGRESS_TYPE);
@@ -363,7 +388,7 @@ public class AddInseminasi extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESAddInseminasi",result);
             pDialog.dismiss();
             if (result.trim().equals("1")){
                 new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.SUCCESS_TYPE)

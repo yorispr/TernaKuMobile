@@ -190,22 +190,8 @@ public class InsertTernak extends AppCompatActivity {
                         String urlParameters2;
                         urlParameters2 = "rfid=" + txtRFID.getText().toString() +
                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
-                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDCek(), urlParameters2);
-                        if (json.trim().equals("0")) {
-                            Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
-                                    txtTgl.getText().toString()+radioKelamin.getText().toString());
-                            String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null).trim()
-                                    +"&namaternak=" + txtNama.getText().toString()
-                                    +"&jeniskelamin=" + radioKelamin.getText().toString()
-                                    +"&tanggallahirternak=" + txtTgl.getText().toString()
-                                    +"&rfidcode=" + txtRFID.getText().toString();
-                            new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);
-                        }else{
-                            new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
-                                    .setTitleText("Peringatan!")
-                                    .setContentText("RFID Sudah Terpakai ")
-                                    .show();
-                        }
+                        new CheckRFID().execute(url.getUrlGet_RFIDCek(), urlParameters2);
+
                     }
                 })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -216,6 +202,46 @@ public class InsertTernak extends AppCompatActivity {
                 })
                 .show();
 
+    }
+
+    private class CheckRFID extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES_Insert",result);
+            pDialog.dismiss();
+            if (result.trim().equals("0")) {
+                Log.d("TAG_INSERT",txtNama.getText().toString()+txtBrt.getText().toString()+
+                        txtTgl.getText().toString()+radioKelamin.getText().toString());
+                String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null).trim()
+                        +"&namaternak=" + txtNama.getText().toString()
+                        +"&jeniskelamin=" + radioKelamin.getText().toString()
+                        +"&tanggallahirternak=" + txtTgl.getText().toString()
+                        +"&rfidcode=" + txtRFID.getText().toString();
+                new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);
+            }else{
+                new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("RFID Sudah Terpakai ")
+                        .show();
+            }
+        }
     }
 
 

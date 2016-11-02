@@ -12,6 +12,8 @@ import android.widget.Button;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekKesehatan;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon;
+import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
+import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKawanan;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekPenyakit;
@@ -33,7 +35,12 @@ public class AddDataFragment extends Fragment implements View.OnClickListener {
     private Button button_adddata_fragment_pindahternak,button_adddata_fragment_kesuburan,button_adddata_fragment_kesehatan,
             button_adddata_fragment_produksi;
     //Expander Maiin Tambah Data Fragment--------------------------------
-    ExpandableRelativeLayout expander_adddata_fragment_kesuburan, expander_adddata_fragment_kesehatan, expander_adddata_fragment_produksi;
+    ExpandableRelativeLayout expander_adddata_fragment_kesuburan, expander_adddata_fragment_kesehatan,
+            expander_adddata_fragment_produksi,expander_adddata_fragment_pindahternak;
+    //Button Expander Pindah Ternak--------------------------------------
+    private Button button_adddata_fragment_produksi_pindahternak,button_adddata_fragment_produksi_tambahkandang,
+            button_adddata_fragment_produksi_tambahkawanan;
+
     //Button Expander Kesuburan------------------------------------------
     private Button button_adddata_fragment_kesuburan_mengandung,button_adddata_fragment_kesuburan_inseminasi,
             button_adddata_fragment_kesuburan_pemeriksaanreproduksi,button_adddata_fragment_kesuburan_masasubur,
@@ -58,15 +65,14 @@ public class AddDataFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add_data, container, false);
 
-        //Pindah Ternak Action-------------------------------
+
+        //Pindah Ternak Action--------------------------------
         Button button_adddata_fragment_pindahternak =(Button)view.findViewById(R.id.button_adddata_fragment_pindahternak);
+        expander_adddata_fragment_pindahternak = (ExpandableRelativeLayout) view.findViewById(R.id.expander_adddata_fragment_pindahternak);
         button_adddata_fragment_pindahternak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
-                i = new Intent(getActivity(),PindahTernak.class);
-                startActivity(i);
-
+                expander_adddata_fragment_pindahternak.toggle();
             }
         });
 
@@ -99,6 +105,17 @@ public class AddDataFragment extends Fragment implements View.OnClickListener {
                 expander_adddata_fragment_produksi.toggle();
             }
         });
+
+        //Declare Button Pindah Ternak-----------------------
+        button_adddata_fragment_produksi_pindahternak = (Button)view.findViewById(R.id.button_adddata_fragment_produksi_pindahternak);
+        button_adddata_fragment_produksi_pindahternak.setOnClickListener(this);
+
+        button_adddata_fragment_produksi_tambahkandang = (Button)view.findViewById(R.id.button_adddata_fragment_produksi_tambahkandang);
+        button_adddata_fragment_produksi_tambahkandang.setOnClickListener(this);
+
+        button_adddata_fragment_produksi_tambahkawanan = (Button)view.findViewById(R.id.button_adddata_fragment_produksi_tambahkawanan);
+        button_adddata_fragment_produksi_tambahkawanan.setOnClickListener(this);
+
 
         //Declare Button Expander Kesuburan------------------
         button_adddata_fragment_kesuburan_mengandung = (Button)view.findViewById(R.id.button_adddata_fragment_kesuburan_mengandung);
@@ -173,6 +190,23 @@ public class AddDataFragment extends Fragment implements View.OnClickListener {
         Intent i = new Intent();
         Log.d("ID",String.valueOf(id));
         switch (id){
+            //Case For Expander Pindah Ternak-------------------------------------
+            case R.id.button_adddata_fragment_produksi_pindahternak :
+                Log.d("ID",String.valueOf(id));
+                i = new Intent(getActivity(),PindahTernak.class);
+                startActivity(i);
+                break;
+            case R.id.button_adddata_fragment_produksi_tambahkandang :
+                Log.d("ID",String.valueOf(id));
+                i = new Intent(getActivity(),AddKandang.class);
+                startActivity(i);
+                break;
+            case R.id.button_adddata_fragment_produksi_tambahkawanan :
+                Log.d("ID",String.valueOf(id));
+                i = new Intent(getActivity(),AddKawanan.class);
+                startActivity(i);
+                break;
+
             //Case For Expander Kesuburan-----------------------------------------
             case R.id.button_adddata_fragment_kesuburan_mengandung :
                 Log.d("ID",String.valueOf(id));

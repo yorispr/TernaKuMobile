@@ -170,7 +170,7 @@ public class AddMenyusui extends AppCompatActivity {
                                                 }else{
                                                     new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.WARNING_TYPE)
                                                             .setTitleText("Peringatan!")
-                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .setContentText("Tidak Ada RFID Ditemukan")
                                                             .show();
                                                 }
                                             }
@@ -206,9 +206,11 @@ public class AddMenyusui extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sDialog) {
                                                 sDialog.cancel();
 
-                                                //Cek RFID---------------------------------
                                                 Connection c = new Connection();
-                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(),input_addmenyusui_activity_idternak.getText().toString());
+                                                String urlParameters2;
+                                                urlParameters2 = "id=" + input_addmenyusui_activity_idternak.getText().toString().trim() +
+                                                        "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
+                                                String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
                                                 if(json.trim().equals("1")) {
                                                     String status="0";
                                                     String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
@@ -220,7 +222,7 @@ public class AddMenyusui extends AppCompatActivity {
                                                 }else{
                                                     new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.WARNING_TYPE)
                                                             .setTitleText("Peringatan!")
-                                                            .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                                                            .setContentText("Tidak Ada RFID Ditemukan")
                                                             .show();
                                                 }
                                             }
@@ -399,7 +401,7 @@ public class AddMenyusui extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("RES",result);
+            Log.d("RESInsertMenyusui",result);
             pDialog.dismiss();
             if (result.trim().equals("1")){
                 new SweetAlertDialog(AddMenyusui.this, SweetAlertDialog.SUCCESS_TYPE)
