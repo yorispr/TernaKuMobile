@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#e2e8e9"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
@@ -11,6 +12,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:fillViewport="true"
+
         android:layout_weight="1">
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +32,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,7 +74,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
-                            android:textColor="#cf6d17"
+                            android:textColor="#f1646c"
                             android:textStyle="bold"/>
                         <Button
                             style="?android:attr/buttonStyleSmall"
@@ -86,7 +89,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#b86114"
+                        android:background="#f1646c"
                         android:id="@+id/viewds2"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp" />
@@ -108,7 +111,7 @@
                                 android:text="N/A"
                                 android:id="@+id/input_pindahternak_activity_iddetail"
                                 android:layout_marginLeft="10dp"
-                                android:textColor="#cf6d17" />
+                                android:textColor="#f1646c" />
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -121,7 +124,7 @@
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:text="N/A"
                                 android:id="@+id/input_pindahternak_activity_namadetail"
-                                android:textColor="#cf6d17"
+                                android:textColor="#f1646c"
                                 android:textAlignment="center" />
                         </LinearLayout>
                         <LinearLayout
@@ -135,7 +138,7 @@
                                 android:text="N/A"
                                 android:id="@+id/input_pindahternak_activity_breed"
                                 android:layout_marginRight="10dp"
-                                android:textColor="#cf6d17"
+                                android:textColor="#f1646c"
                                 android:textAlignment="viewEnd" />
                         </LinearLayout>
                     </LinearLayout>
@@ -153,7 +156,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
-                            android:textColor="#cf6d17"
+                            android:textColor="#f1646c"
                             android:textStyle="bold"/>
                         <View
                             android:layout_width="match_parent"
@@ -179,7 +182,7 @@
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:text="Kandang"
                                     android:layout_marginLeft="10dp"
-                                    android:textColor="#cf6d17" />
+                                    android:textColor="#f1646c" />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -192,7 +195,7 @@
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:text="N/A"
                                     android:id="@+id/input_pindahternak_activity_namakandang"
-                                    android:textColor="#cf6d17"
+                                    android:textColor="#f1646c"
                                     android:textAlignment="center" />
                             </LinearLayout>
                             <LinearLayout
@@ -207,7 +210,7 @@
                                     android:text="N/A"
                                     android:layout_marginRight="10dp"
                                     android:id="@+id/input_pindahternak_activity_idkandang"
-                                    android:textColor="#cf6d17"
+                                    android:textColor="#f1646c"
                                     android:textAlignment="viewEnd" />
                             </LinearLayout>
                         </LinearLayout>
@@ -228,7 +231,7 @@
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:text="Kawanan"
                                     android:layout_marginLeft="10dp"
-                                    android:textColor="#cf6d17" />
+                                    android:textColor="#f1646c" />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -241,7 +244,7 @@
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:text="N/A"
                                     android:id="@+id/input_pindahternak_activity_namakawanan"
-                                    android:textColor="#cf6d17"
+                                    android:textColor="#f1646c"
                                     android:textAlignment="center" />
                             </LinearLayout>
                             <LinearLayout
@@ -256,7 +259,7 @@
                                     android:layout_marginRight="10dp"
                                     android:id="@+id/input_pindahternak_activity_idkawanan"
                                     android:layout_alignTop="@+id/txtInsNama"
-                                    android:textColor="#cf6d17"
+                                    android:textColor="#f1646c"
                                     android:textAlignment="viewEnd" />
                             </LinearLayout>
                         </LinearLayout>
@@ -274,7 +277,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Kandang"
                         android:id="@+id/textView28"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="#f1646c"
                         android:layout_margin="7dp"/>
                     <EditText
                         android:layout_width="match_parent"
@@ -298,8 +301,9 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Kawanan"
+
                         android:id="@+id/textViewKawanan"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="#f1646c"
                         android:layout_margin="7dp"/>
                     <EditText
                         android:layout_width="match_parent"
@@ -312,16 +316,22 @@
                         android:focusable="false"
                         android:layout_marginBottom="5dp" />
                 </LinearLayout>
+
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pindah"
                     android:id="@+id/button_pindahternak_activity_simpan"
+                    android:background="#f1646c"
                     android:textColor="#FFFFFF"
-                    android:background="@color/colorPrimary"
                     android:layout_marginTop="30dp"
-                    android:elevation="10dp" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    />
+
             </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

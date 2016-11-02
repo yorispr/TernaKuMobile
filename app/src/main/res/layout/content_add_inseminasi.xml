@@ -65,7 +65,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tanggal Inseminasi"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -125,7 +125,7 @@
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:text="Semen"
                                     android:id="@+id/textView44"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="#f39cc3"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginBottom="5dp"
                                     android:layout_alignParentTop="true"
@@ -161,7 +161,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:text="Biaya"
-                                            android:textColor="@color/colorPrimary"
+                                            android:textColor="#f39cc3"
                                             android:id="@+id/textView" />
 
                                         <EditText
@@ -185,7 +185,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:text="Jumlah"
-                                            android:textColor="@color/colorPrimary"/>
+                                            android:textColor="#f39cc3"
+                                            />
                                         <EditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -218,7 +219,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Metode Inseminasi"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
@@ -242,7 +243,8 @@
                     android:text="Simpan"
                     android:id="@+id/button_addinseminasi_activity_simpan"
                     android:textColor="#FFFFFF"
-                    android:background="@color/colorPrimary"
+
+                    android:background="#f39cc3"
                     android:layout_marginTop="30dp"
                     android:elevation="10dp"
                     android:layout_alignParentBottom="true"

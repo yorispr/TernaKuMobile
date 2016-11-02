@@ -3,6 +3,7 @@ package com.fintech.ternaku.Main.TambahData.PindahTernak;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,7 +47,13 @@ public class AddKandang extends AppCompatActivity {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Tambah Kandang Baru");
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f1646c")));
+
         }
+
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         input_addkandang_activity_nama = (EditText)findViewById(R.id.input_addkandang_activity_nama);
         input_addkandang_activity_lokasi = (EditText)findViewById(R.id.input_addkandang_activity_lokasi);

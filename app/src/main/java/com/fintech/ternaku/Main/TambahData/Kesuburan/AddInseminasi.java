@@ -6,7 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,6 +78,19 @@ public class AddInseminasi extends AppCompatActivity {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Tambah Data Inseminasi");
+            //actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f578c5")));
+            /*
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setStatusBarColor(Color.parseColor("#f578c5"));
+                }
+            */
+
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f39cc3")));
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
         //Set Tanggal Inseminasi--------------------------------------
@@ -116,6 +134,7 @@ public class AddInseminasi extends AppCompatActivity {
 
         //Simpan Data------------------------------------------------
         button_addinseminasi_activity_simpan = (Button)findViewById(R.id.button_addinseminasi_activity_simpan);
+        button_addinseminasi_activity_simpan.setBackgroundColor(Color.parseColor("#f578c5"));
         button_addinseminasi_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

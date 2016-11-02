@@ -64,7 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tanggal Periksa"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#9dd5c0"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -115,7 +115,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Jenis Periksa"
                             android:id="@+id/textView44"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#9dd5c0"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true"
@@ -157,7 +157,7 @@
                                 android:text="Detail Pemeriksaan"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:layout_marginBottom="10dp"
-                                android:textColor="@color/colorPrimary"/>
+                                android:textColor="#9dd5c0"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -175,7 +175,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Diagnosis"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="#9dd5c0"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_alignParentTop="true"
@@ -211,7 +211,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Perawatan"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="#9dd5c0"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_alignParentTop="true"
@@ -243,7 +243,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Kondisi Sapi"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#9dd5c0"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
@@ -282,7 +282,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Status Kesehatan Susu"
                             android:id="@+id/textView44sd"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#9dd5c0"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true"
@@ -306,7 +306,7 @@
                     android:text="Simpan"
                     android:id="@+id/button_addcekpenyakit_activity_simpan"
                     android:textColor="#FFFFFF"
-                    android:background="@color/colorPrimary"
+                    android:background="#9dd5c0"
                     android:layout_marginTop="30dp"
                     android:elevation="10dp"
                     android:layout_alignParentBottom="true"

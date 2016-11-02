@@ -64,7 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tanggal Pemeriksaan"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -115,7 +115,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Status Kesehatan Reproduksi"
                             android:id="@+id/textView44"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true"
@@ -154,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Diagnosis Pemeriksaan"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Perawatan"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
@@ -207,7 +207,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tanggal Periksa Berikutnya"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -257,7 +257,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Biaya Periksa"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="#f39cc3"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_alignParentTop="true" />
@@ -281,7 +281,7 @@
                     android:text="Simpan"
                     android:id="@+id/button_addpemeriksaansubur_activity_simpan"
                     android:textColor="#FFFFFF"
-                    android:background="@color/colorPrimary"
+                    android:background="#f39cc3"
                     android:layout_marginTop="30dp"
                     android:elevation="10dp"
                     android:layout_alignParentBottom="true"
