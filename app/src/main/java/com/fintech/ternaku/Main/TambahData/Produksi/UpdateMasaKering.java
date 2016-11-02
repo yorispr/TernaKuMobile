@@ -135,7 +135,6 @@ public class UpdateMasaKering extends AppCompatActivity {
             public void onClick(View view) {
                 if (cekForm()) {
                     if(flag_radio==1){
-                        final String idter = input_updatemasakering_activity_idternak.getText().toString();
                         new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Simpan")
                                 .setContentText("Data Yang Dimasukkan Sudah Benar?")
@@ -148,44 +147,10 @@ public class UpdateMasaKering extends AppCompatActivity {
                                         //Cek RFID---------------------------------
                                         Connection c = new Connection();
                                         String urlParameters2;
-                                        urlParameters2 = "id=" + input_updatemasakering_activity_idternak.getText().toString() +
+                                        urlParameters2 = "id=" + input_updatemasakering_activity_idternak.getText().toString().trim() +
                                                 "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
-                                        String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
-                                        if(json.trim().equals("1")) {
-                                            if(isMulai) {
-                                                if (!isDry(idter)) {
-                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + idter
-                                                            + "&tglmulaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                                                    new AddDry().execute(url.getUrlInsertMasaKeringMulai(), param);
-                                                } else {
-                                                    new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
-                                                            .setTitleText("Peringatan!")
-                                                            .setContentText("Ternak Sedang Masa Kering")
-                                                            .show();
-                                                }
-                                            }else{
-                                                if (isDry(idter)) {
-                                                    String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                            + "&idternak=" + idter
-                                                            + "&tglselesaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
-                                                    new AddDry().execute(url.getUrlInsertMasaKeringSelesai(), param);
-                                                } else {
-                                                    new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
-                                                            .setTitleText("Peringatan!")
-                                                            .setContentText("Ternak Tidak Sedang Masa Kering")
-                                                            .show();
-                                                }
-                                            }
-                                            //Set Ternak Dry--------------------------------------------
-                                            String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-                                            new GetTernakDry().execute(url.getUrl_GetKering(), param_2);
-                                        }else{
-                                            new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
-                                                    .setTitleText("Peringatan!")
-                                                    .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
-                                                    .show();
-                                        }
+                                        new CheckRFID().execute(url.getUrlGet_RFIDanIdCek(), urlParameters2);
+
                                     }
                                 })
                                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -322,6 +287,67 @@ public class UpdateMasaKering extends AppCompatActivity {
             }
         }
         catch (JSONException e){e.printStackTrace();}
+    }
+
+    private class CheckRFID extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES_Insert",result);
+            pDialog.dismiss();
+            if(result.trim().equals("1")) {
+                final String idter = input_updatemasakering_activity_idternak.getText().toString();
+                if(isMulai) {
+                    if (!isDry(idter)) {
+                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                + "&idternak=" + idter
+                                + "&tglmulaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
+                        new AddDry().execute(url.getUrlInsertMasaKeringMulai(), param);
+                    } else {
+                        new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Ternak Sedang Masa Kering")
+                                .show();
+                    }
+                }else{
+                    if (isDry(idter)) {
+                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                                + "&idternak=" + idter
+                                + "&tglselesaidry=" + input_updatemasakering_activity_tglpemeriksaan.getText().toString();
+                        new AddDry().execute(url.getUrlInsertMasaKeringSelesai(), param);
+                    } else {
+                        new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Peringatan!")
+                                .setContentText("Ternak Tidak Sedang Masa Kering")
+                                .show();
+                    }
+                }
+                //Set Ternak Dry--------------------------------------------
+                String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                new GetTernakDry().execute(url.getUrl_GetKering(), param_2);
+            }else{
+                new SweetAlertDialog(UpdateMasaKering.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("Tidak Ada RFID Ditemukan")
+                        .show();
+            }
+        }
     }
 
     //Insert To Database----------------------------------------------------

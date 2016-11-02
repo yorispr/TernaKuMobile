@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_cow),
                         Color.parseColor(colors[0]))
-                        .title("Daftar Ternak")
+                        .title("List Ternak")
                         .build()
         );
         models.add(
@@ -188,13 +189,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .title("Kalender")
                         .build()
         );
-        /*models.add(
+        models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_action_calculator),
                         Color.parseColor(colors[0]))
                         .title("Keuangan")
                         .build()
-        );*/
+        );
         navigationTabBar.setModels(models);
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
@@ -240,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
 
         navigationTabBar.deselect();
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -254,8 +256,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this,AddPeternak.class));
         }else if(id == R.id.nav_tambah_pambayaran){
             startActivity(new Intent(MainActivity.this,RequestTransactionActivity.class));
-        }else if(id == R.id.nav_add_keuangan){
-            startActivity(new Intent(MainActivity.this,AddKeuangan.class));
+        }else if(id == R.id.nav_setting){
+            startActivity(new Intent(MainActivity.this,SetPrefs.class));
+        }else if(id == R.id.nav_log_out){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+
+            finish();
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -365,9 +378,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
-        } else if(id == R.id.action_pembayaran){
-            Intent i = new Intent(MainActivity.this, RequestTransactionActivity.class);
-            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

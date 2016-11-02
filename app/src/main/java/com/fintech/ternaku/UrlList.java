@@ -22,6 +22,7 @@ public class UrlList {
     private String Url_GetKering = Url_Utama + "C_HistoryKesehatan/getDataTernakDryByPeternakan";
     private String Url_GetListJabatan = Url_Utama + "C_Pengguna/getListRole";
     private String Url_GetPakan = Url_Utama + "C_HistoryMakan/getDataPakan";
+    private String Url_GetIdRFID = Url_Utama + "C_Ternak/getidTernakByRFID";
 
     //Login========================================
     private String Url_Login = Url_Utama + "C_Pengguna/cekLogin";
@@ -134,6 +135,10 @@ public class UrlList {
 
     public UrlList(){
 
+    }
+
+    public String getUrl_GetIdRFID() {
+        return Url_GetIdRFID;
     }
 
     public String getUrl_InsertTask() {

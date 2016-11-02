@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,8 +47,11 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.Locale;
 
+import lecho.lib.hellocharts.model.Line;
+import me.wangyuwei.loadingview.LoadingView;
+
 public class LaporanFragment extends Fragment {
-    private ProgressBar prog_laporan_fragment;
+    private LoadingView prog_laporan_fragment;
     private Spinner spinner_laporan_fragment_bulan,spinner_laporan_fragment_tahun;
     private int flag_tahun=0,flag_bulan=0;
     private TextView txt_laporan_fragment_pilihbulan;
@@ -69,6 +73,19 @@ public class LaporanFragment extends Fragment {
             txt_laporan_fragment_keuanganpenjualanpupuk,
             txt_laporan_fragment_keuanganpenjualansusu,
             txt_laporan_fragment_keuanganpenjualanlainnya;
+    private LinearLayout linearLayout_laporan_fragment_pengeluaranpakan,
+            linearLayout_laporan_fragment_pengeluaranobat,
+            linearLayout_laporan_fragment_pengeluaranvaksin,
+            linearLayout_laporan_fragment_pengeluaransemen,
+            linearLayout_laporan_fragment_pengeluarankesehatan,
+            linearLayout_laporan_fragment_pengeluaranperlengkapan,
+            linearLayout_laporan_fragment_pengeluaranternak,
+            linearLayout_laporan_fragment_pengeluaranlistrik,
+            linearLayout_laporan_fragment_pengeluaranlainnya,
+            linearLayout_laporan_fragment_pemasukanternak,
+            linearLayout_laporan_fragment_pemasukankompos,
+            linearLayout_laporan_fragment_pemasukansusu,
+            linearLayout_laporan_fragment_pemasukanlainnya;
     private Button button_laporan_fragment_grafikkeuangan;
     private String bln_selected,thn_selected,bln_selected_angka;
 
@@ -108,14 +125,183 @@ public class LaporanFragment extends Fragment {
         txt_laporan_fragment_keuanganpenjualanlainnya = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpenjualanlainnya);
 
         //Declare Button Laporan Keuangan----------------------------------------
-        button_laporan_fragment_grafikkeuangan = (Button) view.findViewById(R.id.button_laporan_fragment_grafikkeuangan);
-        button_laporan_fragment_grafikkeuangan.setOnClickListener(new View.OnClickListener() {
+        linearLayout_laporan_fragment_pengeluaranpakan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranpakan);
+        linearLayout_laporan_fragment_pengeluaranpakan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle b = new Bundle();
                 b.putString("bln",bln_selected);
                 b.putString("thn",thn_selected);
                 b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Pakan");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranobat = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranobat);
+        linearLayout_laporan_fragment_pengeluaranobat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Obat");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranvaksin = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranvaksin);
+        linearLayout_laporan_fragment_pengeluaranvaksin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Vaksin");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaransemen = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaransemen);
+        linearLayout_laporan_fragment_pengeluaransemen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Semen");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluarankesehatan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluarankesehatan);
+        linearLayout_laporan_fragment_pengeluarankesehatan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pemeriksaan Kesehatan Sapi");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranperlengkapan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranperlengkapan);
+        linearLayout_laporan_fragment_pengeluaranperlengkapan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Perlengkapan");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranternak = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranternak);
+        linearLayout_laporan_fragment_pengeluaranternak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Ternak");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranlistrik = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranlistrik);
+        linearLayout_laporan_fragment_pengeluaranlistrik.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembayaran Listrik");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranlainnya = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranlainnya);
+        linearLayout_laporan_fragment_pengeluaranlainnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pengeluaran Lainnya");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukanternak = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukanternak);
+        linearLayout_laporan_fragment_pemasukanternak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Ternak");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukankompos = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukankompos);
+        linearLayout_laporan_fragment_pemasukankompos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Kompos");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukansusu = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukansusu);
+        linearLayout_laporan_fragment_pemasukansusu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Susu");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukanlainnya = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukanlainnya);
+        linearLayout_laporan_fragment_pemasukanlainnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pemasukan Lainnya");
                 Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -123,7 +309,7 @@ public class LaporanFragment extends Fragment {
         });
 
         //Loading Bar------------------------------------------------------------
-        prog_laporan_fragment = (ProgressBar) view.findViewById(R.id.prog_laporan_fragment);
+        prog_laporan_fragment = (LoadingView) view.findViewById(R.id.loading_view_dashboard);
 
         //Set All Action---------------------------------------------------------
         initiate();
@@ -160,6 +346,7 @@ public class LaporanFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             prog_laporan_fragment.setVisibility(View.VISIBLE);
+            prog_laporan_fragment.start();
         }
 
         @Override
@@ -174,6 +361,7 @@ public class LaporanFragment extends Fragment {
             Log.d("Laporan_Keuangan",s);
             ShowLaporanKeuangan(s);
             prog_laporan_fragment.setVisibility(View.GONE);
+            prog_laporan_fragment.stop();
             linearLayout_laporan_fragment_laporankeuangan.setVisibility(View.VISIBLE);
 
         }
@@ -198,14 +386,14 @@ public class LaporanFragment extends Fragment {
                 "Oktober",
                 "November",
                 "Desember"};
-        Calendar cal = Calendar.getInstance();
-        String bulan = bulan_array[cal.get(Calendar.MONTH)-1];
+        Calendar cal = Calendar.getInstance(Locale.getDefault());
+        String bulan = bulan_array[cal.get(Calendar.MONTH)];
         String tahun = String.valueOf(cal.get(Calendar.YEAR));
         txt_laporan_fragment_pilihbulan.setText(bulan.trim()
                 + ", " + String.valueOf(tahun.trim()));
-        bln_selected = bulan_array[cal.get(Calendar.MONTH)-1];
+        bln_selected = bulan_array[cal.get(Calendar.MONTH)];
         thn_selected = String.valueOf(cal.get(Calendar.YEAR));
-        bln_selected_angka = String.valueOf(cal.get(Calendar.MONTH)-1);
+        bln_selected_angka = String.valueOf(cal.get(Calendar.MONTH));
 
         //Set Data------------------------------------------------------------
         String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
@@ -213,6 +401,15 @@ public class LaporanFragment extends Fragment {
                 +"&tahun=" + tahun.trim();
         Log.d("CekUrl",param);
         new GetDataKeuanganLaporan().execute(url.getUrlGetLaporanKeuanganList(), param);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initiate();
+        InitiateData();
+
     }
 
     //DialogBox Initiate--------------------------------------------------------

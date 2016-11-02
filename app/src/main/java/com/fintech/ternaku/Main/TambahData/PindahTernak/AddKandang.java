@@ -67,8 +67,8 @@ public class AddKandang extends AppCompatActivity {
                                             +"&namakandang=" + input_addkandang_activity_nama.getText().toString()
                                             +"&lokasi=" + input_addkandang_activity_lokasi.getText().toString()
                                             +"&kapasitas=" + input_addkandang_activity_kapasitas.getText().toString()
-                                            +"&statusaktif=Aktif";
-                                    new InsertKandangTask().execute(url.getUrl_GetKandang(), urlParameters);
+                                            +"&statusaktif=" + "Aktif";
+                                    new InsertKandangTask().execute(url.getUrl_InsertKandang(), urlParameters);
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

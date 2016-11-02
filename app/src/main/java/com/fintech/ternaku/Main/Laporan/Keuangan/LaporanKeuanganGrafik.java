@@ -48,7 +48,7 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
     private LineChart mChart;
     ProgressDialog progDialog;
     private int Jumlah_Bulan, Jumlah_Uang;
-    String bln,thn,bln_angka;
+    String bln,thn,bln_angka,jenis_transaksi;
     String jsonMasuk, jsonKeluar;
     ArrayList<Float> uangListMasuk = new ArrayList<Float>();
     ArrayList<Float> uangListKeluar = new ArrayList<Float>();
@@ -66,7 +66,7 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
         {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Grafik Laporan Keuangan");
+            actionbar.setTitle("");
         }
 
         mChart = (LineChart) findViewById(R.id.chart1);
@@ -95,11 +95,14 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
         bln = getIntent().getExtras().getString("bln");
         thn = getIntent().getExtras().getString("thn");
         bln_angka = getIntent().getExtras().getString("bln_angka");
+        jenis_transaksi = getIntent().getExtras().getString("jenis_transaksi");
+        getSupportActionBar().setTitle("Grafik " + jenis_transaksi);
 
         //Get Data From Web Service------------------------------------------------
         String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                 +"&bulan=" + bln.trim()
-                +"&tahun=" + thn.trim();
+                +"&tahun=" + thn.trim()
+                +"&jenistransaksi=" + jenis_transaksi.trim();
         new GetDataKeuanganMasuk().execute(url.getUrlGetLaporanKeuanganGrafik_Masuk(),param);
         Log.d("Url",param);
 
@@ -165,7 +168,8 @@ public class LaporanKeuanganGrafik extends AppCompatActivity implements
             jsonMasuk = result;
             String param = "uid="+getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null)
                     +"&bulan=" + bln.trim()
-                    +"&tahun=" + thn.trim();
+                    +"&tahun=" + thn.trim()
+                    +"&jenistransaksi=" + jenis_transaksi.trim();
             new GetDataKeuanganKeluar().execute(url.getUrlGetLaporanKeuanganGrafik_Keluar(),param);
         }
     }

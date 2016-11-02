@@ -120,22 +120,10 @@ public class UpdateCulling extends AppCompatActivity {
                                     //Cek RFID---------------------------------
                                     Connection c = new Connection();
                                     String urlParameters2;
-                                    urlParameters2 = "id=" + input_updateculling_activity_idternak.getText().toString() +
+                                    urlParameters2 = "id=" + input_updateculling_activity_idternak.getText().toString().trim() +
                                             "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null);
-                                    String json = c.GetJSONfromURL(url.getUrlGet_RFIDanIdCek(), urlParameters2);
-                                    if(json.trim().equals("1")) {
-                                        String idter = input_updateculling_activity_idternak.getText().toString();
-                                        String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
-                                                + "&idternak=" + idter
-                                                + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
-                                                + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
-                                        new AddCulling().execute(url.getUrlInsertCulling(), param);
-                                    }else{
-                                        new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.WARNING_TYPE)
-                                                .setTitleText("Peringatan!")
-                                                .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
-                                                .show();
-                                    }
+                                    new CheckRFID().execute(url.getUrlGet_RFIDanIdCek(), urlParameters2);
+
                                 }
                             })
                             .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -213,6 +201,44 @@ public class UpdateCulling extends AppCompatActivity {
             adp.notifyDataSetChanged();
         }
         catch (JSONException e){e.printStackTrace();}
+    }
+
+    private class CheckRFID extends AsyncTask<String,Integer,String>{
+        SweetAlertDialog pDialog = new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.PROGRESS_TYPE);
+
+        @Override
+        protected void onPreExecute() {
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#fa6900"));
+            pDialog.setTitleText("Menyimpan Data");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(params[0],params[1]);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("RES_Insert",result);
+            pDialog.dismiss();
+            if(result.trim().equals("1")) {
+                String idter = input_updateculling_activity_idternak.getText().toString();
+                String param = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                        + "&idternak=" + idter
+                        + "&tglculling=" + input_updateculling_activity_tanggal.getText().toString()
+                        + "&alasan=" + input_updateculling_activity_alasan.getText().toString();
+                new AddCulling().execute(url.getUrlInsertCulling(), param);
+            }else{
+                new SweetAlertDialog(UpdateCulling.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Peringatan!")
+                        .setContentText("RFID Sudah Terpakai atau Tidak Ada RFID Ditemukan")
+                        .show();
+            }
+        }
     }
 
     //Insert In To Database---------------------------------------------------
