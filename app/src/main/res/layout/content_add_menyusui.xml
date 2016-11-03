@@ -89,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:text="Tanggal"
                             android:id="@+id/txt_addmenyusui_activity_ket"
-                            android:textColor="#f39cc3"
+                            android:textColor="@color/color_primary_kesuburan"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -120,19 +120,28 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Simpan"
-                    android:id="@+id/button_addmenyusui_activity_simpan"
-                    android:textColor="#FFFFFF"
 
-                    android:background="#f39cc3"
-                    android:layout_marginTop="30dp"
-                    android:elevation="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true" />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_addmenyusui_activity_simpan"
+            android:textColor="#FFFFFF"
+
+            android:background="@color/color_primary_kesuburan"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"            android:elevation="10dp"
+          />
+    </RelativeLayout>
+
 </LinearLayout>

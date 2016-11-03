@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="#27a4dd"
+        android:background="@color/color_primary_produksi"
         android:elevation="5dp"
         android:layout_centerVertical="true"
         android:id="@+id/relativeLayout_updateweight_activity_berat"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Panjang Badan Sapi (Cm)"
                 android:drawableLeft="@drawable/ic_action_ruler"
-                android:backgroundTint="#27a4dd"
+                android:backgroundTint="@color/color_primary_produksi"
                 android:id="@+id/input_weightupdate_activity_panjangbadansapi"
                 android:inputType="number"/>
         </LinearLayout>
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Lingkar Dada Sapi (Cm)"
                 android:drawableLeft="@drawable/ic_action_ticket"
-                android:backgroundTint="#27a4dd"
+                android:backgroundTint="@color/color_primary_produksi"
                 android:id="@+id/input_weightupdate_activity_lebarbadansapi"
                 android:inputType="number"/>
         </LinearLayout>
@@ -204,17 +204,7 @@
                 android:layout_height="wrap_content"
                 android:text="KG" /></LinearLayout>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Simpan"
-        android:id="@+id/button_weightupdate_activity_simpan"
-        android:textColor="#FFFFFF"
-        android:background="#27a4dd"
-        android:elevation="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/relativeLayout_updateweight_activity_berat" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -235,6 +225,23 @@
             android:hint="Ketikkan ID Sapi atau Scan RFID"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_weightupdate_activity_simpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/color_primary_produksi"
+            android:elevation="10dp"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
 </RelativeLayout>

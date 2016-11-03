@@ -73,7 +73,7 @@ public class UpdateCulling extends AppCompatActivity {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Culling");
 
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#27a4dd")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_produksi)));
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }

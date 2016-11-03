@@ -80,7 +80,7 @@ public class AddMenyusui extends AppCompatActivity {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Menyusui");
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f39cc3")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_kesuburan)));
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }

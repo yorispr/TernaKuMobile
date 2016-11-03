@@ -106,7 +106,7 @@ public class PindahTernak extends AppCompatActivity {
             getSupportActionBar().setTitle("Pindah Ternak");
 
 
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f1646c")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_pindahternak)));
 
 
             Window window = getWindow();

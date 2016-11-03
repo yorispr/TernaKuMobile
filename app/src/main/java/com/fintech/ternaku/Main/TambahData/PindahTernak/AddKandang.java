@@ -47,7 +47,7 @@ public class AddKandang extends AppCompatActivity {
             ActionBar actionbar = getSupportActionBar();
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Tambah Kandang Baru");
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f1646c")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_pindahternak)));
 
         }
 

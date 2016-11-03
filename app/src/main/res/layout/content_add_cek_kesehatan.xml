@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#e2e8e9"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
@@ -64,7 +66,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tanggal Periksa"
-                            android:textColor="#9dd5c0"
+                            android:textColor="@color/color_primary_kesehatan"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -113,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:text="Kondisi Fisik"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#9dd5c0"
+                            android:textColor="@color/color_primary_kesehatan"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"
                             android:id="@+id/textView2" />
@@ -128,7 +130,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Suhu Badan"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <EditText
@@ -150,7 +152,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Berat Badan"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <EditText
@@ -177,7 +179,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Tinggi Badan"
-                                    android:textColor="#9dd5c0"
+                                    android:textColor="@color/color_primary_kesehatan"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginLeft="5dp"
                                     android:layout_weight="1"/>
@@ -185,7 +187,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Panjang Badan"
-                                    android:textColor="#9dd5c0"
+                                    android:textColor="@color/color_primary_kesehatan"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginLeft="5dp"
                                     android:layout_weight="1" />
@@ -225,7 +227,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Aktivitas"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <android.support.v7.widget.AppCompatSpinner
@@ -246,7 +248,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Status Fisik"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <android.support.v7.widget.AppCompatSpinner
@@ -267,7 +269,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Status Stress"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <android.support.v7.widget.AppCompatSpinner
@@ -288,7 +290,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Produksi Susu"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <android.support.v7.widget.AppCompatSpinner
@@ -309,7 +311,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Body Condition"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="5dp" />
                             <TextView
@@ -332,18 +334,27 @@
                             </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Simpan"
-                    android:id="@+id/button_addcekkesehatan_activity_simpan"
-                    android:textColor="#FFFFFF"
-                    android:background="#9dd5c0"
-                    android:layout_marginTop="30dp"
-                    android:elevation="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_addcekkesehatan_activity_simpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/color_primary_kesehatan"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:elevation="10dp"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

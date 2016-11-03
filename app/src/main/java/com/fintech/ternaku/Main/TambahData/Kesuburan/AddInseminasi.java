@@ -88,7 +88,7 @@ public class AddInseminasi extends AppCompatActivity {
                 }
             */
 
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f39cc3")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_kesuburan)));
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }

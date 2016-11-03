@@ -81,7 +81,7 @@ public class AddVaksinasi extends AppCompatActivity {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Tambah Vaksinasi");
 
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#9dd5c0")));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_primary_kesehatan)));
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }

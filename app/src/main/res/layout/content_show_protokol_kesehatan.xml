@@ -26,7 +26,7 @@
             android:id="@+id/button_showprotokolkesehatan_activity_tambah"
             style="?android:attr/borderlessButtonStyle"
             android:drawableRight="@drawable/ic_action_add_orange"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_kesehatan"
             android:layout_margin="5dp" />
     </LinearLayout>
 

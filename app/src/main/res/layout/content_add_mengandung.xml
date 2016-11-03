@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#e2e8e9"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
@@ -64,7 +66,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tanggal Pemeriksaan"
-                        android:textColor="#f39cc3"
+                        android:textColor="@color/color_primary_kesuburan"
                         android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"/>
                     <LinearLayout
@@ -115,7 +117,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Status Keberhasilan"
                         android:id="@+id/textView44"
-                        android:textColor="#f39cc3"
+                        android:textColor="@color/color_primary_kesuburan"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_alignParentTop="true"
@@ -149,7 +151,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tanggal Perkiraan Hamil"
-                        android:textColor="#f39cc3"
+                        android:textColor="@color/color_primary_kesuburan"
                         android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"/>
                     <LinearLayout
@@ -178,18 +180,28 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Simpan"
-                android:id="@+id/button_addmengandung_activity_simpan"
-                android:textColor="#FFFFFF"
-                android:background="#f39cc3"
-                android:layout_marginTop="30dp"
-                android:elevation="10dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
+
         </LinearLayout>
     </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_addmengandung_activity_simpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/color_primary_kesuburan"
+            android:elevation="10dp"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

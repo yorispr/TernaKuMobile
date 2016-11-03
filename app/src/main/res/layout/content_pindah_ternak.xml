@@ -317,21 +317,30 @@
                         android:layout_marginBottom="5dp" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Pindah"
-                    android:id="@+id/button_pindahternak_activity_simpan"
-                    android:background="#f1646c"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    />
 
             </LinearLayout>
+
+
         </LinearLayout>
 
     </ScrollView>
 
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pindah"
+            android:id="@+id/button_pindahternak_activity_simpan"
+            android:background="#f1646c"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
+    </RelativeLayout>
 </LinearLayout>

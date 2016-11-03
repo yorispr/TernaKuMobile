@@ -41,4 +41,12 @@
     <color name="toolbar_text">#8f000000</color>
     <color name="accent">#2789e4</color>
 
+
+    //Color Primary Button
+    <color name="color_primary_kesehatan">#749d8e</color>
+    <color name="color_primary_pindahternak">#f1646c</color>
+    <color name="color_primary_kesuburan">#f39cc3</color>
+    <color name="color_primary_produksi">#27a4dd</color>
+
+
 </resources>

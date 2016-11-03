@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#e2e8e9"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
@@ -93,7 +95,7 @@
                             android:layout_height="wrap_content"
                             android:text="Tanggal Pemeriksaan"
                             android:id="@+id/txt_addmasasubur_activity_ket"
-                            android:textColor="#9dd5c0"
+                            android:textColor="@color/color_primary_kesehatan"
                             android:layout_marginTop="5dp"
                             android:layout_marginLeft="5dp"/>
                         <LinearLayout
@@ -150,7 +152,7 @@
                                 android:text="Detail Pemeriksaan"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:layout_marginBottom="10dp"
-                                android:textColor="#9dd5c0"/>
+                                android:textColor="@color/color_primary_kesehatan"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -168,7 +170,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Diagnosis"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_alignParentTop="true"
@@ -205,7 +207,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Perawatan"
-                                android:textColor="#9dd5c0"
+                                android:textColor="@color/color_primary_kesehatan"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:layout_alignParentTop="true"
@@ -264,7 +266,7 @@
                                     android:text="Pilih Lokasi"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:layout_marginBottom="10dp"
-                                    android:textColor="#9dd5c0"/>
+                                    android:textColor="@color/color_primary_kesehatan"/>
                             </LinearLayout>
                         </LinearLayout>
                         <TextView
@@ -303,18 +305,27 @@
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
                 </LinearLayout>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Simpan"
-                    android:id="@+id/button_addkarantina_activity_simpan"
-                    android:textColor="#FFFFFF"
-                    android:background="#9dd5c0"
-                    android:layout_marginTop="30dp"
-                    android:elevation="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_addkarantina_activity_simpan"
+            android:textColor="#FFFFFF"
+            android:background="@color/color_primary_kesehatan"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:elevation="10dp"
+             />
+    </RelativeLayout>
+
 </LinearLayout>
