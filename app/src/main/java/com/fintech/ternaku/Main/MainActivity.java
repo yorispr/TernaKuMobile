@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
@@ -33,8 +34,11 @@ import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
 import com.fintech.ternaku.Main.NavBar.Keuangan.AddKeuangan;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
 import com.fintech.ternaku.Main.Pengingat.ShowReminderFragment;
+import com.fintech.ternaku.Main.Scheduler.AddScheduleActivity;
+import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekKesehatan;
 import com.fintech.ternaku.RequestTransactionActivity;
 import com.fintech.ternaku.Setting.SetPrefs;
+import com.fintech.ternaku.SplashscreenActivity;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.fintech.ternaku.LoginAndRegister.LoginActivity;
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        //new LongOperation().execute();
 
         //Set Toolbar Floating Button-----------------------------
         navigationTabBar = (NavigationTabBar) findViewById(R.id.navigation_main_activity);
@@ -142,6 +148,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private class LongOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected String doInBackground(String... params) {
+            InitUI();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    }
+
     public boolean getStatusLogOut(){
         return flag_log_out;
     }
@@ -196,6 +222,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .title("Keuangan")
                         .build()
         );
+
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_action_calendar_month_white),
+                        Color.parseColor(colors[0]))
+                        .title("Schedule")
+                        .build()
+        );
+
         navigationTabBar.setModels(models);
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
@@ -224,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case 5:
                         i = new Intent(MainActivity.this,AddKeuangan.class);
+                        startActivity(i);
+                        break;
+                    case 6:
+                        i = new Intent(MainActivity.this,AddScheduleActivity.class);
                         startActivity(i);
                         break;
                 }

@@ -192,7 +192,7 @@ public class AddReminderActivity extends AppCompatActivity {
         key = firebaseDatabase.child(idpeternakan).child(idpengguna).push().getKey();
         SimpleDateFormat df1 = new SimpleDateFormat("dd MMM yyyy HH:mm");
         String CurrentDate = df1.format(new Date());
-        ReminderModel pm = new ReminderModel(key,judul,isi,isimportant,idpengguna,namapengguna,CurrentDate,0,txtTgl.getText().toString());
+        ReminderModel pm = new ReminderModel(key,judul,isi,isimportant,idpengguna,namapengguna,CurrentDate,"0",0,txtTgl.getText().toString());
         DatabaseHandler db = new DatabaseHandler(this);
         //db.addReminder(pm);
         firebaseDatabase.child(idpeternakan).child(key).setValue(pm);

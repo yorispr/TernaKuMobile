@@ -69,5 +69,9 @@
     <string name="title_activity_calendar_to_do">CalendarToDoActivity</string>
     <string name="title_activity_add_task_ternak">AddTaskTernak</string>
 
+    <string name="title_activity_splashscreen">SplashscreenActivity</string>
+    <string name="title_activity_add_schedule">AddScheduleActivity</string>
+    <string name="title_activity_show_detail_schedule">ShowDetailScheduleAct</string>
+
 
 </resources>

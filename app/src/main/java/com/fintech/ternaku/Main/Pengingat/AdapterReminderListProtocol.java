@@ -116,7 +116,7 @@ public class AdapterReminderListProtocol extends BaseAdapter implements Filterab
                         String data2 = mOriginalValues.get(i).getIsi();
 
                         if (data.toLowerCase().startsWith(constraint.toString())||data2.toLowerCase().startsWith(constraint.toString())) {
-                            FilteredArrList.add(new ReminderModel(mOriginalValues.get(i).getId_protocol(),mOriginalValues.get(i).getJudul(),mOriginalValues.get(i).getIsi(),mOriginalValues.get(i).isImportant(),mOriginalValues.get(i).getCreator_id(),mOriginalValues.get(i).getCreator(),mOriginalValues.get(i).getTimestamp(),mOriginalValues.get(i).getIsread(),mOriginalValues.get(i).getSchedule_time()));
+                            FilteredArrList.add(new ReminderModel(mOriginalValues.get(i).getId_protocol(),mOriginalValues.get(i).getJudul(),mOriginalValues.get(i).getIsi(),mOriginalValues.get(i).isImportant(),mOriginalValues.get(i).getCreator_id(),mOriginalValues.get(i).getCreator(),mOriginalValues.get(i).getTimestamp(),mOriginalValues.get(i).getIs_repeat(),mOriginalValues.get(i).getIsread(),mOriginalValues.get(i).getSchedule_time()));
                         }
                     }
                     // set the Filtered result to return

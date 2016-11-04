@@ -216,7 +216,6 @@
             android:label="Ganti Data"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity
             android:name=".Main.Laporan.Keuangan.LaporanKeuanganGrafik"
             android:label="@string/title_activity_laporan_keuangan_grafik"
@@ -228,12 +227,11 @@
         <activity
             android:name=".DetailTernak.Task.AddTaskTernak"
             android:label="@string/title_activity_add_task_ternak"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RequestTransactionActivity"
             android:label="Request Pembayaran"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".FCM.MyFirebaseMessagingService">
             <intent-filter>
@@ -245,6 +243,23 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".Main.Scheduler.AlarmService"
+            android:enabled="true"
+            android:exported="true" />
+        <activity
+            android:name=".SplashscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_splashscreen"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".Main.Scheduler.AddScheduleActivity"
+            android:label="@string/title_activity_add_schedule"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".Main.Scheduler.AlarmReceiver" />
+
+
     </application>
 
 </manifest>
