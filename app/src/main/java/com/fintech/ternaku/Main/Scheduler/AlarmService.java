@@ -29,6 +29,9 @@ public class AlarmService extends Service {
     private NotificationManager mManager;
     WindowManager mWindowManager;
     Ringtone ringtoneAlarm;
+    NotificationManager notificationManager;
+    public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+
     View mView;
     public AlarmService() {
     }
@@ -66,6 +69,13 @@ public class AlarmService extends Service {
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, _id, intent2, PendingIntent.FLAG_ONE_SHOT);
 
+
+
+
+
+                    PendingIntent dismissintent = PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_ONE_SHOT);
+
+
                     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                             .setContentTitle(b.getString("judul"))
@@ -78,14 +88,16 @@ public class AlarmService extends Service {
                             .setLights(0x0000FF, 1000, 3500)
                             .setContentIntent(pendingIntent)
                             .setPriority(Notification.PRIORITY_MAX)
+                            .addAction(R.drawable.ic_action_cancel_holo_light,"Hentikan",dismissintent)
                             .setOngoing(true);
-                    NotificationManager notificationManager =
+                     notificationManager =
                             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(0, notificationBuilder.build());
                 }
             }
         }
     }
+
 
 
     private void hideDialog(){
