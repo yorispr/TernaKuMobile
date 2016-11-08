@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cuboid.cuboidcirclebutton.CuboidButton;
 import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.Main.Pengingat.ReminderModel;
@@ -42,7 +41,6 @@ public class CalendarToDoActivity extends AppCompatActivity {
 
     private TextView txt_calendartodo_activity_bulan,
             txt_calendartodo_activity_aktivitasbln,txt_calendartodo_activity_aktivitasthn;
-    private CuboidButton txt_calendartodo_activity_aktivitastgl;
     private ListView list_calendartodo_activity_aktivitas;
     String idpengguna;
     String idpeternakan;
@@ -88,10 +86,8 @@ public class CalendarToDoActivity extends AppCompatActivity {
                 cal.get(Calendar.DATE));
 
         //Initiate Detail Event-------------------------------------
-        txt_calendartodo_activity_aktivitastgl = (CuboidButton)findViewById(R.id.txt_calendartodo_activity_aktivitastgl);
         txt_calendartodo_activity_aktivitasbln = (TextView)findViewById(R.id.txt_calendartodo_activity_aktivitasbln);
         txt_calendartodo_activity_aktivitasthn = (TextView)findViewById(R.id.txt_calendartodo_activity_aktivitasthn);
-        txt_calendartodo_activity_aktivitastgl.setText(String.valueOf(cal.get(Calendar.DATE)));
         txt_calendartodo_activity_aktivitasbln.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
         txt_calendartodo_activity_aktivitasthn.setText(String.valueOf(cal.get(Calendar.YEAR)));
 
@@ -101,7 +97,6 @@ public class CalendarToDoActivity extends AppCompatActivity {
             public void onDateClick(int year, int month, int day) {
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, day);
-                txt_calendartodo_activity_aktivitastgl.setText(String.valueOf(day));
                 txt_calendartodo_activity_aktivitasbln.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
                 txt_calendartodo_activity_aktivitasthn.setText(String.valueOf(year));
                 SetListNew(year, cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), day);

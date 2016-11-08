@@ -85,6 +85,16 @@ public class SetPrefs extends PreferenceActivity {
             }
         });
 
+        Preference pref_bluetooth = findPreference("bluetooth_setting");
+        pref_bluetooth.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent testIntent = new Intent(getApplicationContext(), BluetoothAct.class);
+                startActivity(testIntent);
+                return true;
+            }
+        });
+
     }
 
     private AppCompatDelegate getDelegate() {

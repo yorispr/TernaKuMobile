@@ -72,6 +72,7 @@
     <string name="title_activity_splashscreen">SplashscreenActivity</string>
     <string name="title_activity_add_schedule">AddScheduleActivity</string>
     <string name="title_activity_show_detail_schedule">ShowDetailScheduleAct</string>
+    <string name="title_activity_bluetooth">BluetoothActivity</string>
 
 
 </resources>
