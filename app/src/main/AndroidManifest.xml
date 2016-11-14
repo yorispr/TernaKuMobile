@@ -271,6 +271,14 @@
         <activity
             android:name=".Setting.BluetoothAct"
             android:label="@string/title_activity_bluetooth"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Alarm.ShowAlarmActivity"
+            android:label="@string/title_activity_show_alarm"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Alarm.ShowCalendarActivity"
+            android:label="@string/title_activity_show_calendar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -1,16 +1,22 @@
 package com.fintech.ternaku;
 
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.fintech.ternaku.Alarm.Alarm;
 import com.fintech.ternaku.Main.Pengingat.ReminderModel;
+import com.fintech.ternaku.Main.Scheduler.AlarmReceiver;
 import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ModelAddProtokolInjeksi;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by YORIS on 9/29/16.
@@ -28,12 +34,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TBL_REMINDER = "CREATE TABLE TBL_REMINDER (ID_REMINDER TEXT , JUDUL TEXT, ISI TEXT, ISIMPORTANT INTEGER, CREATOR_ID TEXT, CREATOR TEXT, TIMESTAMP TEXT, ISREAD INTEGER, SCHEDULETIME TEXT)";
+        String CREATE_TBL_ALARM = "CREATE TABLE TBL_ALARM(ID INTEGER AUTO INCREMENT , ID_ALARM TEXT, JENIS_ALARM TEXT,CREATED_DATE TEXT, ALARM_DATE TEXT, ID_SAPI TEXT)";
+
+        db.execSQL(CREATE_TBL_ALARM);
         db.execSQL(CREATE_TBL_REMINDER);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + "TBL_REMINDER");
+        db.execSQL("DROP TABLE IF EXISTS " + "TBL_ALARM");
+
         onCreate(db);
     }
 
@@ -61,6 +72,87 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.close(); // Closing database connection
     }
+
+
+    public void addAlarm(Alarm alarm) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.setForeignKeyConstraintsEnabled(false);
+        ContentValues values = new ContentValues();
+        values.put("ID_ALARM", alarm.getId_alarm());
+        values.put("JENIS_ALARM", alarm.getJenis());
+        values.put("CREATED_DATE", alarm.getCreated_date());
+        values.put("ALARM_DATE", alarm.getAlarm_date());
+        values.put("ID_SAPI", alarm.getId_sapi());
+
+        // Inserting Row
+        db.insert("TBL_ALARM", null, values);
+        db.close(); // Closing database connection
+    }
+
+
+    public Alarm getAlarmBirahiById(String id_alarm) {
+        ArrayList<Alarm> AlarmList = new ArrayList<Alarm>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM TBL_ALARM WHERE ID_ALARM = "+id_alarm;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        Alarm al = new Alarm();
+        // looping through all rows and adding to list
+        if (cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    al.setId(cursor.getInt(cursor.getColumnIndex("ID")));
+                    al.setId_alarm(cursor.getString(cursor.getColumnIndex("ID_ALARM")));
+                    al.setJenis(cursor.getString(cursor.getColumnIndex("JENIS_ALARM")));
+                    al.setCreated_date(cursor.getString(cursor.getColumnIndex("CREATED_DATE")));
+                    al.setAlarm_date(cursor.getString(cursor.getColumnIndex("ALARM_DATE")));
+                    al.setId_sapi(cursor.getString(cursor.getColumnIndex("ID_SAPI")));
+
+                    AlarmList.add(al);
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        db.close();
+        return al;
+    }
+
+    public void TurnOffAlarmByIdSapi(String id_sapi) {
+        ArrayList<Alarm> AlarmList = new ArrayList<Alarm>();
+        String heat = "heat";
+        // Select All Query
+        String selectQuery = "SELECT * FROM TBL_ALARM WHERE ID_SAPI = "+id_sapi+" AND JENIS_ALARM = "+heat;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        Alarm al = new Alarm();
+        // looping through all rows and adding to list
+        if (cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    al.setId(cursor.getInt(cursor.getColumnIndex("ID")));
+                    al.setId_alarm(cursor.getString(cursor.getColumnIndex("ID_ALARM")));
+                    al.setJenis(cursor.getString(cursor.getColumnIndex("JENIS_ALARM")));
+                    al.setCreated_date(cursor.getString(cursor.getColumnIndex("CREATED_DATE")));
+                    al.setAlarm_date(cursor.getString(cursor.getColumnIndex("ALARM_DATE")));
+                    al.setId_sapi(cursor.getString(cursor.getColumnIndex("ID_SAPI")));
+
+                    AlarmList.add(al);
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        db.close();
+        for(int i=0;i<AlarmList.size();i++) {
+            turnOffAlarm(AlarmList.get(i).getId_alarm());
+        }
+    }
+
+    public void turnOffAlarm(String id_alarm){
+        Intent myIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(id_alarm), myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT).cancel();
+    }
+
 
     public ArrayList<ReminderModel> getReminder() {
         ArrayList<ReminderModel> reminderList = new ArrayList<ReminderModel>();

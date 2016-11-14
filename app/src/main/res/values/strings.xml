@@ -73,6 +73,8 @@
     <string name="title_activity_add_schedule">AddScheduleActivity</string>
     <string name="title_activity_show_detail_schedule">ShowDetailScheduleAct</string>
     <string name="title_activity_bluetooth">BluetoothActivity</string>
+    <string name="title_activity_show_alarm">ShowAlarmActivity</string>
+    <string name="title_activity_show_calendar">ShowCalendarActivity</string>
 
 
 </resources>

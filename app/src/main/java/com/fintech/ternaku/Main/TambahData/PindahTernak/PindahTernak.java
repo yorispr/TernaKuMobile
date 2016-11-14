@@ -88,7 +88,7 @@ public class PindahTernak extends AppCompatActivity {
     int choosenindexkawanan;
     String idpeternakan;
     AutoCompleteTextView input_pindahternak_activity_idternak;
-
+String id_sapi="";
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
 
@@ -112,6 +112,9 @@ public class PindahTernak extends AppCompatActivity {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
+
+
 
         //Initial----------------------------------------------------
         idpeternakan =  getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
@@ -254,6 +257,10 @@ public class PindahTernak extends AppCompatActivity {
 
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetAllTernak().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters);
+
+        if(getIntent().getExtras()!=null){
+            id_sapi = getIntent().getExtras().getString("id_sapi");
+        }
     }
 
     private void setDetailToTextView(String idTernak) {
@@ -724,6 +731,8 @@ public class PindahTernak extends AppCompatActivity {
                 TernakList.add(t);
             }
 
+            setDetailToTextView(id_sapi);
+
         }
         catch (JSONException e){e.printStackTrace();}
     }
@@ -842,8 +851,7 @@ public class PindahTernak extends AppCompatActivity {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    private boolean checkForm()
-    {
+    private boolean checkForm() {
         boolean value = true;
         if(TextUtils.isEmpty(input_pindahternak_activity_idternak.getText().toString())){
             value= false;

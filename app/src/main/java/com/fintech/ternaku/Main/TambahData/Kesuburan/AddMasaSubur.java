@@ -31,7 +31,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fintech.ternaku.Alarm.Alarm;
+import com.fintech.ternaku.Alarm.AlarmScheduler;
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
@@ -43,6 +46,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -66,7 +70,7 @@ public class AddMasaSubur extends AppCompatActivity {
     ArrayAdapter<String> myAdapter;
     boolean isHeat;
     int flag_radio=0;
-
+    String id_sapi;
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
 
@@ -78,6 +82,7 @@ public class AddMasaSubur extends AppCompatActivity {
         setContentView(R.layout.activity_add_masa_subur);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        id_sapi = "";
         if(getSupportActionBar()!=null)
         {
             ActionBar actionbar = getSupportActionBar();
@@ -152,6 +157,7 @@ public class AddMasaSubur extends AppCompatActivity {
                 if(checkForm()) {
                     if(flag_radio==1) {
                         final String idter = input_addmasasubur_activity_idternak.getText().toString().trim();
+
                         new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Simpan")
                                 .setContentText("Data Yang Dimasukkan Sudah Benar?")
@@ -161,6 +167,7 @@ public class AddMasaSubur extends AppCompatActivity {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
+                                        id_sapi = input_addmasasubur_activity_idternak.getText().toString().trim();
 
                                         //Cek RFID---------------------------------
                                         Connection c = new Connection();
@@ -255,8 +262,7 @@ public class AddMasaSubur extends AppCompatActivity {
             }
         }
     }
-    private void AddTernakToList(String result)
-    {
+    private void AddTernakToList(String result){
         list_addmasasubur_idternak.clear();
         Log.d("PET",result);
         try{
@@ -311,8 +317,7 @@ public class AddMasaSubur extends AppCompatActivity {
             }
         }
     }
-    private void AddTernakHeat(String result)
-    {
+    private void AddTernakHeat(String result) {
         list_addmasasubur_ternakheat.clear();
         Log.d("PET",result);
         try{
@@ -412,6 +417,7 @@ public class AddMasaSubur extends AppCompatActivity {
                 //Set Ternak Heat-------------------------------------------------
                 String param_2 = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
                 new GetTernakHeat().execute(url.getUrl_GetHeat(), param_2);
+
             }else{
                 new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Peringatan!")
@@ -420,8 +426,6 @@ public class AddMasaSubur extends AppCompatActivity {
             }
         }
     }
-
-
 
     //Insert To Database------------------------------------------------
     private class UpdateMasaSubur extends AsyncTask<String,Integer,String> {
@@ -444,6 +448,7 @@ public class AddMasaSubur extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            final DatabaseHandler db = new DatabaseHandler(getApplicationContext());
             Log.d("RESRFID",result);
             pDialog.dismiss();
             if (result.trim().equals("1")){
@@ -454,6 +459,21 @@ public class AddMasaSubur extends AppCompatActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                if(isHeat){
+                                    final int _id = (int) System.currentTimeMillis();
+                                    Calendar cal = Calendar.getInstance();
+                                    Date date = cal.getTime();
+                                    String formatteddate = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(date);
+                                    cal.add(Calendar.MINUTE,1);
+                                    Log.d("calendar3",formatteddate);
+
+                                    Alarm al = new Alarm(0,String.valueOf(_id),"heat",String.valueOf(new Date()),formatteddate,id_sapi);
+                                    db.addAlarm(al);
+                                    AlarmScheduler as = new AlarmScheduler();
+                                    as.setAlarm(al,getApplicationContext());
+                                    Log.d("id_sapi2",al.getId_sapi());
+
+                                }
                                 sweetAlertDialog.dismiss();
                                 new SweetAlertDialog(AddMasaSubur.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Ubah Masa Subur")

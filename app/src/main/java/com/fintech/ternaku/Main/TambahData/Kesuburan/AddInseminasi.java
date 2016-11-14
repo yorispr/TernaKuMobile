@@ -40,9 +40,13 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
+import com.fintech.ternaku.Alarm.Alarm;
+import com.fintech.ternaku.Alarm.AlarmScheduler;
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
 
@@ -59,7 +63,8 @@ public class AddInseminasi extends AppCompatActivity {
     private TimePickerDialog mTimePicker;
     String datetime;
     int choosenindex=-1;
-
+    DatabaseHandler db = new DatabaseHandler(this);
+    String id_sapi="";
     ArrayList<String> list_addinseminasi_semen = new ArrayList<String>();
     ArrayList<String> list_addinseminasi_idternak = new ArrayList<String>();
     ArrayAdapter<String> myAdapter;
@@ -93,6 +98,8 @@ public class AddInseminasi extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
+
+
         //Set Tanggal Inseminasi--------------------------------------
         setDateTimeField();
         setTime();
@@ -119,7 +126,14 @@ public class AddInseminasi extends AppCompatActivity {
                 choosenindex = i;
             }
         });
+        if(getIntent().getExtras()!=null){
+            id_sapi = getIntent().getExtras().getString("id_sapi");
+            input_addinseminasi_activity_idternak.setText(id_sapi);
+        }
         input_addinseminasi_activity_idternak.setEnabled(false);
+
+
+
 
         //Set Spinner Daftar Semen------------------------------------
         spinner_addinseminasi_activity_semen = (Spinner)findViewById(R.id.spinner_addinseminasi_activity_semen);
@@ -172,7 +186,6 @@ public class AddInseminasi extends AppCompatActivity {
                 }
             }
         });
-
 
     }
 
@@ -293,8 +306,7 @@ public class AddInseminasi extends AppCompatActivity {
             }
         }
     }
-    private void AddSemenToList(String result)
-    {
+    private void AddSemenToList(String result) {
         list_addinseminasi_semen.clear();
         Log.d("PET",result);
         try{
@@ -418,6 +430,20 @@ public class AddInseminasi extends AppCompatActivity {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 sweetAlertDialog.dismiss();
+
+                                final int _id = (int) System.currentTimeMillis();
+                                Calendar cal = Calendar.getInstance();
+                                Date date = cal.getTime();
+                                String formatteddate = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(date);
+                                cal.add(Calendar.MINUTE,1);
+                                Log.d("calendar3",formatteddate);
+
+                                Alarm al = new Alarm(0,String.valueOf(_id),"inseminasi",String.valueOf(new Date()),formatteddate,input_addinseminasi_activity_idternak.getText().toString().trim());
+                                db.addAlarm(al);
+                                AlarmScheduler as = new AlarmScheduler();
+                                as.setAlarm(al,getApplicationContext());
+                                Log.d("id_sapi2",al.getId_sapi());
+
                                 new SweetAlertDialog(AddInseminasi.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Ubah Data Inseminasi")
                                         .setContentText("Apakah Ingin Menambah Data Inseminasi Lagi?")

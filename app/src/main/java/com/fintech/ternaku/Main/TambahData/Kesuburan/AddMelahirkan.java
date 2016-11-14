@@ -35,7 +35,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fintech.ternaku.Alarm.Alarm;
+import com.fintech.ternaku.Alarm.AlarmScheduler;
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
@@ -47,6 +50,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -292,8 +296,7 @@ public class AddMelahirkan extends AppCompatActivity {
         }
         catch (JSONException e){e.printStackTrace();}
     }
-    private String getTglInseminasi(String idternak)
-    {
+    private String getTglInseminasi(String idternak) {
         String tgl="";
         for (int i=0;i<list_addmelahirkan_idternak.size();i++)
         {
@@ -385,6 +388,23 @@ public class AddMelahirkan extends AppCompatActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
+                                final int _id = (int) System.currentTimeMillis();
+                                Calendar cal = Calendar.getInstance();
+                                Date date = cal.getTime();
+                                String formatteddate = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(date);
+                                cal.add(Calendar.MONTH,9);
+                                Log.d("calendar3",formatteddate);
+
+                                Alarm al = new Alarm(0,String.valueOf(_id),"ins_melahirkan",String.valueOf(new Date()),formatteddate,input_addmelahirkan_activity_idternak.getText().toString().trim());
+                                db.addAlarm(al);
+                                AlarmScheduler as = new AlarmScheduler();
+                                as.setAlarm(al,getApplicationContext());
+                                Log.d("id_sapi2",al.getId_sapi());
+
+                                db.TurnOffAlarmByIdSapi(al.getId_sapi());
+
                                 sweetAlertDialog.dismiss();
                                 new SweetAlertDialog(AddMelahirkan.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Tambah Ternak Melahirkan")
