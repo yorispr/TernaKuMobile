@@ -39,6 +39,7 @@ public class AlarmService extends Service {
     DatabaseHandler db = new DatabaseHandler(this);
 
     View mView;
+
     public AlarmService() {
     }
 

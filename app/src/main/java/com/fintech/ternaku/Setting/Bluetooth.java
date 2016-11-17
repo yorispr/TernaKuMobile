@@ -6,6 +6,7 @@ package com.fintech.ternaku.Setting;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -17,6 +18,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.Xml;
+import android.widget.EditText;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -53,6 +58,8 @@ public class Bluetooth {
         private ConnectThread mConnectThread;
         private ConnectedThread mConnectedThread;
         private int mState;
+         EditText input;
+        int readBufferPosition;
 
         // Constants that indicate the current connection state
         public static final int STATE_NONE = 0; // we're doing nothing
@@ -465,12 +472,22 @@ public class Bluetooth {
                     try {
                         // Read from the InputStream
                         bytes = mmInStream.read(buffer);
+
+                        //String theString = IOUtils.toString(mmInStream, "US-ASCII");
+
                         Log.d(TAG, "message bytes " + bytes);
                         Log.d(TAG, "message string bytes " + String.valueOf(bytes));
-                        Log.d(TAG, "message buffer " + new String(buffer));
+                        //String rfidtag = new String(buffer,0,bytes, "US-ASCII");
+                        String theString = "N/A";
+                        try {
+                            theString = IOUtils.toString(buffer, "UTF-8");
+                            theString.replaceAll("\\s","");
+                        }catch(IOException e){e.printStackTrace();}
+
+                        Log.d(TAG, "message buffer " + buffer);
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(MESSAGE_READ, bytes,
-                                -1, buffer).sendToTarget();
+                                -1, theString.replaceAll("\\s","")).sendToTarget();
                     } catch (IOException e) {
                         Log.e(TAG, "disconnected", e);
                         connectionLost();

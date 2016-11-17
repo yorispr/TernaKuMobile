@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.Setting.Bluetooth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +49,9 @@ public class UpdateWeightActivity extends AppCompatActivity {
     ArrayList<String> list_updateweight_activity_berat = new ArrayList<String>();
     private int flag_hit = 0;
     private int choosenindex=-1;
+    private Bluetooth bt;
+    public final String TAG = "AddInseminasi";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +133,45 @@ public class UpdateWeightActivity extends AppCompatActivity {
                 }
             }
         });
+
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    input_updateweight_activity_idternak.setText(msg.obj.toString().trim());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
+
 
     //Hitung Berat---------------------------------------------------
     private String hitBerat(float lingkar_dada,float panjang_badan){

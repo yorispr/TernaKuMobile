@@ -12,6 +12,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
+import com.fintech.ternaku.Setting.Bluetooth;
 import com.fintech.ternaku.UrlList;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -65,7 +68,8 @@ public class PindahTernak extends AppCompatActivity {
     AdapterKawananPindahTernak adapter2;
 
     boolean isRFID = false;
-
+    private Bluetooth bt;
+    public final String TAG = "PindahTernak";
     ArrayAdapter<String> adp;
     boolean kandangclick = false;
     boolean kawananclick = false;
@@ -261,7 +265,49 @@ String id_sapi="";
         if(getIntent().getExtras()!=null){
             id_sapi = getIntent().getExtras().getString("id_sapi");
         }
+
+
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
     }
+
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+       // bt = new Bluetooth(this, mHandler);
+        //bt.stop();
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    final String rfid = msg.obj.toString();
+                    input_pindahternak_activity_idternak.setText(rfid);
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
 
     private void setDetailToTextView(String idTernak) {
         int counter = 0;

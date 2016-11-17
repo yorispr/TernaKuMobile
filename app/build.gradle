@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.fintech.ternaku"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -60,6 +60,8 @@ dependencies {
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.1'
     compile 'commons-io:commons-io:2.4'
+    compile 'me.aflak.libraries:bluetooth:1.2.4'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
