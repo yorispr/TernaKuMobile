@@ -918,6 +918,181 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#34495e"
+                    android:textColor="#fff"
+                    android:layout_marginTop="10dp"
+                    android:elevation="5dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:weightSum="8">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_pakan_dashboard"
+                            android:text=" Skor Berat Badan"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#fff"
+                            android:layout_weight="4"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:gravity="center_vertical"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtbtn_dashboard_fragment_bscore2"
+                                android:text="5 Kg "
+                                android:textSize="12dp"
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:textColor="#fff"
+                                android:gravity="center_vertical"
+                                android:textAlignment="textEnd"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtbtn_dashboard_fragment_bscore"
+                                android:textSize="12dp"
+                                android:text="Rp 20.000.000 "
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:textColor="#fff"
+                                android:gravity="center_vertical"
+                                android:textAlignment="textEnd"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/arrow_down_float"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+                    android:id="@+id/expanderlayout_dashboard_fragment_bodyscore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    app:ael_duration="400"
+                    app:ael_expanded="false"
+                    app:ael_interpolator="linearOutSlowIn"
+                    app:ael_orientation="vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_alignStart="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_below="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_alignEnd="@+id/buttonexpander_dashboard_fragment_bodyscore">
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+                            <lecho.lib.hellocharts.view.PieChartView
+                                android:id="@+id/chart_dashboard_fragment_bodyscore"
+                                android:layout_width="170dp"
+                                android:layout_height="170dp"
+                                android:layout_alignParentStart="true" />
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical|center_horizontal|center">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:layout_marginLeft="5dp">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbsempurna"
+                                            android:text="BB Sempurna "
+                                            android:textSize="15dp"
+                                            android:textColor="#4183D7"
+                                            android:drawableLeft="@drawable/ic_ternakdewasa_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbbagus"
+                                            android:text="BB Bagus"
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_ternakmuda_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#59ABE3"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbsedang"
+                                            android:text="BB Sedang "
+                                            android:textSize="15dp"
+                                            android:textColor="#8bdafc"
+                                            android:drawableLeft="@drawable/ic_ternakbayi_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbkurang"
+                                            android:text="BB Kurang "
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_lainnyahamil_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#bdc3c7"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bblainnya"
+                                            android:text="Lainnya "
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_lainnyahamil_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#bdc3c7"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_totalpakan"
                     android:layout_width="fill_parent"
@@ -1033,7 +1208,6 @@
                                 app:gaugeStrokeColor="#bdc3c7"
                                 app:gaugeStrokeWidth="10dp"
                                 app:gaugeSweepAngle="270"
-                                android:layout_below="@+id/textView35"
                                 android:layout_alignParentStart="true"
                                 android:layout_marginTop="10dp" />
                         </RelativeLayout>
