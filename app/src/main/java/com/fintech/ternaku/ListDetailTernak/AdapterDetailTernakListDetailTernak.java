@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fintech.ternaku.Main.TambahData.PindahTernak.ModelKandangPindahTernak;
@@ -64,78 +65,82 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
         holder = new ViewHolder();
         view.setTag(holder);
 
+        holder.linearlayout_produksi_susu = (LinearLayout)view.findViewById(R.id.linearlayout_listternak_activity_produksisusu);
         holder.id_ternak = (TextView)view.findViewById(R.id.txt_listdetailternak_activity_idternak);
+        holder.nama_ternak = (TextView)view.findViewById(R.id.txt_listdetailternak_activity_nameternak);
         holder.kondisi_kesehatan = (TextView)view.findViewById(R.id.txt_listdetailternak_activity_kondisitubuh);
         holder.img_kondisi_tubuh = (ImageView) view.findViewById(R.id.img_listdetailternak_activity_kondisitubuh);
-        holder.rfid = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_rfid);
-        holder.isheat = (TextView) view.findViewById(R.id.txtIsHeat);
-        holder.ismenyusui = (TextView) view.findViewById(R.id.txtIsMenyusui);
-        holder.iskering = (TextView) view.findViewById(R.id.txtIsKering);
-        holder.berat = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_berat);
-        holder.umur = (TextView) view.findViewById(R.id.txtUmur);
-        holder.produksi_susu = (TextView) view.findViewById(R.id.txtProduksiSusu);
+        holder.img_heat = (ImageView) view.findViewById(R.id.img_listdetailternak_activity_heatternak);
+        holder.img_menyusui = (ImageView) view.findViewById(R.id.img_listdetailternak_activity_menyusuiternak);
+        holder.img_kering = (ImageView) view.findViewById(R.id.img_listdetailternak_activity_keringternak);
+        //holder.rfid = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_rfid);
+        holder.isheat = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_heatternak);
+        holder.ismenyusui = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_menyusuiternak);
+        holder.iskering = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_keringternak);
+        holder.berat = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_beratbadan);
+        holder.umur = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_umurternak);
+        holder.produksi_susu = (TextView) view.findViewById(R.id.txt_listdetailternak_activity_pruduksisusu);
 
         ModelDetailTernalListDetailTernak ternak = new ModelDetailTernalListDetailTernak();
         ternak = data.get(position);
-        // Setting all values in listview
+        //Setting all values in listview
 
         holder.umur.setText(ternak.getUmur());
 
+        holder.nama_ternak.setText(ternak.getNama_ternak());
         holder.id_ternak.setText(ternak.getId_ternak());
-        holder.rfid.setText(ternak.getRfid());
+        //holder.rfid.setText(ternak.getRfid());
 
         holder.berat.setText(String.valueOf(ternak.getBerat()) + " Kg");
 
         if(ternak.getProduksisusu() != 0){
+            holder.linearlayout_produksi_susu.setVisibility(View.VISIBLE);
             holder.produksi_susu.setText("Produksi Susu : " + String.valueOf(ternak.getProduksisusu()));
         }else{
-            holder.produksi_susu.setVisibility(View.GONE);
+            holder.linearlayout_produksi_susu.setVisibility(View.GONE);
         }
 
         String isheat = "";
-        holder.isheat.setTextColor(Color.parseColor("#e74c3c"));
         if(ternak.getIs_heat() == 1){
             isheat = "Heat";
-            holder.isheat.setTextColor(Color.parseColor("#2ecc71"));
-
+            holder.img_heat.setBackgroundResource(R.drawable.ic_listternak_heat);
+        }else{
+            isheat = "Tidak Heat";
+            holder.img_heat.setBackgroundResource(R.drawable.ic_listternak_tdkheat);
         }
         holder.isheat.setText(isheat);
 
-        holder.ismenyusui.setTextColor(Color.parseColor("#e74c3c"));
         String ismenyusui = "";
         if(ternak.getIs_menyusui() == 1){
             ismenyusui = "Menyusui";
-            holder.ismenyusui.setTextColor(Color.parseColor("#2ecc71"));
+            holder.img_menyusui.setBackgroundResource(R.drawable.ic_listternak_menyusui);
+        }else{
+            ismenyusui = "Tidak Menyusui";
+            holder.img_menyusui.setBackgroundResource(R.drawable.ic_listternak_tdkmenyusui);
         }
         holder.ismenyusui.setText(ismenyusui);
 
-        holder.iskering.setTextColor(Color.parseColor("#e74c3c"));
         String iskering = "";
         if(ternak.getIs_dry() == 1){
             iskering = "Kering";
-            holder.iskering.setTextColor(Color.parseColor("#2ecc71"));
+            holder.img_kering.setBackgroundResource(R.drawable.ic_listternak_kering);
+        }else{
+            iskering = "Tidak Kering";
+            holder.img_kering.setBackgroundResource(R.drawable.ic_listternak_laktasi);
         }
         holder.iskering.setText(iskering);
 
 
-        String kesuburan = "Sedang tidak heat";
-        if(ternak.getIs_heat() == 1){
-            kesuburan = "Sedang Heat";
-        }
-
         int kondisi = Integer.parseInt(ternak.getBody_condition_score());
 
         if(kondisi >= 7) {
-            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_cow_green);
-            holder.kondisi_kesehatan.setTextColor(Color.parseColor("#2ecc71"));
+            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_body_condition_20);
         }
         else if(kondisi >= 5) {
-            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_cow_orange);
-            holder.kondisi_kesehatan.setTextColor(Color.parseColor("#e67e22"));
+            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_body_condition_20);
 
         }else if(kondisi >=0) {
-            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_cow_red);
-            holder.kondisi_kesehatan.setTextColor(Color.parseColor("#e74c3c"));
+            holder.img_kondisi_tubuh.setImageResource(R.drawable.ic_body_condition_20);
         }
         holder.kondisi_kesehatan.setText(getString_kondisi_tubuh(Integer.parseInt(ternak.getBody_condition_score())));
 
@@ -143,14 +148,15 @@ public class AdapterDetailTernakListDetailTernak extends ArrayAdapter<ModelDetai
     }
 
     public class ViewHolder {
-        public TextView id_ternak,kondisi_kesehatan, rfid, isheat,ismenyusui,iskering, berat, umur,produksi_susu;
-        public ImageView img_kondisi_tubuh;
+        public TextView id_ternak,nama_ternak,kondisi_kesehatan, isheat,ismenyusui,iskering, berat, umur,produksi_susu;
+        public ImageView img_kondisi_tubuh,img_heat,img_menyusui,img_kering;
+        public LinearLayout linearlayout_produksi_susu;
     }
 
     public String getString_kondisi_tubuh(int kondisi){
-        String string_kondisi="Tidak Diketahui";
+        String string_kondisi="N/A";
         if(kondisi>=7){
-                string_kondisi = "Baik";
+            string_kondisi = "Baik";
         }else if(kondisi<7&&kondisi>=5){
             string_kondisi = "Cukup Baik";
         }else if(kondisi>0&&kondisi<5){

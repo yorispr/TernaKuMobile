@@ -74,9 +74,9 @@ public class ListDetailTernakMain extends AppCompatActivity {
     DialogPlus dialog,dialogurut;
     boolean isFilter, isUrut;
     ArrayAdapter<String> adapterfilter,adapterurut;
-     View mProgressBarFooter;
+    View mProgressBarFooter;
     boolean isdashboardperiksa,isdashboardbelumperiksa, isdashboardsubur, isdashboardtidaksubur,isdashboardkehamilanlainnya, isdashboardmenyusui, isdashboardmelahirkan, isdashboardmengandung,
-            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya, isdashboardproduksi;
+            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya, isdashboardproduksi, isdashboardsakit,isdashboardsehat;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -102,6 +102,8 @@ public class ListDetailTernakMain extends AppCompatActivity {
         isdashboardmuda = false;
         isdashboardbayi = false;
         isdashboardbelumperiksa = false;
+        isdashboardsakit = false;
+        isdashboardsehat = false;
         isdashboardtidaksubur = false;
         isdashboardkehamilanlainnya = false;
         iskawananlainnya = false;
@@ -125,77 +127,83 @@ public class ListDetailTernakMain extends AppCompatActivity {
             }
         });
 
-            isFilter = false;
-            isUrut = false;
-            isloading = false;
-            mProgressBarFooter = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.footer_listview, null, false);
-            //list.addFooterView(mProgressBarFooter);
-            list.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView absListView, int i) {
+        isFilter = false;
+        isUrut = false;
+        isloading = false;
+        mProgressBarFooter = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.footer_listview, null, false);
+        //list.addFooterView(mProgressBarFooter);
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-                }
+            }
 
-                @Override
-                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    if (!isloading) {
-                        if (segment > 1) {
-                            final int lastItem = firstVisibleItem + visibleItemCount;
-                            if (lastItem == totalItemCount) {
-                                isloading = true;
-                                String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                                        + "&segment=" + segment;
-                                if(isdashboarddewasa){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakDewasa(), urlParameters);
-                                }
-                                else if(isdashboardsubur){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaTernakHeat(), urlParameters);
-                                }
-                                else if(isdashboardtidaksubur){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaTernakTidakHeat(), urlParameters);
-                                }
-                                else if(isdashboardmuda){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakHeifers(), urlParameters);
-                                }
-                                else if(isdashboardbayi){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakBayi(), urlParameters);
-                                }
-                                else if(iskawananlainnya){
-                                    new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakLainnya(), urlParameters);
-                                }
-                                else if(isdashboardperiksa){
-                                    new GetAllTernak().execute(url.getUrlGet_PeriksaHariIni(), urlParameters);
-                                }
-                                else if(isdashboardbelumperiksa){
-                                    new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
-                                }
-                                else if(isdashboardmengandung){
-                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMengandung(), urlParameters);
-                                }
-                                else if(isdashboardmenyusui){
-                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMenyusui(), urlParameters);
-                                }
-                                else if(isdashboardmelahirkan){
-                                    new GetAllTernak().execute(url.getUrlGet_KehamilanMelahirkan(), urlParameters);
-                                }
-                                else if(isdashboardkehamilanlainnya){
-                                    new GetAllTernak().execute(url.getUrlGet_KehamilanLainnya(), urlParameters);
-                                }
-                                else if(isdashboardproduksi){
-                                    new GetAllTernak().execute("http://service.ternaku.com/C_Ternak/GetSemuaProduksiSusuTernakByPeternakan", urlParameters);
-                                }
-                                else{
-                                    new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
-                                }
-                                Log.d("Scroll", "Bottom");
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (!isloading) {
+                    if (segment > 1) {
+                        final int lastItem = firstVisibleItem + visibleItemCount;
+                        if (lastItem == totalItemCount) {
+                            isloading = true;
+                            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                                    + "&segment=" + segment;
+                            if(isdashboarddewasa){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakDewasa(), urlParameters);
                             }
+                            else if(isdashboardsubur){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaTernakHeat(), urlParameters);
+                            }
+                            else if(isdashboardtidaksubur){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaTernakTidakHeat(), urlParameters);
+                            }
+                            else if(isdashboardmuda){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakHeifers(), urlParameters);
+                            }
+                            else if(isdashboardbayi){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakBayi(), urlParameters);
+                            }
+                            else if(iskawananlainnya){
+                                new GetAllTernak().execute(url.getUrlGet_SemuaKawananTernakLainnya(), urlParameters);
+                            }
+                            else if(isdashboardperiksa){
+                                new GetAllTernak().execute(url.getUrlGet_PeriksaHariIni(), urlParameters);
+                            }
+                            else if(isdashboardbelumperiksa){
+                                new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
+                            }
+                            else if(isdashboardsehat){
+                                new GetAllTernak().execute(url.getUrlGet_SehatHariIni(), urlParameters);
+                            }
+                            else if(isdashboardsakit){
+                                new GetAllTernak().execute(url.getUrlGet_SakitHariIni(), urlParameters);
+                            }
+                            else if(isdashboardmengandung){
+                                new GetAllTernak().execute(url.getUrlGet_KehamilanMengandung(), urlParameters);
+                            }
+                            else if(isdashboardmenyusui){
+                                new GetAllTernak().execute(url.getUrlGet_KehamilanMenyusui(), urlParameters);
+                            }
+                            else if(isdashboardmelahirkan){
+                                new GetAllTernak().execute(url.getUrlGet_KehamilanMelahirkan(), urlParameters);
+                            }
+                            else if(isdashboardkehamilanlainnya){
+                                new GetAllTernak().execute(url.getUrlGet_KehamilanLainnya(), urlParameters);
+                            }
+                            else if(isdashboardproduksi){
+                                new GetAllTernak().execute("http://service.ternaku.com/C_Ternak/GetSemuaProduksiSusuTernakByPeternakan", urlParameters);
+                            }
+                            else{
+                                new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
+                            }
+                            Log.d("Scroll", "Bottom");
                         }
                     }
                 }
+            }
 
-            });
-            animateList();
+        });
+        animateList();
 
 
         if(getIntent().hasExtra("periksa")) {
@@ -213,6 +221,23 @@ public class ListDetailTernakMain extends AppCompatActivity {
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
             new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
             getSupportActionBar().setTitle("Ternak belum periksa");
+
+        }
+        else if(getIntent().hasExtra("sehat")) {
+            isdashboardsehat = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            new GetAllTernak().execute(url.getUrlGet_SehatHariIni(), urlParameters);
+            getSupportActionBar().setTitle("Ternak sehat");
+
+        }
+        else if(getIntent().hasExtra("sakit")) {
+            isdashboardsakit = true;
+            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                    + "&segment=" + segment;
+            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
+            new GetAllTernak().execute(url.getUrlGet_SakitHariIni(), urlParameters);
+            getSupportActionBar().setTitle("Ternak sakit");
 
         }
         else if(getIntent().hasExtra("masasubur")) {
@@ -319,7 +344,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
             new GetAllTernak().execute(url.getUrlGet_SegmentList(), urlParameters);
 
         }
-            initButton();
+        initButton();
     }
 
 
@@ -355,16 +380,16 @@ public class ListDetailTernakMain extends AppCompatActivity {
                     list.removeFooterView(mProgressBarFooter);
                 }
                 else {*/
-                    if (segment == 1) {
-                        showTernak(s);
-                        Log.d("showternak", s);
-                        isloading = false;
-                    } else if (segment > 1) {
-                        showTernakMore(s);
-                        Log.d("showternakmore", s);
-                        isloading = false;
-                    }
-                    segment++;
+                if (segment == 1) {
+                    showTernak(s);
+                    Log.d("showternak", s);
+                    isloading = false;
+                } else if (segment > 1) {
+                    showTernakMore(s);
+                    Log.d("showternakmore", s);
+                    isloading = false;
+                }
+                segment++;
                 //}
             }
         }

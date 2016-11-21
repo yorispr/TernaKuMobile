@@ -53,42 +53,42 @@ public class UrlList {
 
     //Tambah Data==================================
     //Pindah Ternak++++++++++++++++
-        //Pindah Ternak------------
-        private String Url_InsertPindahTernak = Url_Utama + "C_Ternak/insertinsertHistoryPengelompokan";
-        //Tambah Kawanan-----------
-        private String Url_InsertKawanan = Url_Utama + "C_Ternak/insertKawanan";
-        //Tambah Kandang-----------
-        private String Url_InsertKandang = Url_Utama + "C_Ternak/insertKandang";
+    //Pindah Ternak------------
+    private String Url_InsertPindahTernak = Url_Utama + "C_Ternak/insertinsertHistoryPengelompokan";
+    //Tambah Kawanan-----------
+    private String Url_InsertKawanan = Url_Utama + "C_Ternak/insertKawanan";
+    //Tambah Kandang-----------
+    private String Url_InsertKandang = Url_Utama + "C_Ternak/insertKandang";
     //Kesuburan++++++++++++++++++++
-        //Tambah Mengandung--------
-        private String Url_InsertMengandung = Url_Utama + "C_HistoryInseminasi/UpdateStatusKehamilan";
-        //Tambah Inseminasi--------
-        private String Url_InsertInseminasi= Url_Utama + "C_HistoryInseminasi/insertInseminasi";
-        //Tambah Pemeriksaan Reproduksi--------
-        private String Url_InsertPemeriksaanReproduksi= Url_Utama + "C_HistoryKesehatan/InsertKesehatanReproduksi";
-        //Tambah Masa Subur--------
-        private String Url_InsertHeatMulai= Url_Utama + "C_HistoryKesehatan/HeatMulai";
-        private String Url_InsertHeatSelesai= Url_Utama + "C_HistoryKesehatan/HeatSelesai";
-        //Tambah Melahirkan--------
-        private String Url_InsertMelahirkan = Url_Utama + "C_HistoryInseminasi/UpdateStatusKelahiran";
-        //Tambah Menyusui----------
-        private String Url_InsertMenyusui = Url_Utama + "C_HistoryKesehatan/StatusMenyusui";
+    //Tambah Mengandung--------
+    private String Url_InsertMengandung = Url_Utama + "C_HistoryInseminasi/UpdateStatusKehamilan";
+    //Tambah Inseminasi--------
+    private String Url_InsertInseminasi= Url_Utama + "C_HistoryInseminasi/insertInseminasi";
+    //Tambah Pemeriksaan Reproduksi--------
+    private String Url_InsertPemeriksaanReproduksi= Url_Utama + "C_HistoryKesehatan/InsertKesehatanReproduksi";
+    //Tambah Masa Subur--------
+    private String Url_InsertHeatMulai= Url_Utama + "C_HistoryKesehatan/HeatMulai";
+    private String Url_InsertHeatSelesai= Url_Utama + "C_HistoryKesehatan/HeatSelesai";
+    //Tambah Melahirkan--------
+    private String Url_InsertMelahirkan = Url_Utama + "C_HistoryInseminasi/UpdateStatusKelahiran";
+    //Tambah Menyusui----------
+    private String Url_InsertMenyusui = Url_Utama + "C_HistoryKesehatan/StatusMenyusui";
     //Kesehatan++++++++++++++++++++
-        //Tambah Cek Kesehatan-----
-        private String Url_InsertCekKesehatan = Url_Utama + "C_HistoryKesehatan/InsertKesehatanUmum";
-        //Tambah Insert Vaksinasi--
-        private String Url_InsertVaksinasi = Url_Utama + "C_Vaksinasi/insertVaksinasi";
-        //Tambah Penyakit----------
-        private String Url_InsertPenyakit = Url_Utama + "C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness";
-        //Tambah Karantina---------
-        private String Url_InsertKarantinaMulai = Url_Utama + "C_HistoryKesehatan/KarantinaMulai";
-        private String Url_InsertKarantinaSelesai = Url_Utama + "C_HistoryKesehatan/KarantinaSelesai";
+    //Tambah Cek Kesehatan-----
+    private String Url_InsertCekKesehatan = Url_Utama + "C_HistoryKesehatan/InsertKesehatanUmum";
+    //Tambah Insert Vaksinasi--
+    private String Url_InsertVaksinasi = Url_Utama + "C_Vaksinasi/insertVaksinasi";
+    //Tambah Penyakit----------
+    private String Url_InsertPenyakit = Url_Utama + "C_HistoryKesehatan/InsertKesehatanKukuMastitisLameness";
+    //Tambah Karantina---------
+    private String Url_InsertKarantinaMulai = Url_Utama + "C_HistoryKesehatan/KarantinaMulai";
+    private String Url_InsertKarantinaSelesai = Url_Utama + "C_HistoryKesehatan/KarantinaSelesai";
     //Produksi++++++++++++++++++++
-        //Tambah Masa Kering-------
-        private String UrlInsertMasaKeringMulai = Url_Utama + "C_HistoryKesehatan/MasaKeringMulai";
-        private String UrlInsertMasaKeringSelesai = Url_Utama + "C_HistoryKesehatan/MasaKeringSelesai";
-        //Tambah Culling-----------
-        private String UrlInsertCulling = Url_Utama + "C_HistoryKesehatan/UpdateCulling";
+    //Tambah Masa Kering-------
+    private String UrlInsertMasaKeringMulai = Url_Utama + "C_HistoryKesehatan/MasaKeringMulai";
+    private String UrlInsertMasaKeringSelesai = Url_Utama + "C_HistoryKesehatan/MasaKeringSelesai";
+    //Tambah Culling-----------
+    private String UrlInsertCulling = Url_Utama + "C_HistoryKesehatan/UpdateCulling";
 
     //Pengingat====================================
     private String UrlInsert_Reminder = Url_Utama + "C_Fcm/send_message";
@@ -97,36 +97,40 @@ public class UrlList {
     private String UrlGetLaporanKeuanganList = Url_Utama + "C_Laporan/UangKeluarMasuk_PETERNAKAN_HARI";
     private String UrlGetLaporanKeuanganGrafik_Masuk = Url_Utama + "C_Laporan/UangMasuk_PETERNAKAN_BULAN_TERTENTU";
     private String UrlGetLaporanKeuanganGrafik_Keluar = Url_Utama + "C_Laporan/UangKeluar_PETERNAKAN_BULAN_TERTENTU";
+    private String UrlGetlaporanAll = Url_Utama + "C_Laporan/GetDataLaporan";
 
 
     //ListDetailTernak=============================
+    //Kesehatan+++++++++++++++++++
+    private String UrlGet_SehatHariIni = Url_Utama + "C_Ternak/GetTernakSehatByPeternakan";
+    private String UrlGet_SakitHariIni = Url_Utama + "C_Ternak/GetTernakTidakSehatByPeternakan";
     //Pemeriksaan+++++++++++++++++
-        private String UrlGet_PeriksaHariIni = Url_Utama + "C_Ternak/GetPeriksaHariIni";
-        private String UrlGet_BelumPeriksaHariIni = Url_Utama + "C_Ternak/GetBelumPeriksaHariIni";
+    private String UrlGet_PeriksaHariIni = Url_Utama + "C_Ternak/GetPeriksaHariIni";
+    private String UrlGet_BelumPeriksaHariIni = Url_Utama + "C_Ternak/GetBelumPeriksaHariIni";
     //Kesuburan+++++++++++++++++++
-        private String UrlGet_SemuaTernakHeat = Url_Utama + "C_Ternak/GetSemuaTernakHeatByPeternakan";
-        private String UrlGet_SemuaTernakTidakHeat = Url_Utama + "C_Ternak/GetSemuaTernakTidakHeatByPeternakan";
+    private String UrlGet_SemuaTernakHeat = Url_Utama + "C_Ternak/GetSemuaTernakHeatByPeternakan";
+    private String UrlGet_SemuaTernakTidakHeat = Url_Utama + "C_Ternak/GetSemuaTernakTidakHeatByPeternakan";
     //Kawanan+++++++++++++++++++++
-        private String UrlGet_SemuaKawananTernakDewasa = Url_Utama + "C_Ternak/GetSemuaTernakDewasaByPeternakan";
-        private String UrlGet_SemuaKawananTernakHeifers = Url_Utama + "C_Ternak/GetSemuaTernakHeifersByPeternakan";
-        private String UrlGet_SemuaKawananTernakBayi = Url_Utama + "C_Ternak/GetSemuaTernakBayiByPeternakan";
-        private String UrlGet_SemuaKawananTernakLainnya = Url_Utama + "C_Ternak/GetSemuaTernakLainnyaByPeternakan";
+    private String UrlGet_SemuaKawananTernakDewasa = Url_Utama + "C_Ternak/GetSemuaTernakDewasaByPeternakan";
+    private String UrlGet_SemuaKawananTernakHeifers = Url_Utama + "C_Ternak/GetSemuaTernakHeifersByPeternakan";
+    private String UrlGet_SemuaKawananTernakBayi = Url_Utama + "C_Ternak/GetSemuaTernakBayiByPeternakan";
+    private String UrlGet_SemuaKawananTernakLainnya = Url_Utama + "C_Ternak/GetSemuaTernakLainnyaByPeternakan";
     //Data Kehamilan++++++++++++++
-        private String UrlGet_KehamilanMenyusui = Url_Utama + "C_Ternak/GetSemuaTernakMenyusuiByPeternakan";
-        private String UrlGet_KehamilanMelahirkan = Url_Utama + "C_Ternak/GetSemuaTernakMelahirkanByPeternakan";
-        private String UrlGet_KehamilanMengandung = Url_Utama + "C_Ternak/GetSemuaTernakHamilByPeternakan";
-        private String UrlGet_KehamilanLainnya = Url_Utama + "C_Ternak/GetSemuaTernakTidakHamilMelahirkanMenyusuiBulanIniByPeternakan";
+    private String UrlGet_KehamilanMenyusui = Url_Utama + "C_Ternak/GetSemuaTernakMenyusuiByPeternakan";
+    private String UrlGet_KehamilanMelahirkan = Url_Utama + "C_Ternak/GetSemuaTernakMelahirkanByPeternakan";
+    private String UrlGet_KehamilanMengandung = Url_Utama + "C_Ternak/GetSemuaTernakHamilByPeternakan";
+    private String UrlGet_KehamilanLainnya = Url_Utama + "C_Ternak/GetSemuaTernakTidakHamilMelahirkanMenyusuiBulanIniByPeternakan";
     private String UrlGet_SegmentList = Url_Utama + "C_Ternak/GetSemuaTernakByPeternakanOnSegment";
 
 
     //DetailTernak=================================
     //Profile+++++++++++++++++++++
-        private String UrlGet_TernakProfile = Url_Utama + "C_Ternak/GetTernakUmum";
+    private String UrlGet_TernakProfile = Url_Utama + "C_Ternak/GetTernakUmum";
     //Event+++++++++++++++++++++++
-        private String UrlGet_TernakEvent = Url_Utama + "C_Ternak/GetTernakUmumEvent";
+    private String UrlGet_TernakEvent = Url_Utama + "C_Ternak/GetTernakUmumEvent";
     //Task++++++++++++++++++++++++
-        private String Url_InsertTask = Url_Utama + "C_Ternak/insertTask";
-        private String UrlGet_TernakTask = Url_Utama + "C_Ternak/GetTask";
+    private String Url_InsertTask = Url_Utama + "C_Ternak/insertTask";
+    private String UrlGet_TernakTask = Url_Utama + "C_Ternak/GetTask";
 
     //Handling=====================================
     private String UrlGet_RFIDanIdCek = Url_Utama + "C_Handling/cekIDTernakTerdaftar";
@@ -135,6 +139,18 @@ public class UrlList {
 
     public UrlList(){
 
+    }
+
+    public String getUrlGetlaporanAll() {
+        return UrlGetlaporanAll;
+    }
+
+    public String getUrlGet_SehatHariIni() {
+        return UrlGet_SehatHariIni;
+    }
+
+    public String getUrlGet_SakitHariIni() {
+        return UrlGet_SakitHariIni;
     }
 
     public String getUrl_GetIdRFID() {
