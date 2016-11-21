@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtSearchDialogKawanan"
+        android:layout_gravity="center_horizontal"
+        android:drawableRight="@drawable/ic_action_search"
+        android:hint="Pencarian"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_kawanan_dial"
+        android:dividerHeight="0.01dip"
+        android:divider="@color/half_black"
+
+        android:layout_weight="1.20" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Batal"
+        android:id="@+id/btnbtl"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#FFFFFF"
+        android:background="@color/colorPrimary" />
+</LinearLayout>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80FFFFFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_selector_date_picker_laporan"
+        android:layout_margin="5dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_listdetailternak_activity_nameternak"
+            android:textColor="#000"
+            android:text="Nama Ternak"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textAlignment="center" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_listdetailternak_activity_idternak"
+            android:textColor="#95a5a6"
+            android:text="Id Ternak"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textAlignment="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginBottom="5dp">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/img_listdetailternak_activity_kondisitubuh"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_weight="1"
+                android:src="@drawable/ic_body_condition_20"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kondisi"
+                    android:textColor="#000"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_listdetailternak_activity_kondisitubuh"
+                    android:text="Cukup Baik"
+                    android:textColor="#95a5a6"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Berat"
+                    android:textColor="#000"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_listdetailternak_activity_beratbadan"
+                    android:text="0.0 Kg"
+                    android:textColor="#95a5a6"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_listdetailternak_activity_umurternak"
+            android:textColor="#000"
+            android:text="1 Tahun 2 Bulan 2 Hari"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textAlignment="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_listdetailternak_activity_heatternak"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_listternak_heat"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_listdetailternak_activity_heatternak"
+                    android:textColor="#000"
+                    android:text="Heat"
+                    android:visibility="gone"
+                    android:textSize="10sp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_listdetailternak_activity_menyusuiternak"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_listternak_menyusui" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_listdetailternak_activity_menyusuiternak"
+                    android:textColor="#000"
+                    android:text="Menyusui"
+                    android:visibility="gone"
+                    android:textSize="10sp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_listdetailternak_activity_keringternak"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_listternak_kering" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_listdetailternak_activity_keringternak"
+                    android:textColor="#000"
+                    android:text="Kering"
+                    android:visibility="gone"
+                    android:textSize="10sp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearlayout_listternak_activity_produksisusu">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Produksi Susu"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textAlignment="center" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_listdetailternak_activity_pruduksisusu"
+                android:textColor="#95a5a6"
+                android:text="5 Liter"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

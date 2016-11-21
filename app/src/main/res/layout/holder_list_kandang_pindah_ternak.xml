@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="10dp">
+
+    <TextView
+        android:id="@+id/txtNamaKawanan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:text="Nama Kandang"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#000000"
+        android:textStyle="bold"
+
+        android:layout_marginLeft="10dp"
+        android:layout_alignEnd="@+id/txtKeteranganKawanan"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/txtKeteranganKawanan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:text="Keterangan kandang"
+        android:drawableLeft="@drawable/ic_location_on"
+
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtNamaKawanan"
+        android:textColor="#000000"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

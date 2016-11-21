@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "694831779867",
+    "firebase_url": "https://ternakku-b96ba.firebaseio.com",
+    "project_id": "ternakku-b96ba",
+    "storage_bucket": "ternakku-b96ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694831779867:android:0e32b779ee17096e",
+        "android_client_info": {
+          "package_name": "com.fintech.ternaku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694831779867-0f9oust2elalq2iqoindm1on55s92l62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyIg6q6W4QRIqDJUSO3Zq9ck0XLZWnM1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ic_action_add_peternak"
+        android:icon="@drawable/ic_action_user"
+        android:title="Add Ternak"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/ic_action_add_ternak"
+        android:icon="@drawable/ic_action_add_white"
+        android:title="Add Ternak"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_pakan"
+        android:icon="@drawable/ic_action_restaurant"
+        android:title="Add Pakan"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_produksisusu"
+        android:icon="@drawable/ic_action_filter"
+        android:title="Add Produksi Susu"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_batasproduksisusu"
+        android:icon="@drawable/ic_action_line_chart_white"
+        android:title="Add Produksi Susu"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/ic_action_cancel"
+        android:icon="@drawable/ic_action_cancel"
+        android:title="Refresh"
+        app:showAsAction="ifRoom" />
+
+</menu>

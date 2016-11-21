@@ -1,0 +1,28 @@
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="change_peternakan"
+        android:icon="@drawable/ic_action_home"
+        android:title="Ubah Data Peternakan">
+    </Preference>
+
+    <Preference
+        android:key="change_password"
+        android:icon="@drawable/ic_security_24"
+        android:title="Ganti Password" >
+    </Preference>
+
+    <Preference
+        android:key="change_peternak"
+        android:icon="@drawable/ic_account_circle_24"
+        android:title="Perbarui Profil Peternak" >
+    </Preference>
+
+    <Preference
+        android:key="bluetooth_setting"
+        android:icon="@drawable/ic_action_bluetooth"
+        android:title="Bluetooth" >
+    </Preference>
+
+</PreferenceScreen>
