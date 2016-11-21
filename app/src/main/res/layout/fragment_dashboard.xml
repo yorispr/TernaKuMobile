@@ -69,7 +69,6 @@
                 android:orientation="vertical"
                 android:id="@+id/linearlayout_dashboard_fragment_content"
                 android:layout_below="@+id/linearlayout_dashboard_fragment_namapeternakan">
-
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_produksisusu"
                     android:layout_width="fill_parent"
@@ -200,159 +199,11 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/buttonexpander_dashboard_fragment_kesehatan"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#CDDC39"
-                    android:textColor="#fff"
-                    android:layout_marginTop="10dp"
-                    android:elevation="5dp"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:weightSum="8">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_kesehatan"
-                            android:text=" Kesehatan"
-                            android:layout_marginLeft="3dp"
-                            android:textColor="#fff"
-                            android:layout_weight="4"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:gravity="center_vertical"/>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:orientation="horizontal"
-                            android:gravity="right"
-                            android:layout_gravity="center_vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/txtbtn_dashboard_fragment_tidaksakit"
-                                android:text="5 "
-                                android:textSize="15dp"
-                                android:textColor="#2ecc71"
-                                android:drawableLeft="@drawable/ic_periksa_dashboard_btn"
-                                android:textAppearance="@android:style/TextAppearance.Small"
-                                android:layout_gravity="center_vertical"
-                                android:textAlignment="textEnd"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/txtbtn_dashboard_fragment_sakit"
-                                android:text="20 "
-                                android:textSize="15dp"
-                                android:drawableLeft="@drawable/ic_blmperiksa_dashboard_btn"
-                                android:textAppearance="@android:style/TextAppearance.Small"
-                                android:textColor="#e74c3c"
-                                android:layout_gravity="center_vertical"
-                                android:textAlignment="textEnd"/>
-                        </LinearLayout>
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/arrow_down_float"
-                            android:layout_gravity="center_vertical"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
-                    android:id="@+id/expanderlayout_dashboard_fragment_kesehatan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#fff"
-                    app:ael_duration="400"
-                    app:ael_expanded="false"
-                    app:ael_interpolator="linearOutSlowIn"
-                    app:ael_orientation="vertical"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_alignStart="@+id/buttonexpander_dashboard_fragment_kesehatan"
-                    android:layout_below="@+id/buttonexpander_dashboard_fragment_kesehatan"
-                    android:layout_alignEnd="@+id/buttonexpander_dashboard_fragment_kesehatan">
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1">
-                            <lecho.lib.hellocharts.view.PieChartView
-                                android:id="@+id/chart_dashboard_fragment_kesehatan"
-                                android:layout_width="match_parent"
-                                android:layout_height="170dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_marginTop="10dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:layout_gravity="center_vertical|left">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginLeft="5dp">
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-                                    <ImageView
-                                        android:layout_width="20dp"
-                                        android:layout_height="20dp"
-                                        android:src="@drawable/ic_periksa_dashboard"
-                                        android:layout_gravity="center_vertical"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?android:attr/textAppearanceSmall"
-                                        android:text="Sapi Sehat"
-                                        android:textColor="#2ecc71"
-                                        android:layout_marginLeft="8dp"
-                                        android:layout_gravity="bottom"/>
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_marginTop="7dp">
-                                    <ImageView
-                                        android:layout_width="20dp"
-                                        android:layout_height="20dp"
-                                        android:src="@drawable/ic_blmperiksa_dashboard"
-                                        android:layout_gravity="center_vertical" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?android:attr/textAppearanceSmall"
-                                        android:text="Sapi Sakit"
-                                        android:textColor="#e74c3c"
-                                        android:layout_marginLeft="8dp"
-                                        android:layout_gravity="bottom"/>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_pemeriksaanhariini"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFA726"
+                    android:background="@color/colorPrimary"
                     android:textColor="#fff"
                     android:layout_marginTop="10dp"
                     android:elevation="5dp"
@@ -436,7 +287,7 @@
                             android:layout_weight="1">
                             <lecho.lib.hellocharts.view.PieChartView
                                 android:id="@+id/chart_dashboard_fragment_pemeriksaanhariini"
-                                android:layout_width="match_parent"
+                                android:layout_width="170dp"
                                 android:layout_height="170dp"
                                 android:layout_below="@+id/textView10"
                                 android:layout_alignParentStart="true"
@@ -499,12 +350,11 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_sapidalammasasubur"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="#8D6E63"
+                    android:background="#3a9bff"
                     android:textColor="#fff"
                     android:layout_marginTop="10dp"
                     android:elevation="5dp"
@@ -587,7 +437,7 @@
                             android:layout_weight="1">
                             <lecho.lib.hellocharts.view.PieChartView
                                 android:id="@+id/chart_dashboard_fragment_sedangdalammasasubur"
-                                android:layout_width="match_parent"
+                                android:layout_width="170dp"
                                 android:layout_height="170dp"
                                 android:layout_marginTop="10dp" />
                         </LinearLayout>
@@ -647,7 +497,6 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_datakehamilan"
                     android:layout_width="fill_parent"
@@ -757,7 +606,7 @@
                             android:layout_weight="1">
                             <lecho.lib.hellocharts.view.PieChartView
                                 android:id="@+id/chart_dashboard_fragment_datakehamilan"
-                                android:layout_width="match_parent"
+                                android:layout_width="170dp"
                                 android:layout_height="170dp"
                                 android:layout_alignParentStart="true" />
                         </LinearLayout>
@@ -859,7 +708,6 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_datakawanan"
                     android:layout_width="fill_parent"
@@ -969,7 +817,7 @@
                             android:layout_weight="1">
                             <lecho.lib.hellocharts.view.PieChartView
                                 android:id="@+id/chart_dashboard_fragment_datakawanan"
-                                android:layout_width="match_parent"
+                                android:layout_width="170dp"
                                 android:layout_height="170dp" />
                         </LinearLayout>
                         <LinearLayout
@@ -1070,6 +918,180 @@
                         </LinearLayout>
                     </LinearLayout>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#34495e"
+                    android:textColor="#fff"
+                    android:layout_marginTop="10dp"
+                    android:elevation="5dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:weightSum="8">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_pakan_dashboard"
+                            android:text=" Skor Berat Badan"
+                            android:layout_marginLeft="3dp"
+                            android:textColor="#fff"
+                            android:layout_weight="4"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:gravity="center_vertical"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:orientation="vertical"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtbtn_dashboard_fragment_bscore2"
+                                android:text="5 Kg "
+                                android:textSize="12dp"
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:textColor="#fff"
+                                android:gravity="center_vertical"
+                                android:textAlignment="textEnd"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtbtn_dashboard_fragment_bscore"
+                                android:textSize="12dp"
+                                android:text="Rp 20.000.000 "
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:textColor="#fff"
+                                android:gravity="center_vertical"
+                                android:textAlignment="textEnd"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/arrow_down_float"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+                    android:id="@+id/expanderlayout_dashboard_fragment_bodyscore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    app:ael_duration="400"
+                    app:ael_expanded="false"
+                    app:ael_interpolator="linearOutSlowIn"
+                    app:ael_orientation="vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_alignStart="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_below="@+id/buttonexpander_dashboard_fragment_bodyscore"
+                    android:layout_alignEnd="@+id/buttonexpander_dashboard_fragment_bodyscore">
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+                            <lecho.lib.hellocharts.view.PieChartView
+                                android:id="@+id/chart_dashboard_fragment_bodyscore"
+                                android:layout_width="170dp"
+                                android:layout_height="170dp"
+                                android:layout_alignParentStart="true" />
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical|center_horizontal|center">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:layout_marginLeft="5dp">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbsempurna"
+                                            android:text="BB Sempurna "
+                                            android:textSize="15dp"
+                                            android:textColor="#4183D7"
+                                            android:drawableLeft="@drawable/ic_ternakdewasa_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbbagus"
+                                            android:text="BB Bagus"
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_ternakmuda_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#59ABE3"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbsedang"
+                                            android:text="BB Sedang "
+                                            android:textSize="15dp"
+                                            android:textColor="#8bdafc"
+                                            android:drawableLeft="@drawable/ic_ternakbayi_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bbkurang"
+                                            android:text="BB Kurang "
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_lainnyahamil_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#bdc3c7"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/txtbtn_dashboard_fragment_bblainnya"
+                                            android:text="Lainnya "
+                                            android:textSize="15dp"
+                                            android:drawableLeft="@drawable/ic_lainnyahamil_dashboard_btn"
+                                            android:textAppearance="@android:style/TextAppearance.Small"
+                                            android:textColor="#bdc3c7"
+                                            android:layout_gravity="center_vertical"
+                                            android:textAlignment="textEnd"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
 
                 <LinearLayout
                     android:id="@+id/buttonexpander_dashboard_fragment_totalpakan"

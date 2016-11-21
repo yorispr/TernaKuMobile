@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -28,20 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
-import com.fintech.ternaku.Main.Laporan.Keuangan.DemoBase;
 import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuangan;
 import com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik;
 import com.fintech.ternaku.Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan;
 import com.fintech.ternaku.Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
-import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -52,32 +43,54 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
-import java.util.List;
 import java.util.Locale;
 
 import lecho.lib.hellocharts.model.Line;
 import me.wangyuwei.loadingview.LoadingView;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class LaporanFragment extends Fragment {
-    private NavigationTabBar navbar_laporan_fragment_pilih ;
-    private ArrayList<NavigationTabBar.Model> models5 = new ArrayList<>();
-    ListView listview_laporan_keuangan,listview_laporan_kesehatan;
-    ProgressDialog progDialog;
-    String bln,thn,bln_angka,jenis_transaksi;
-    String json;
-    ArrayList<Float> list_value_grafik_laporan_keuangan = new ArrayList<Float>();
-    ArrayList<Float> list_value_grafik_laporan_kesehatan = new ArrayList<Float>();
+    private LoadingView prog_laporan_fragment;
+    private Spinner spinner_laporan_fragment_bulan,spinner_laporan_fragment_tahun;
+    private int flag_tahun=0,flag_bulan=0;
+    private TextView txt_laporan_fragment_pilihbulan;
+    private LinearLayout linearLayout_laporan_fragment_pilihtgl;
+
+    //Declare Laporan Keuangan----------------------------------------
+    private LinearLayout linearLayout_laporan_fragment_laporankeuangan;
+    private DialogPlus dialog_pilih_tanggal_laporan;
+    private TextView txt_laporan_fragment_keuanganpembelianpakan,
+            txt_laporan_fragment_keuanganpembelianobat,
+            txt_laporan_fragment_keuanganpembelianvaksin,
+            txt_laporan_fragment_keuanganpembeliansemen,
+            txt_laporan_fragment_keuanganpemeriksaankesehatan,
+            txt_laporan_fragment_keuanganpembelianperlengkapan,
+            txt_laporan_fragment_keuanganpembelianternak,
+            txt_laporan_fragment_keuanganpembelianlistrik,
+            txt_laporan_fragment_keuanganpembelianlainnya,
+            txt_laporan_fragment_keuanganpenjualanternak,
+            txt_laporan_fragment_keuanganpenjualanpupuk,
+            txt_laporan_fragment_keuanganpenjualansusu,
+            txt_laporan_fragment_keuanganpenjualanlainnya;
+    private LinearLayout linearLayout_laporan_fragment_pengeluaranpakan,
+            linearLayout_laporan_fragment_pengeluaranobat,
+            linearLayout_laporan_fragment_pengeluaranvaksin,
+            linearLayout_laporan_fragment_pengeluaransemen,
+            linearLayout_laporan_fragment_pengeluarankesehatan,
+            linearLayout_laporan_fragment_pengeluaranperlengkapan,
+            linearLayout_laporan_fragment_pengeluaranternak,
+            linearLayout_laporan_fragment_pengeluaranlistrik,
+            linearLayout_laporan_fragment_pengeluaranlainnya,
+            linearLayout_laporan_fragment_pemasukanternak,
+            linearLayout_laporan_fragment_pemasukankompos,
+            linearLayout_laporan_fragment_pemasukansusu,
+            linearLayout_laporan_fragment_pemasukanlainnya;
+    private Button button_laporan_fragment_grafikkeuangan;
+    private String bln_selected,thn_selected,bln_selected_angka;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
-
-    //Loading------------------------------------------------------------
-    private LoadingView loading_view_laporan;
 
     public LaporanFragment() {
         // Required empty public constructor
@@ -90,99 +103,250 @@ public class LaporanFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_laporan, container, false);
 
-        listview_laporan_keuangan = (ListView) view.findViewById(R.id.list_laporan_keuangan);
-        listview_laporan_kesehatan = (ListView) view.findViewById(R.id.list_laporan_kesehatan);
+        //Set Layout------------------------------------------------------------
+        txt_laporan_fragment_pilihbulan = (TextView) view.findViewById(R.id.txt_laporan_fragment_pilihbulan);
+        linearLayout_laporan_fragment_laporankeuangan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_laporankeuangan);
+        linearLayout_laporan_fragment_pilihtgl = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pilihtgl);
 
-        //Loading UI--------------------------------------------------------
-        loading_view_laporan = (LoadingView) view.findViewById(R.id.loading_view_laporan);
-        InitiateFragment();
 
-        navbar_laporan_fragment_pilih = (NavigationTabBar) view.findViewById(R.id.navbar_laporan_fragment_pilih);
-        ArrayList<NavigationTabBar.Model> models5 = new ArrayList<>();
-        models5.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_action_calculator), Color.WHITE
-                ).title("Keuangan")
-                .build()
-        );
-        models5.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_milk_production),  Color.WHITE
-                ).title("Kesehatan")
-                .build()
-        );
-        models5.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_fourth),  Color.WHITE
-                ).title("Perlengkapan")
-                .build()
-        );
-        navbar_laporan_fragment_pilih.setModels(models5);
-        navbar_laporan_fragment_pilih.setModelIndex(0, true);
-        navbar_laporan_fragment_pilih.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+        //Declare Laporan Keuangan-----------------------------------------------
+        txt_laporan_fragment_keuanganpembelianpakan = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianpakan);
+        txt_laporan_fragment_keuanganpembelianobat = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianobat);
+        txt_laporan_fragment_keuanganpembelianvaksin = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianvaksin);
+        txt_laporan_fragment_keuanganpembeliansemen = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembeliansemen);
+        txt_laporan_fragment_keuanganpemeriksaankesehatan = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpemeriksaankesehatan);
+        txt_laporan_fragment_keuanganpembelianperlengkapan = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianperlengkapan);
+        txt_laporan_fragment_keuanganpembelianternak = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianternak);
+        txt_laporan_fragment_keuanganpembelianlistrik = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianlistrik);
+        txt_laporan_fragment_keuanganpembelianlainnya = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpembelianlainnya);
+        txt_laporan_fragment_keuanganpenjualanternak = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpenjualanternak);
+        txt_laporan_fragment_keuanganpenjualanpupuk = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpenjualanpupuk);
+        txt_laporan_fragment_keuanganpenjualansusu = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpenjualansusu);
+        txt_laporan_fragment_keuanganpenjualanlainnya = (TextView) view.findViewById(R.id.txt_laporan_fragment_keuanganpenjualanlainnya);
+
+        //Declare Button Laporan Keuangan----------------------------------------
+        linearLayout_laporan_fragment_pengeluaranpakan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranpakan);
+        linearLayout_laporan_fragment_pengeluaranpakan.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
-
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Pakan");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
             }
-
+        });
+        linearLayout_laporan_fragment_pengeluaranobat = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranobat);
+        linearLayout_laporan_fragment_pengeluaranobat.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-                if(index==0){
-                    listview_laporan_keuangan.setVisibility(View.VISIBLE);
-                    listview_laporan_kesehatan.setVisibility(View.GONE);
-                }
-                if(index==1){
-                    listview_laporan_keuangan.setVisibility(View.GONE);
-                    listview_laporan_kesehatan.setVisibility(View.VISIBLE);
-                }
-                if(index==2){
-                    listview_laporan_keuangan.setVisibility(View.GONE);
-                    listview_laporan_kesehatan.setVisibility(View.GONE);
-                }
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Obat");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranvaksin = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranvaksin);
+        linearLayout_laporan_fragment_pengeluaranvaksin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Vaksin");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaransemen = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaransemen);
+        linearLayout_laporan_fragment_pengeluaransemen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Semen");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluarankesehatan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluarankesehatan);
+        linearLayout_laporan_fragment_pengeluarankesehatan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pemeriksaan Kesehatan Sapi");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranperlengkapan = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranperlengkapan);
+        linearLayout_laporan_fragment_pengeluaranperlengkapan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Perlengkapan");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranternak = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranternak);
+        linearLayout_laporan_fragment_pengeluaranternak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembelian Ternak");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranlistrik = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranlistrik);
+        linearLayout_laporan_fragment_pengeluaranlistrik.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pembayaran Listrik");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pengeluaranlainnya = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pengeluaranlainnya);
+        linearLayout_laporan_fragment_pengeluaranlainnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pengeluaran Lainnya");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukanternak = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukanternak);
+        linearLayout_laporan_fragment_pemasukanternak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Ternak");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukankompos = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukankompos);
+        linearLayout_laporan_fragment_pemasukankompos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Kompos");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukansusu = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukansusu);
+        linearLayout_laporan_fragment_pemasukansusu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Penjualan Susu");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+        linearLayout_laporan_fragment_pemasukanlainnya = (LinearLayout) view.findViewById(R.id.linearLayout_laporan_fragment_pemasukanlainnya);
+        linearLayout_laporan_fragment_pemasukanlainnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putString("bln",bln_selected);
+                b.putString("thn",thn_selected);
+                b.putString("bln_angka",bln_selected_angka);
+                b.putString("jenis_transaksi","Pemasukan Lainnya");
+                Intent intent = new Intent(getActivity(),LaporanKeuanganGrafik.class);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
 
-        //Get Bundle-------------------------------------------------------
-        bln = "November";
-        thn = "2016";
-        bln_angka = "11";
-        jenis_transaksi = "Pembelian Vaksin";
+        //Loading Bar------------------------------------------------------------
+        prog_laporan_fragment = (LoadingView) view.findViewById(R.id.loading_view_dashboard);
 
-        //Get Data From Web Service------------------------------------------------
-        String param = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null)
-                +"&bulan=" + bln.trim()
-                +"&tahun=" + thn.trim();
-        new GetDataKeuanganMasuk().execute(url.getUrlGetlaporanAll(),param);
+        //Set All Action---------------------------------------------------------
+        initiate();
+        InitiateData();
+        dialog_datepicker_laporan_initiate();
+        linearLayout_laporan_fragment_pilihtgl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_pilih_tanggal_laporan.show();
+            }
+        });
 
 
 
         return  view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        navbar_laporan_fragment_pilih.onPageSelected(0);
+    //Convert Currency---------------------------------------------------
+    public String Convert(String jumlahbiaya)
+    {
+        String currencyCode = "IDR";
+        Currency currency = Currency.getInstance(currencyCode);
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(0);
+        format.setCurrency(currency);
+        String formattedAmount = format.format(jumlahbiaya);
 
+        return formattedAmount;
     }
 
-    //Initiate Fragment----------------------------------------------------
-    private void InitiateFragment(){
-        loading_view_laporan.setVisibility(View.VISIBLE);
-        listview_laporan_keuangan.setVisibility(View.GONE);
-        listview_laporan_kesehatan.setVisibility(View.GONE);
-    }
-    private void RefreshFragment(){
-        loading_view_laporan.setVisibility(View.GONE);
-        listview_laporan_keuangan.setVisibility(View.VISIBLE);
-    }
-
-    //Get Data From Web Service---------------------------------------------------
-    private class GetDataKeuanganMasuk extends AsyncTask<String,Integer,String> {
+    //Get Data Keuangan Laporan-------------------------------------------------
+    private class GetDataKeuanganLaporan extends AsyncTask<String,Integer,String>{
 
         @Override
         protected void onPreExecute() {
-            loading_view_laporan.start();
+            prog_laporan_fragment.setVisibility(View.VISIBLE);
+            prog_laporan_fragment.start();
         }
 
         @Override
@@ -193,263 +357,264 @@ public class LaporanFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Log.d("RESGrafikKeuangan",result);
-            SetList(result);
-            loading_view_laporan.stop();
-            RefreshFragment();
+        protected void onPostExecute(String s) {
+            Log.d("Laporan_Keuangan",s);
+            ShowLaporanKeuangan(s);
+            prog_laporan_fragment.setVisibility(View.GONE);
+            prog_laporan_fragment.stop();
+            linearLayout_laporan_fragment_laporankeuangan.setVisibility(View.VISIBLE);
+
         }
     }
 
-    private void SetList(String JSON){
-        String Jenis_Grafik="N/A";
-        int total_data_grafik=0;
-        LineData temp_data_grafik;
-        ArrayList<ModelLaporanKeuanganGrafik> temp_list_set_keuangan = new ArrayList<ModelLaporanKeuanganGrafik>();
-        ArrayList<ModelLaporanKeuanganGrafik> temp_list_set_kesehatan = new ArrayList<ModelLaporanKeuanganGrafik>();
+    //Initiate------------------------------------------------------------------
+    private void initiate(){
+        prog_laporan_fragment.setVisibility(View.GONE);
+        linearLayout_laporan_fragment_laporankeuangan.setVisibility(View.GONE);
+    }
+    private void InitiateData(){
+        String[] bulan_array = {
+                "Januari",
+                "Februari",
+                "Maret",
+                "April",
+                "Mei",
+                "Juni",
+                "Juli",
+                "Agustus",
+                "September",
+                "Oktober",
+                "November",
+                "Desember"};
+        Calendar cal = Calendar.getInstance(Locale.getDefault());
+        String bulan = bulan_array[cal.get(Calendar.MONTH)];
+        String tahun = String.valueOf(cal.get(Calendar.YEAR));
+        txt_laporan_fragment_pilihbulan.setText(bulan.trim()
+                + ", " + String.valueOf(tahun.trim()));
+        bln_selected = bulan_array[cal.get(Calendar.MONTH)];
+        thn_selected = String.valueOf(cal.get(Calendar.YEAR));
+        bln_selected_angka = String.valueOf(cal.get(Calendar.MONTH));
 
-        try{
-            JSONArray jArray = new JSONArray(JSON);
+        //Set Data------------------------------------------------------------
+        String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                +"&bulan=" + bulan.trim()
+                +"&tahun=" + tahun.trim();
+        Log.d("CekUrl",param);
+        new GetDataKeuanganLaporan().execute(url.getUrlGetLaporanKeuanganList(), param);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initiate();
+        InitiateData();
+
+    }
+
+    //DialogBox Initiate--------------------------------------------------------
+    private void dialog_datepicker_laporan_initiate(){
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View view = layoutInflater.inflate(R.layout.dialog_picker_laporan,null);
+
+        //Set Picker Bulan------------------------------
+        final String[] bulan = {
+                "Januari",
+                "Februari",
+                "Maret",
+                "April",
+                "Mei",
+                "Juni",
+                "Juli",
+                "Agustus",
+                "September",
+                "Oktober",
+                "November",
+                "Desember"};
+        final NumberPicker numberPicker_laporan_bulan = (NumberPicker) view.findViewById(R.id.numberPicker_laporan_bulan);
+        numberPicker_laporan_bulan.setMinValue(0);
+        numberPicker_laporan_bulan.setMaxValue(bulan.length-1);
+        numberPicker_laporan_bulan.setDisplayedValues(bulan);
+        numberPicker_laporan_bulan.setWrapSelectorWheel(true);
+        setNumberPickerDividerColour(numberPicker_laporan_bulan,view);
+
+        //Set Picker Tahun------------------------------
+        final NumberPicker numberPicker_laporan_tahun = (NumberPicker) view.findViewById(R.id.numberPicker_laporan_tahun);
+        numberPicker_laporan_tahun.setMinValue(2000);
+        numberPicker_laporan_tahun.setMaxValue(2050);
+        numberPicker_laporan_tahun.setWrapSelectorWheel(true);
+        setNumberPickerDividerColour(numberPicker_laporan_tahun,view);
+
+        dialog_pilih_tanggal_laporan = DialogPlus.newDialog(getActivity())
+                .setContentHolder(new ViewHolder(view))
+                .setGravity(Gravity.BOTTOM)
+                .setCancelable(false)
+                .create();
+
+        dialog_pilih_tanggal_laporan.findViewById(R.id.button_laporan_fragment_pickerset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initiate();
+                dialog_pilih_tanggal_laporan.dismiss();
+                txt_laporan_fragment_pilihbulan.setText(bulan[numberPicker_laporan_bulan.getValue()].toString().trim()
+                        + ", " + String.valueOf(numberPicker_laporan_tahun.getValue()).trim());
+                bln_selected = bulan[numberPicker_laporan_bulan.getValue()].toString().trim();
+                thn_selected = String.valueOf(numberPicker_laporan_tahun.getValue()).trim();
+                bln_selected_angka = String.valueOf(numberPicker_laporan_bulan.getValue()+1).trim();
+
+                //Set Data------------------------------------------------------------
+                String param = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null)
+                        +"&bulan=" + bulan[numberPicker_laporan_bulan.getValue()].toString().trim()
+                        +"&tahun=" + String.valueOf(numberPicker_laporan_tahun.getValue()).trim();
+                Log.d("CekUrl",param);
+                new GetDataKeuanganLaporan().execute(url.getUrlGetLaporanKeuanganList(), param);
+            }
+        });
+        dialog_pilih_tanggal_laporan.findViewById(R.id.button_laporan_fragment_pickercancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_pilih_tanggal_laporan.dismiss();
+            }
+        });
+    }
+
+    private void setNumberPickerDividerColour(NumberPicker number_picker,View mContext){
+        final int count = number_picker.getChildCount();
+
+        for(int i = 0; i < count; i++){
+
+            try{
+                Field dividerField = number_picker.getClass().getDeclaredField("mSelectionDivider");
+                dividerField.setAccessible(true);
+                ColorDrawable colorDrawable = new ColorDrawable(mContext.getResources().getColor(R.color
+                        .colorPrimary));
+                dividerField.set(number_picker,colorDrawable);
+
+                number_picker.invalidate();
+            }
+            catch(NoSuchFieldException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+            catch(IllegalAccessException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+            catch(IllegalArgumentException e){
+                Log.w("setNumberPickerTxtClr", e);
+            }
+        }
+    }
+
+    //Show Laporan Keuangan-----------------------------------------------------
+    private void ShowLaporanKeuangan(String result){
+        float Pembelian_Pakan=0,
+                Pembelian_Obat=0,
+                Pembelian_Vaksin=0,
+                Pembelian_Semen=0,
+                Pemeriksaan_Kesehatan_Sapi=0,
+                Pembelian_Perlengkapan=0,
+                Pembelian_Ternak=0,
+                Pembayaran_Listrik=0,
+                Pembayaran_Lain_lain=0;
+        float Penjualan_ternak=0,
+                Penjualan_kompos=0,
+                Penjualan_Susu=0,
+                Pemasukan_Lain_lain=0;
+
+        try {
+            JSONArray jArray = new JSONArray(result);
             JSONObject jObj = jArray.getJSONObject(0);
 
-            //Get JSON Laporan Keuangan+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            JSONArray getPembelianPakan_arr = jObj.getJSONArray("uang_keluar_pakan");
-            JSONArray getPembelianObat_arr = jObj.getJSONArray("uang_keluar_obat");
-            JSONArray getPembelianSemen_arr = jObj.getJSONArray("uang_keluar_semen");
-            JSONArray getPembelianVaksin_arr = jObj.getJSONArray("uang_keluar_belivaksin");
-            JSONArray getPemeriksaanKesehatanSapi_arr = jObj.getJSONArray("uang_keluar_periksaKesehatanSapi");
-            JSONArray getPembelianPerlengkapan_arr = jObj.getJSONArray("uang_keluar_beliPerlengkapan");
-            JSONArray getPembelianTernak_arr = jObj.getJSONArray("uang_keluar_beliTernak");
-            JSONArray getPembayaranListrik_arr = jObj.getJSONArray("uang_keluar_bayarListrik");
-            JSONArray getPembelianLainnya_arr = jObj.getJSONArray("uang_keluar_lainnya");
-            JSONArray getPenjualanTernak_arr = jObj.getJSONArray("uang_masuk_jualternak");
-            JSONArray getPenjualanSusu_arr = jObj.getJSONArray("uang_masuk_jualsusu");
-            JSONArray getPenjualanKompos_arr = jObj.getJSONArray("uang_masuk_jualkompos");
-            JSONArray getPenjulanLainnya_arr = jObj.getJSONArray("uang_masuk_lainnya");
+            JSONArray getPengeluaran_arr = jObj.getJSONArray("UangKeluar");
+            JSONArray getPemasukan_arr = jObj.getJSONArray("UangMasuk");
 
-            //Get JSON Laporan Kesehatan+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            JSONArray getTernakHeat_arr = jObj.getJSONArray("sapi_birahi");
-            JSONArray getProduksiSusuTernak_arr = jObj.getJSONArray("produksisusu");
-            JSONArray getPenggunaanPakan_arr = jObj.getJSONArray("penggunaanpakan");
+            for (int i = 0; i < getPengeluaran_arr.length(); i++) {
+                JSONObject obj_getPengeluaran = getPengeluaran_arr.getJSONObject(i);
 
-
-            for(int i=0;i<17;i++){
-                total_data_grafik = getPembelianPakan_arr.length();
-                list_value_grafik_laporan_keuangan.clear();
-                list_value_grafik_laporan_kesehatan.clear();
-                for(int k=0;k<getPembelianPakan_arr.length();k++) {
-                    //Set Grafik Pembelian Pakan++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 0) {
-                        Jenis_Grafik=" Pembelian Pakan";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianPakan_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembelian Obat++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 1) {
-                        Jenis_Grafik=" Pembelian Obat";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianObat_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembelian Semen++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 2) {
-                        Jenis_Grafik=" Pembelian Semen";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianSemen_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                        Log.d("Tes", String.valueOf(i));
-                    }
-                    //Set Grafik Pembelian Vaksin++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 3) {
-                        Jenis_Grafik=" Pembelian Vaksin";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianVaksin_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pemeriksaan Kesehatan++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 4) {
-                        Jenis_Grafik=" Biaya Pemeriksaan Kesehatan Sapi";
-                        JSONObject Obj_DataKeuanganGrafik = getPemeriksaanKesehatanSapi_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembelian Perlengkapan++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 5) {
-                        Jenis_Grafik=" Pembelian Perlengkapan";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianPerlengkapan_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembelian Ternak++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 6) {
-                        Jenis_Grafik=" Pembelian Ternak";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianTernak_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembayaran Listrik++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 7) {
-                        Jenis_Grafik=" Pembayaran Listrik";
-                        JSONObject Obj_DataKeuanganGrafik = getPembayaranListrik_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Pembelian Lainnya++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 8) {
-                        Jenis_Grafik=" Pembelian Lainnya";
-                        JSONObject Obj_DataKeuanganGrafik = getPembelianLainnya_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Penjualan Ternak++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 9) {
-                        Jenis_Grafik=" Penjualan Ternak";
-                        JSONObject Obj_DataKeuanganGrafik = getPenjualanTernak_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Penjualan Susu++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 10) {
-                        Jenis_Grafik=" Penjualan Susu";
-                        JSONObject Obj_DataKeuanganGrafik = getPenjualanSusu_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Penjualan Kompos++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 11) {
-                        Jenis_Grafik=" Penjualan Kompos";
-                        JSONObject Obj_DataKeuanganGrafik = getPenjualanKompos_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Penjualan Lainnya++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 12) {
-                        Jenis_Grafik=" Penjualan Lainnya";
-                        JSONObject Obj_DataKeuanganGrafik = getPenjulanLainnya_arr.getJSONObject(k);
-                        list_value_grafik_laporan_keuangan.add((float) Obj_DataKeuanganGrafik.getDouble("JumlahUang"));
-                    }
-                    //Set Grafik Ternak Birahi++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 13) {
-                        Jenis_Grafik=" Jumlah Ternak Birahi";
-                        JSONObject Obj_DataKesehatanGrafik = getTernakHeat_arr.getJSONObject(k);
-                        list_value_grafik_laporan_kesehatan.add((float) Obj_DataKesehatanGrafik.getDouble("JumlahSapiBirahi"));
-                    }
-                    //Set Grafik Peroduksi Susu+++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 14) {
-                        Jenis_Grafik=" Produksi Susu Peternakan";
-                        JSONObject Obj_DataKesehatanGrafik = getProduksiSusuTernak_arr.getJSONObject(k);
-                        list_value_grafik_laporan_kesehatan.add((float) Obj_DataKesehatanGrafik.getDouble("JumlahProduksi"));
-                    }
-                    //Set Grafik Penggunaan Pakan+++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    if (i == 15) {
-                        Jenis_Grafik=" Penggunaan Pakan";
-                        JSONObject Obj_DataKesehatanGrafik = getPenggunaanPakan_arr.getJSONObject(k);
-                        list_value_grafik_laporan_kesehatan.add((float) Obj_DataKesehatanGrafik.getDouble("JumlahPakan"));
-                    }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Pakan")){
+                    Pembelian_Pakan = Pembelian_Pakan + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
                 }
-
-                //Insert To List Keuangan+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                if(i>=0&&i<13){
-                    temp_data_grafik = setDataKeuangan(total_data_grafik);
-                    ModelLaporanKeuanganGrafik mdl_grfk = new ModelLaporanKeuanganGrafik();
-
-                    mdl_grfk.setJudul(Jenis_Grafik.toString().trim());
-                    mdl_grfk.setBulan(bln_angka.toString());
-                    mdl_grfk.setGrafik(temp_data_grafik);
-                    temp_list_set_keuangan.add(mdl_grfk);
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Obat")){
+                    Pembelian_Obat = Pembelian_Obat + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
                 }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Vaksin")){
+                    Pembelian_Vaksin = Pembelian_Vaksin + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
 
-                //Insert To List Kesehatan+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                if(i>=13&&i<16){
-                    temp_data_grafik = setDataKesehatan(total_data_grafik,i);
-                    ModelLaporanKeuanganGrafik mdl_grfk = new ModelLaporanKeuanganGrafik();
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Semen")){
+                    Pembelian_Semen = Pembelian_Semen + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
 
-                    mdl_grfk.setJudul(Jenis_Grafik.toString().trim());
-                    mdl_grfk.setBulan(bln_angka.toString());
-                    mdl_grfk.setGrafik(temp_data_grafik);
-                    temp_list_set_kesehatan.add(mdl_grfk);
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pemeriksaan Kesehatan Sapi")){
+                    Pemeriksaan_Kesehatan_Sapi = Pemeriksaan_Kesehatan_Sapi + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
+
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Perlengkapan")){
+                    Pembelian_Perlengkapan = Pembelian_Perlengkapan + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
+
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembelian Ternak")){
+                    Pembelian_Ternak = Pembelian_Ternak + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
+
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pembayaran Listrik")){
+                    Pembayaran_Listrik = Pembayaran_Listrik + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
+
+                }
+                if(obj_getPengeluaran.getString("jenis_transaksi").trim().equalsIgnoreCase("Pengeluaran Lainnya")){
+                    Pembayaran_Lain_lain = Pembayaran_Lain_lain + Float.valueOf(obj_getPengeluaran.getString("JumlahUangKeluar"));
+
                 }
             }
 
-            //Set To Adapter+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            AdapterLaporanKeuangan cda_keuangan = new AdapterLaporanKeuangan(getActivity(), temp_list_set_keuangan);
-            listview_laporan_keuangan.setAdapter(cda_keuangan);
-            AdapterLaporanKeuangan cda_kesehatan = new AdapterLaporanKeuangan(getActivity(), temp_list_set_kesehatan);
-            listview_laporan_kesehatan.setAdapter(cda_kesehatan);
+            for (int i = 0; i < getPemasukan_arr.length(); i++) {
+                JSONObject obj_getPemasukan = getPemasukan_arr.getJSONObject(i);
 
-        }catch (JSONException e){e.printStackTrace();}
-    }
-
-
-    private LineData setDataKeuangan(int count) {
-        float val = 0;
-        LineDataSet set_uang;
-
-
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-
-        for (int i = 0; i < count + 1; i++) {
-            if (i != 0) {
-                val = list_value_grafik_laporan_keuangan.get(i - 1);
+                if(obj_getPemasukan.getString("jenis_transaksi").trim().equalsIgnoreCase("Penjualan Ternak")){
+                    Penjualan_ternak = Penjualan_ternak + Float.valueOf(obj_getPemasukan.getString("JumlahUangKeluar"));
+                }
+                if(obj_getPemasukan.getString("jenis_transaksi").trim().equalsIgnoreCase("Penjualan Kompos")){
+                    Penjualan_kompos = Penjualan_kompos + Float.valueOf(obj_getPemasukan.getString("JumlahUangKeluar"));
+                }
+                if(obj_getPemasukan.getString("jenis_transaksi").trim().equalsIgnoreCase("Penjualan Susu")){
+                    Penjualan_Susu = Penjualan_Susu + Float.valueOf(obj_getPemasukan.getString("JumlahUangKeluar"));
+                }
+                if(obj_getPemasukan.getString("jenis_transaksi").trim().equalsIgnoreCase("Pemasukan Lainnya")){
+                    Pemasukan_Lain_lain = Pemasukan_Lain_lain + Float.valueOf(obj_getPemasukan.getString("JumlahUangKeluar"));
+                }
             }
-            yVals1.add(new Entry(i, val));
+            Log.d("Bahasa",Locale.getDefault().getDisplayLanguage());
+
+            String currencyCode = "IDR";
+            Currency currency = Currency.getInstance(currencyCode);
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.ROOT);
+            format.setMaximumFractionDigits(0);
+            format.setGroupingUsed(true);
+            format.setCurrency(currency);
+            //Uang Keluar-------------------------------------------------------
+            txt_laporan_fragment_keuanganpembelianpakan.setText(format.format(Pembelian_Pakan));
+            txt_laporan_fragment_keuanganpembelianobat.setText(format.format(Pembelian_Obat));
+            txt_laporan_fragment_keuanganpembelianvaksin.setText(format.format(Pembelian_Vaksin));
+            txt_laporan_fragment_keuanganpembeliansemen.setText(format.format(Pembelian_Semen));
+            txt_laporan_fragment_keuanganpemeriksaankesehatan.setText(format.format(Pemeriksaan_Kesehatan_Sapi));
+            txt_laporan_fragment_keuanganpembelianperlengkapan.setText(format.format(Pembelian_Perlengkapan));
+            txt_laporan_fragment_keuanganpembelianternak.setText(format.format(Pembelian_Ternak));
+            txt_laporan_fragment_keuanganpembelianlistrik.setText(format.format(Pembayaran_Listrik));
+            txt_laporan_fragment_keuanganpembelianlainnya.setText(format.format(Pembayaran_Lain_lain));
+            //Uang Masuk-------------------------------------------------------
+            txt_laporan_fragment_keuanganpenjualanternak.setText(format.format(Penjualan_ternak));
+            txt_laporan_fragment_keuanganpenjualanpupuk.setText(format.format(Penjualan_kompos));
+            txt_laporan_fragment_keuanganpenjualansusu.setText(format.format(Penjualan_Susu));
+            txt_laporan_fragment_keuanganpenjualanlainnya.setText(format.format(Pemasukan_Lain_lain));
+        } catch (JSONException e){
+            e.printStackTrace();
         }
-
-        // create a dataset and give it a type
-        set_uang = new LineDataSet(yVals1, "Jumlah Uang (Rupiah)");
-        set_uang.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set_uang.setColor(ColorTemplate.getHoloBlue());
-        //set_uang.setCircleColor(Color.BLACK);
-        set_uang.setLineWidth(2f);
-        //set_uang.setCircleRadius(2f);
-        set_uang.setFillAlpha(65);
-        set_uang.setFillColor(ColorTemplate.getHoloBlue());
-        set_uang.setHighLightColor(Color.rgb(244, 117, 117));
-        set_uang.setDrawCircleHole(false);
-        set_uang.setDrawCircles(false);
-        set_uang.setDrawValues(false);
-
-
-        // create a data object with the datasets
-        LineData data = new LineData(set_uang);
-        data.setValueTextColor(Color.BLACK);
-        data.setValueTextSize(9f);
-
-        return data;
     }
 
-    private LineData setDataKesehatan(int count,int Keterangan) {
-        float val = 0;
-        LineDataSet set_uang;
-
-
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-
-        for (int i = 0; i < count + 1; i++) {
-            if (i != 0) {
-                val = list_value_grafik_laporan_kesehatan.get(i - 1);
-            }
-            yVals1.add(new Entry(i, val));
-        }
-
-        // create a dataset and give it a type
-        set_uang = new LineDataSet(yVals1, "N/A");
-        if(Keterangan==13){
-            set_uang = new LineDataSet(yVals1, "Jumlah Ternak");
-        }else
-        if(Keterangan==14){
-            set_uang = new LineDataSet(yVals1, "Jumlah Produksi Susu (Liter)");
-        }else
-        if(Keterangan==15){
-            set_uang = new LineDataSet(yVals1, "Jumlah Pakan (Kilogram)");
-        }
-        set_uang.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set_uang.setColor(ColorTemplate.getHoloBlue());
-        //set_uang.setCircleColor(Color.BLACK);
-        set_uang.setLineWidth(2f);
-        //set_uang.setCircleRadius(2f);
-        set_uang.setFillAlpha(65);
-        set_uang.setFillColor(ColorTemplate.getHoloBlue());
-        set_uang.setHighLightColor(Color.rgb(244, 117, 117));
-        set_uang.setDrawCircleHole(false);
-        set_uang.setDrawCircles(false);
-        set_uang.setDrawValues(false);
-
-
-        // create a data object with the datasets
-        LineData data = new LineData(set_uang);
-        data.setValueTextColor(Color.BLACK);
-        data.setValueTextSize(9f);
-
-        return data;
+    private String SubString(String value){
+        //return value.substring(3, value.length()-2);
+        return value;
     }
+
+
+
 }

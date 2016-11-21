@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnCancel"
         android:textColor="@color/colorPrimary"
-        android:background="@drawable/bg_selector_date_picker_laporan"
+        android:background="@drawable/button_style"
         android:elevation="0dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"

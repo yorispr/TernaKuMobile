@@ -64,18 +64,6 @@
                 android:weightSum="4"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp">
-                <com.cuboid.cuboidcirclebutton.CuboidButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/txt_calendartodo_activity_aktivitastgl"
-                    android:text="19"
-                    android:textColor="#000"
-                    android:textSize="15sp"
-                    android:layout_gravity="center_vertical"
-                    app:cub_border_color="#c0c0c0"
-                    app:cub_border_radius="4dp"
-                    app:cub_color="#fff"
-                    app:cub_hover_color="@color/colorPrimaryDark"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -103,11 +91,11 @@
                         android:textAppearance="@android:style/TextAppearance.Small"/>
                 </LinearLayout>
             </LinearLayout>
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:id="@+id/list_calendartodo_activity_aktivitas"/>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:id="@+id/list_calendartodo_activity_aktivitas"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

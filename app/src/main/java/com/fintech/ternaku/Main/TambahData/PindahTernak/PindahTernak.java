@@ -12,6 +12,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.Ternak.InsertTernak;
+import com.fintech.ternaku.Setting.Bluetooth;
 import com.fintech.ternaku.UrlList;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -65,7 +68,8 @@ public class PindahTernak extends AppCompatActivity {
     AdapterKawananPindahTernak adapter2;
 
     boolean isRFID = false;
-
+    private Bluetooth bt;
+    public final String TAG = "PindahTernak";
     ArrayAdapter<String> adp;
     boolean kandangclick = false;
     boolean kawananclick = false;
@@ -88,7 +92,7 @@ public class PindahTernak extends AppCompatActivity {
     int choosenindexkawanan;
     String idpeternakan;
     AutoCompleteTextView input_pindahternak_activity_idternak;
-
+String id_sapi="";
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
 
@@ -112,6 +116,9 @@ public class PindahTernak extends AppCompatActivity {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
+
+
 
         //Initial----------------------------------------------------
         idpeternakan =  getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan",null);
@@ -254,7 +261,53 @@ public class PindahTernak extends AppCompatActivity {
 
         String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna",null);
         new GetAllTernak().execute(url.getUrl_GetTernakPengelompokkan(), urlParameters);
+
+        if(getIntent().getExtras()!=null){
+            id_sapi = getIntent().getExtras().getString("id_sapi");
+        }
+
+
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
     }
+
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+       // bt = new Bluetooth(this, mHandler);
+        //bt.stop();
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    final String rfid = msg.obj.toString();
+                    input_pindahternak_activity_idternak.setText(rfid);
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
 
     private void setDetailToTextView(String idTernak) {
         int counter = 0;
@@ -724,6 +777,8 @@ public class PindahTernak extends AppCompatActivity {
                 TernakList.add(t);
             }
 
+            setDetailToTextView(id_sapi);
+
         }
         catch (JSONException e){e.printStackTrace();}
     }
@@ -842,8 +897,7 @@ public class PindahTernak extends AppCompatActivity {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    private boolean checkForm()
-    {
+    private boolean checkForm() {
         boolean value = true;
         if(TextUtils.isEmpty(input_pindahternak_activity_idternak.getText().toString())){
             value= false;

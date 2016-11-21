@@ -72,16 +72,13 @@ public class DashboardFragment extends Fragment {
 
     //Set Expander---------------------
     private ExpandableRelativeLayout expanderlayout_dashboard_fragment_produsisusu, expanderlayout_dashboard_fragment_pemeriksaanhariini,
-            expanderlayout_dashboard_fragment_kesehatan, expanderlayout_dashboard_fragment_sapidalammasasubur,
-            expanderlayout_dashboard_fragment_datakehamilan, expanderlayout_dashboard_fragment_datakawanan,
-            expanderlayout_dashboard_fragment_totalpakan;
+            expanderlayout_dashboard_fragment_sapidalammasasubur, expanderlayout_dashboard_fragment_datakehamilan,
+            expanderlayout_dashboard_fragment_datakawanan, expanderlayout_dashboard_fragment_totalpakan,expanderlayout_dashboard_fragment_bodyscore;
     private Spinner spinner_dashboard_fragment_namapeternakan;
     private LinearLayout buttonexpander_dashboard_fragment_produksisusu,buttonexpander_dashboard_fragment_pemeriksaanhariini,
-            buttonexpander_dashboard_fragment_kesehatan,buttonexpander_dashboard_fragment_sapidalammasasubur,
-            buttonexpander_dashboard_fragment_datakehamilan, buttonexpander_dashboard_fragment_datakawanan,
-            buttonexpander_dashboard_fragment_totalpakan;
-    private TextView txtbtn_dashboard_fragment_produksisusu,txtbtn_dashboard_fragment_sakit,
-            txtbtn_dashboard_fragment_tidaksakit,txtbtn_dashboard_fragment_sudahperiksa,
+            buttonexpander_dashboard_fragment_sapidalammasasubur,buttonexpander_dashboard_fragment_datakehamilan,
+            buttonexpander_dashboard_fragment_datakawanan,buttonexpander_dashboard_fragment_totalpakan,buttonexpander_dashboard_fragment_bodyscore;
+    private TextView txtbtn_dashboard_fragment_produksisusu,txtbtn_dashboard_fragment_sudahperiksa,
             txtbtn_dashboard_fragment_belumperiksa,txtbtn_dashboard_fragment_sedangbirahi,
             txtbtn_dashboard_fragment_tidakbirahi,txtbtn_dashboard_fragment_hamilmenyusui,
             txtbtn_dashboard_fragment_hamilmelahirkan,txtbtn_dashboard_fragment_hamilmendangdung,
@@ -89,6 +86,10 @@ public class DashboardFragment extends Fragment {
             txtbtn_dashboard_fragment_kawananmuda,txtbtn_dashboard_fragment_kawananbayi,
             txtbtn_dashboard_fragment_kawananlainnya,txtbtn_dashboard_fragment_pakanjumlah,
             txtbtn_dashboard_fragment_pakanharga;
+
+
+
+
 
     //Set Peternakan--------------------
     public List<String> list_dashboard_fragment_peternakan = new ArrayList<String>();
@@ -106,22 +107,24 @@ public class DashboardFragment extends Fragment {
     private boolean canReset = false;
     float totalsusu=0;
 
-    //Set Pie Chart-----------------------------------------------------------
-    private PieChartView chart_dashboard_fragment_kesehatan;
+    //Set Pie Chart-----------------------------------------------------------\
+    private PieChartView chart_dashboard_fragment_bodyscore;
     private PieChartView chart_dashboard_fragment_pemeriksaanhariini;
     private PieChartView chart_dashboard_fragment_sedangdalammasasubur;
     private PieChartView chart_dashboard_fragment_datakehamilan;
     private PieChartView chart_dashboard_fragment_datakawanan;
     private PieChartData data_dashboard_fragment_pemeriksaanhariinia;
-    private PieChartData data_dashboard_fragment_kesehatan;
     private PieChartData data_dashboard_fragment_sedangdalammasasubur;
     private PieChartData data_dashboard_fragment_datakehamilan;
     private PieChartData data_dashboard_fragment_datakawanan;
+    private PieChartData data_dashboard_fragment_bodyscore;
+
     List<SliceValue> value_dashboard_fragment_pemeriksaanhariini;
-    List<SliceValue> value_dashboard_fragment_kesehatan;
     List<SliceValue> value_dashboard_fragment_sedangdalammasasubur;
     List<SliceValue> value_dashboard_fragment_datakehamilan;
     List<SliceValue> value_dashboard_fragment_datakawanan;
+    List<SliceValue> value_dashboard_fragment_bodyscore;
+
     private TextView txt_dashboard_fragment_biayapakan;
     private TextView txt_dashboard_fragment_jumlahpakan;
     private boolean hasLabels = true;
@@ -138,7 +141,6 @@ public class DashboardFragment extends Fragment {
     int jumlahbiaya=0;
 
     int jumlahperiksa=0;
-    int jumlahsehat=0;
     int totsapi=0;
     int jumlahSubur=0;
     int totDewasa;
@@ -178,14 +180,6 @@ public class DashboardFragment extends Fragment {
                 expanderlayout_dashboard_fragment_produsisusu.toggle();
             }
         });
-        buttonexpander_dashboard_fragment_kesehatan=(LinearLayout)view.findViewById(R.id.buttonexpander_dashboard_fragment_kesehatan);
-        expanderlayout_dashboard_fragment_kesehatan = (ExpandableRelativeLayout) view.findViewById(R.id.expanderlayout_dashboard_fragment_kesehatan);
-        buttonexpander_dashboard_fragment_kesehatan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expanderlayout_dashboard_fragment_kesehatan.toggle();
-            }
-        });
         buttonexpander_dashboard_fragment_pemeriksaanhariini=(LinearLayout)view.findViewById(R.id.buttonexpander_dashboard_fragment_pemeriksaanhariini);
         expanderlayout_dashboard_fragment_pemeriksaanhariini = (ExpandableRelativeLayout) view.findViewById(R.id.expanderlayout_dashboard_fragment_pemeriksaanhariini);
         buttonexpander_dashboard_fragment_pemeriksaanhariini.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +212,16 @@ public class DashboardFragment extends Fragment {
                 expanderlayout_dashboard_fragment_datakawanan.toggle();
             }
         });
+
+        buttonexpander_dashboard_fragment_bodyscore=(LinearLayout)view.findViewById(R.id.buttonexpander_dashboard_fragment_bodyscore);
+        expanderlayout_dashboard_fragment_bodyscore = (ExpandableRelativeLayout) view.findViewById(R.id.expanderlayout_dashboard_fragment_bodyscore);
+        buttonexpander_dashboard_fragment_bodyscore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expanderlayout_dashboard_fragment_bodyscore.toggle();
+            }
+        });
+
         buttonexpander_dashboard_fragment_totalpakan=(LinearLayout)view.findViewById(R.id.buttonexpander_dashboard_fragment_totalpakan);
         expanderlayout_dashboard_fragment_totalpakan = (ExpandableRelativeLayout) view.findViewById(R.id.expanderlayout_dashboard_fragment_totalpakan);
         buttonexpander_dashboard_fragment_totalpakan.setOnClickListener(new View.OnClickListener() {
@@ -229,8 +233,6 @@ public class DashboardFragment extends Fragment {
 
         //Set TextView Button---------------------------------------
         txtbtn_dashboard_fragment_produksisusu = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_produksisusu);
-        txtbtn_dashboard_fragment_sakit = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_sakit);
-        txtbtn_dashboard_fragment_tidaksakit = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_tidaksakit);
         txtbtn_dashboard_fragment_sudahperiksa = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_sudahperiksa);
         txtbtn_dashboard_fragment_belumperiksa = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_belumperiksa);
         txtbtn_dashboard_fragment_sedangbirahi = (TextView) view.findViewById(R.id.txtbtn_dashboard_fragment_sedangbirahi);
@@ -271,26 +273,6 @@ public class DashboardFragment extends Fragment {
 
 
         //Set Pie Chart --------------------------------------------
-        chart_dashboard_fragment_kesehatan = (PieChartView) view.findViewById(R.id.chart_dashboard_fragment_kesehatan);
-        chart_dashboard_fragment_kesehatan.setOnValueTouchListener(new PieChartOnValueSelectListener() {
-            @Override
-            public void onValueSelected(int i, SliceValue sliceValue) {
-                if(i == 0) {
-                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
-                    act.putExtra("sehat", "sehat");
-                    startActivity(act);
-                } else if(i == 1) {
-                    Intent act = new Intent(getActivity(), ListDetailTernakMain.class);
-                    act.putExtra("sakit", "sakit");
-                    startActivity(act);
-                }
-            }
-
-            @Override
-            public void onValueDeselected() {
-
-            }
-        });
         chart_dashboard_fragment_pemeriksaanhariini = (PieChartView) view.findViewById(R.id.chart_dashboard_fragment_pemeriksaanhariini);
         chart_dashboard_fragment_pemeriksaanhariini.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
@@ -405,6 +387,45 @@ public class DashboardFragment extends Fragment {
         });
 
 
+        chart_dashboard_fragment_bodyscore = (PieChartView) view.findViewById(R.id.chart_dashboard_fragment_bodyscore);
+        chart_dashboard_fragment_bodyscore.setOnValueTouchListener(new PieChartOnValueSelectListener() {
+            @Override
+            public void onValueSelected(int i, SliceValue sliceValue) {
+                Log.d("SLICEBerat",String.valueOf(i));
+                Intent act;
+
+                switch (i){
+                    case 0:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("dewasa", "dewasa");
+                        //startActivity(act);
+                        break;
+                    case 1:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("muda", "muda");
+                        //startActivity(act);
+                        break;
+                    case 2:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("bayi", "bayi");
+                        //startActivity(act);
+                        break;
+                    case 3:
+                        act = new Intent(getActivity(), ListDetailTernakMain.class);
+                        act.putExtra("kawananlainnya", "kawananlainnya");
+                        //startActivity(act);
+                        break;
+                }
+            }
+
+            @Override
+            public void onValueDeselected() {
+
+            }
+        });
+
+
+
         //Set Gauge Pembelian Pakan----------------------------------
         txt_dashboard_fragment_jumlahpakan = (TextView)view.findViewById(R.id.txt_dashboard_fragment_jumlahpakan);
         txt_dashboard_fragment_biayapakan = (TextView)view.findViewById(R.id.txt_dashboard_fragment_biayapakan);
@@ -433,8 +454,8 @@ public class DashboardFragment extends Fragment {
         ProgressDialog pDialog;
 
         @Override
-        protected void onPreExecute(){
-                loading_view_dashboard.start();
+        protected void onPreExecute() {
+            loading_view_dashboard.start();
         }
 
         @Override
@@ -445,10 +466,11 @@ public class DashboardFragment extends Fragment {
         }
 
         protected void onPostExecute(String result2) {
-            Log.d("Dashboard Data",result2);
             temp_result = result2;
             SetDataDashboard();
             loading_view_dashboard.stop();
+            RefreshFragment();
+
         }
     }
 
@@ -510,13 +532,13 @@ public class DashboardFragment extends Fragment {
     //Set Dashboard Data---------------------------------------------------------------
     private void SetDataDashboard(){
         int numValues = 6;
-        value_dashboard_fragment_kesehatan = new ArrayList<SliceValue>();
         value_dashboard_fragment_pemeriksaanhariini = new ArrayList<SliceValue>();
         value_dashboard_fragment_sedangdalammasasubur = new ArrayList<SliceValue>();
         value_dashboard_fragment_datakehamilan = new ArrayList<SliceValue>();
         value_dashboard_fragment_datakawanan = new ArrayList<SliceValue>();
+        value_dashboard_fragment_bodyscore = new ArrayList<SliceValue>();
 
-        value_dashboard_fragment_kesehatan.clear();
+
         value_dashboard_fragment_pemeriksaanhariini.clear();
         value_dashboard_fragment_sedangdalammasasubur.clear();
         value_dashboard_fragment_datakehamilan.clear();
@@ -534,17 +556,6 @@ public class DashboardFragment extends Fragment {
                     totalsusu = jObj.getLong("produksi_susu");
                 }
                 txtbtn_dashboard_fragment_produksisusu.setText(String.valueOf(totalsusu) + " Liter ");
-
-                //Get Data Kesehatan Hari ini----------------------------------------------
-                SliceValue valueSehat = new SliceValue(jObj.getInt("jumlah_sehat"), Color.parseColor("#2ecc71"));
-                int tidaksehat = jObj.getInt("total_sapi") - jObj.getInt("jumlah_sehat");
-                SliceValue valueTidakSehat = new SliceValue(tidaksehat, Color.parseColor("#e74c3c"));
-                jumlahsehat = jObj.getInt("jumlah_sehat");
-                totsapi = jObj.getInt("total_sapi");
-                value_dashboard_fragment_kesehatan.add(valueSehat);
-                value_dashboard_fragment_kesehatan.add(valueTidakSehat);
-                txtbtn_dashboard_fragment_tidaksakit.setText(String.valueOf(jObj.getInt("jumlah_sehat"))+" ");
-                txtbtn_dashboard_fragment_sakit.setText(String.valueOf(tidaksehat)+" ");
 
                 //Get Data Periksa Hari ini----------------------------------------------
                 SliceValue valuePeriksaHariIni = new SliceValue(jObj.getInt("periksa"), Color.parseColor("#2ecc71"));
@@ -605,6 +616,25 @@ public class DashboardFragment extends Fragment {
                 txtbtn_dashboard_fragment_kawananmuda.setText(String.valueOf(jObj.getInt("jumlah_heifers"))+" ");
                 txtbtn_dashboard_fragment_kawananbayi.setText(String.valueOf(jObj.getInt("jumlah_calv"))+" ");
                 txtbtn_dashboard_fragment_kawananlainnya.setText(String.valueOf(lainnya2)+" ");
+
+
+                //Get Data Berat
+                SliceValue valuesempurna = new SliceValue(jObj.getInt("jumlah_bbsempurna"), Color.parseColor("#2ecc71"));
+                SliceValue valuebagus = new SliceValue(jObj.getInt("jumlah_bbbagus"), Color.parseColor("#3498db"));
+                SliceValue valuesedang = new SliceValue(jObj.getInt("jumlah_bbsedang"), Color.parseColor("#f1c40f"));
+                SliceValue valuekurang = new SliceValue(jObj.getInt("jumlah_bbkurang"), Color.parseColor("#e74c3c"));
+                SliceValue valuelainnya = new SliceValue(jObj.getInt("jumlah_bblainnya"), Color.parseColor("#95a5a6"));
+
+                value_dashboard_fragment_bodyscore.add(valuesempurna);
+                value_dashboard_fragment_bodyscore.add(valuebagus);
+                value_dashboard_fragment_bodyscore.add(valuesedang);
+                value_dashboard_fragment_bodyscore.add(valuekurang);
+                value_dashboard_fragment_bodyscore.add(valuelainnya);
+
+                /*txtbtn_dashboard_fragment_kawanandewasa.setText(String.valueOf(jObj.getInt("jumlah_dewasa"))+" ");
+                txtbtn_dashboard_fragment_kawananmuda.setText(String.valueOf(jObj.getInt("jumlah_heifers"))+" ");
+                txtbtn_dashboard_fragment_kawananbayi.setText(String.valueOf(jObj.getInt("jumlah_calv"))+" ");
+                txtbtn_dashboard_fragment_kawananlainnya.setText(String.valueOf(lainnya2)+" ");*/
             }
             //Start Gauge Produksi Susu-------------------------------------------
             startRunning(-255+(totalsusu*(float)15.1));
@@ -641,18 +671,6 @@ public class DashboardFragment extends Fragment {
         txtbtn_dashboard_fragment_pakanjumlah.setText(String.valueOf(jumlahbiaya)+ " Kg ");
         txtbtn_dashboard_fragment_pakanharga.setText("" + formattedAmount + " ");
 
-        //Set Data Kesehatan Hari Ini--------------------------------------------
-        data_dashboard_fragment_kesehatan = new PieChartData(value_dashboard_fragment_kesehatan);
-        data_dashboard_fragment_kesehatan.setHasLabels(hasLabels);
-        data_dashboard_fragment_kesehatan.setHasLabelsOnlyForSelected(hasLabelForSelected);
-        data_dashboard_fragment_kesehatan.setHasLabelsOutside(hasLabelsOutside);
-        data_dashboard_fragment_kesehatan.setHasCenterCircle(hasCenterCircle);
-
-        data_dashboard_fragment_kesehatan.setCenterText1(String.valueOf(jumlahsehat));
-        data_dashboard_fragment_kesehatan.setCenterText2("Sapi Sehat");
-        data_dashboard_fragment_kesehatan.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
-                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
-
         //Set Data Pemeriksaan Hari Ini--------------------------------------------
         data_dashboard_fragment_pemeriksaanhariinia = new PieChartData(value_dashboard_fragment_pemeriksaanhariini);
         data_dashboard_fragment_pemeriksaanhariinia.setHasLabels(hasLabels);
@@ -661,7 +679,7 @@ public class DashboardFragment extends Fragment {
         data_dashboard_fragment_pemeriksaanhariinia.setHasCenterCircle(hasCenterCircle);
 
         data_dashboard_fragment_pemeriksaanhariinia.setCenterText1(String.valueOf(jumlahperiksa));
-        data_dashboard_fragment_pemeriksaanhariinia.setCenterText2("Sudah Diperiksa");
+        data_dashboard_fragment_pemeriksaanhariinia.setCenterText2("Sudah diperiksa");
         data_dashboard_fragment_pemeriksaanhariinia.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
                 (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
 
@@ -696,6 +714,18 @@ public class DashboardFragment extends Fragment {
         data_dashboard_fragment_datakawanan.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
                 (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
 
+
+        //Set Data Berat-----------------------------------------------
+        data_dashboard_fragment_bodyscore= new PieChartData(value_dashboard_fragment_bodyscore);
+        data_dashboard_fragment_bodyscore.setHasLabels(hasLabels);
+        data_dashboard_fragment_bodyscore.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_bodyscore.setHasLabelsOutside(hasLabelsOutside);
+
+        data_dashboard_fragment_bodyscore.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+
+
         if (isExploded) {
             data_dashboard_fragment_pemeriksaanhariinia.setSlicesSpacing(24);
         }
@@ -724,14 +754,11 @@ public class DashboardFragment extends Fragment {
         }
 
         //Set Chart To View---------------------------------------
-        chart_dashboard_fragment_kesehatan.setPieChartData(data_dashboard_fragment_kesehatan);
         chart_dashboard_fragment_pemeriksaanhariini.setPieChartData(data_dashboard_fragment_pemeriksaanhariinia);
         chart_dashboard_fragment_sedangdalammasasubur.setPieChartData(data_dashboard_fragment_sedangdalammasasubur);
         chart_dashboard_fragment_datakehamilan.setPieChartData(data_dashboard_fragment_datakehamilan);
         chart_dashboard_fragment_datakawanan.setPieChartData(data_dashboard_fragment_datakawanan);
-
-        Refresh();
-        RefreshFragment();
+        chart_dashboard_fragment_bodyscore.setPieChartData(data_dashboard_fragment_bodyscore);
 
     }
 
@@ -816,13 +843,12 @@ public class DashboardFragment extends Fragment {
 
 
     private void Refresh(){
-        expanderlayout_dashboard_fragment_produsisusu.setExpanded(false);
-        expanderlayout_dashboard_fragment_kesehatan.setExpanded(false);
-        expanderlayout_dashboard_fragment_pemeriksaanhariini.setExpanded(false);
-        expanderlayout_dashboard_fragment_datakehamilan.setExpanded(false);
-        expanderlayout_dashboard_fragment_sapidalammasasubur.setExpanded(false);
-        expanderlayout_dashboard_fragment_datakawanan.setExpanded(false);
-        expanderlayout_dashboard_fragment_totalpakan.setExpanded(false);
+        expanderlayout_dashboard_fragment_produsisusu.collapse();
+        expanderlayout_dashboard_fragment_pemeriksaanhariini.collapse();
+        expanderlayout_dashboard_fragment_datakehamilan.collapse();
+        expanderlayout_dashboard_fragment_sapidalammasasubur.collapse();
+        expanderlayout_dashboard_fragment_datakawanan.collapse();
+        expanderlayout_dashboard_fragment_totalpakan.collapse();
     }
 
     public void animateTextView(int initialValue, int finalValue, final TextView textview) {
@@ -857,6 +883,7 @@ public class DashboardFragment extends Fragment {
                 InitiateFragment();
                 String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
                 new GetDashboardData().execute(url.getUrl_GetDashboardInformation(),urlParameters);
+                Refresh();
                 Log.d("IDP",urlParameters);
                 return true;
             default:

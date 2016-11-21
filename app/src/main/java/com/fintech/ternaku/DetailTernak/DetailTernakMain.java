@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cuboid.cuboidcirclebutton.CuboidButton;
 import com.facebook.internal.CollectionMapper;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.DetailTernak.Event.AdapterDetailTernakEvent;
@@ -64,19 +63,19 @@ public class DetailTernakMain extends AppCompatActivity {
     public TextView txt_detailternak_activity_milkwithhold_kesehatan;
     public TextView txt_detailternak_activity_status_kesehatan;
     public TextView txt_detailternak_activity_diagnosisterakhir_kesehatan;
-    //Cek Kesehatan--------------------------------------------------
+        //Cek Kesehatan--------------------------------------------------
     public TextView txt_detailternak_activity_jumlahcekkesehatan_kesehatan;
     public TextView txt_detailternak_activity_tglperiksakesehatanterakhir_kesehatan;
     public TextView txt_detailternak_activity_jumlahharicekkesehatanterakhir_kesehatan;
-    //Cek Mastitis--------------------------------------------------
+        //Cek Mastitis--------------------------------------------------
     public TextView txt_detailternak_activity_jumlahcekmastitis_kesehatan;
     public TextView txt_detailternak_activity_tglperiksamastitisterakhir_kesehatan;
     public TextView txt_detailternak_activity_jumlahharicekmastitisterakhir_kesehatan;
-    //Cek Lameness--------------------------------------------------
+        //Cek Lameness--------------------------------------------------
     public TextView txt_detailternak_activity_jumlahceklameness_kesehatan;
     public TextView txt_detailternak_activity_tglperiksalamenessterakhir_kesehatan;
     public TextView txt_detailternak_activity_jumlahhariceklamenessterakhir_kesehatan;
-    //Cek Potong Kuku--------------------------------------------------
+        //Cek Potong Kuku--------------------------------------------------
     public TextView txt_detailternak_activity_jumlahcekpotongkuku_kesehatan;
     public TextView txt_detailternak_activity_tglperiksapotongkukuterakhir_kesehatan;
     public TextView txt_detailternak_activity_jumlahharicekpotongkukuterakhir_kesehatan;
@@ -88,7 +87,6 @@ public class DetailTernakMain extends AppCompatActivity {
     ListView lvItems;
 
     //Task-----------------------------------------------------------------
-    public CuboidButton button_taskdetail_activity_tambahbaru;
     public ListView list_taskdetail_activity_tambahbaru;
     List<ModelDetailTernakTask> list_task = new ArrayList <ModelDetailTernakTask>();
     AdapterDetailTernakTask adapterTaskTernak;
@@ -814,16 +812,6 @@ public class DetailTernakMain extends AppCompatActivity {
                 getBaseContext()).inflate(R.layout.layout_task, null, false);
 
         list_taskdetail_activity_tambahbaru = (ListView)view.findViewById(R.id.list_taskdetail_activity_tambahbaru);
-
-        button_taskdetail_activity_tambahbaru = (CuboidButton) view.findViewById(R.id.button_taskdetail_activity_tambahbaru);
-        button_taskdetail_activity_tambahbaru.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailTernakMain.this, AddTaskTernak.class);
-                intent.putExtra("idternak", id_ternak);
-                startActivity(intent);
-            }
-        });
 
 
         return view;

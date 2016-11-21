@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import com.fintech.ternaku.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
-import com.fintech.ternaku.Main.NavBar.Calendar.Calendar;
 import com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak;
 import com.fintech.ternaku.Main.NavBar.ProduksiSusu.AddProduksiSusu;
 import com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarToDoActivity;
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ViewPager viewPager_main_activity;
     private TabLayout tabLayout_main_activity;
+    private FloatingToolbar mFloatingToolbar;
     private int opentabs = 0;
     private boolean flag_log_out=false;
     NavigationTabBar navigationTabBar;

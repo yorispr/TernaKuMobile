@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="default_preview">
-        <item>#f3910d</item>
+        <item>#fa6900</item>
         <item>#ffffff</item>
-        <item>#e15e00</item>
     </string-array>
 </resources>

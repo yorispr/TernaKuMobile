@@ -76,7 +76,7 @@ public class ListDetailTernakMain extends AppCompatActivity {
     ArrayAdapter<String> adapterfilter,adapterurut;
      View mProgressBarFooter;
     boolean isdashboardperiksa,isdashboardbelumperiksa, isdashboardsubur, isdashboardtidaksubur,isdashboardkehamilanlainnya, isdashboardmenyusui, isdashboardmelahirkan, isdashboardmengandung,
-            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya, isdashboardproduksi, isdashboardsakit,isdashboardsehat;
+            isdashboarddewasa,isdashboardmuda,isdashboardbayi, iskawananlainnya, isdashboardproduksi;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -102,8 +102,6 @@ public class ListDetailTernakMain extends AppCompatActivity {
         isdashboardmuda = false;
         isdashboardbayi = false;
         isdashboardbelumperiksa = false;
-        isdashboardsakit = false;
-        isdashboardsehat = false;
         isdashboardtidaksubur = false;
         isdashboardkehamilanlainnya = false;
         iskawananlainnya = false;
@@ -172,12 +170,6 @@ public class ListDetailTernakMain extends AppCompatActivity {
                                 else if(isdashboardbelumperiksa){
                                     new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
                                 }
-                                else if(isdashboardsehat){
-                                    new GetAllTernak().execute(url.getUrlGet_SehatHariIni(), urlParameters);
-                                }
-                                else if(isdashboardsakit){
-                                    new GetAllTernak().execute(url.getUrlGet_SakitHariIni(), urlParameters);
-                                }
                                 else if(isdashboardmengandung){
                                     new GetAllTernak().execute(url.getUrlGet_KehamilanMengandung(), urlParameters);
                                 }
@@ -221,23 +213,6 @@ public class ListDetailTernakMain extends AppCompatActivity {
             // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
             new GetAllTernak().execute(url.getUrlGet_BelumPeriksaHariIni(), urlParameters);
             getSupportActionBar().setTitle("Ternak belum periksa");
-
-        }
-        else if(getIntent().hasExtra("sehat")) {
-            isdashboardsehat = true;
-            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    + "&segment=" + segment;
-            new GetAllTernak().execute(url.getUrlGet_SehatHariIni(), urlParameters);
-            getSupportActionBar().setTitle("Ternak sehat");
-
-        }
-        else if(getIntent().hasExtra("sakit")) {
-            isdashboardsakit = true;
-            String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                    + "&segment=" + segment;
-            // new getDataCekHariIni().execute("http://ternaku.com/index.php/C_Ternak/GetSemuaTernakByPeternakan",urlParameters);
-            new GetAllTernak().execute(url.getUrlGet_SakitHariIni(), urlParameters);
-            getSupportActionBar().setTitle("Ternak sakit");
 
         }
         else if(getIntent().hasExtra("masasubur")) {

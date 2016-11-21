@@ -97,13 +97,9 @@ public class UrlList {
     private String UrlGetLaporanKeuanganList = Url_Utama + "C_Laporan/UangKeluarMasuk_PETERNAKAN_HARI";
     private String UrlGetLaporanKeuanganGrafik_Masuk = Url_Utama + "C_Laporan/UangMasuk_PETERNAKAN_BULAN_TERTENTU";
     private String UrlGetLaporanKeuanganGrafik_Keluar = Url_Utama + "C_Laporan/UangKeluar_PETERNAKAN_BULAN_TERTENTU";
-    private String UrlGetlaporanAll = Url_Utama + "C_Laporan/GetDataLaporan";
 
 
     //ListDetailTernak=============================
-    //Kesehatan+++++++++++++++++++
-        private String UrlGet_SehatHariIni = Url_Utama + "C_Ternak/GetTernakSehatByPeternakan";
-        private String UrlGet_SakitHariIni = Url_Utama + "C_Ternak/GetTernakTidakSehatByPeternakan";
     //Pemeriksaan+++++++++++++++++
         private String UrlGet_PeriksaHariIni = Url_Utama + "C_Ternak/GetPeriksaHariIni";
         private String UrlGet_BelumPeriksaHariIni = Url_Utama + "C_Ternak/GetBelumPeriksaHariIni";
@@ -139,18 +135,6 @@ public class UrlList {
 
     public UrlList(){
 
-    }
-
-    public String getUrlGetlaporanAll() {
-        return UrlGetlaporanAll;
-    }
-
-    public String getUrlGet_SehatHariIni() {
-        return UrlGet_SehatHariIni;
-    }
-
-    public String getUrlGet_SakitHariIni() {
-        return UrlGet_SakitHariIni;
     }
 
     public String getUrl_GetIdRFID() {

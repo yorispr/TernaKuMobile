@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -47,6 +49,7 @@ import java.util.Locale;
 
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.Setting.Bluetooth;
 import com.fintech.ternaku.UrlList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -69,6 +72,9 @@ public class AddCekKesehatan extends AppCompatActivity {
     ArrayAdapter<String> adp;
     String datetime;
     int noOfTimesCalled = 0;
+
+    private Bluetooth bt;
+    public final String TAG = "AddInseminasi";
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -215,7 +221,46 @@ public class AddCekKesehatan extends AppCompatActivity {
             }
         });
 
+
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+
     }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    input_addcekkesehatan_activity_idternak.setText(msg.obj.toString().trim());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
 
     //Set AutoComplete-----------------------------------------------------------
     private class GetTernakId extends AsyncTask<String,Integer,String> {

@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,9 +37,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fintech.ternaku.Alarm.Alarm;
+import com.fintech.ternaku.Alarm.AlarmScheduler;
 import com.fintech.ternaku.Connection;
+import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.Setting.Bluetooth;
 import com.fintech.ternaku.UrlList;
 
 import org.json.JSONArray;
@@ -47,6 +53,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -68,6 +75,11 @@ public class AddMelahirkan extends AppCompatActivity {
     ArrayList<String> list_addmelahirkan_idternak = new ArrayList<String>();
     ArrayList<String> list_addmelahirkan_tglinseminasi = new ArrayList<String>();
     ArrayAdapter<String> myAdapter;
+
+
+    private Bluetooth bt;
+    public final String TAG = "AddInseminasi";
+
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -210,7 +222,46 @@ public class AddMelahirkan extends AppCompatActivity {
             }
         });
 
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+
     }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    input_addmelahirkan_activity_idternak.setText(msg.obj.toString().trim());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
+
 
     //Get Data Ternak Sedang hamil autocomplete-------------------------------
     private class GetTernakSedangHamil extends AsyncTask<String,Integer,String> {
@@ -292,8 +343,7 @@ public class AddMelahirkan extends AppCompatActivity {
         }
         catch (JSONException e){e.printStackTrace();}
     }
-    private String getTglInseminasi(String idternak)
-    {
+    private String getTglInseminasi(String idternak) {
         String tgl="";
         for (int i=0;i<list_addmelahirkan_idternak.size();i++)
         {
@@ -385,6 +435,23 @@ public class AddMelahirkan extends AppCompatActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
+                                final int _id = (int) System.currentTimeMillis();
+                                Calendar cal = Calendar.getInstance();
+                                Date date = cal.getTime();
+                                String formatteddate = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(date);
+                                cal.add(Calendar.MONTH,9);
+                                Log.d("calendar3",formatteddate);
+
+                                Alarm al = new Alarm(0,String.valueOf(_id),"ins_melahirkan",String.valueOf(new Date()),formatteddate,input_addmelahirkan_activity_idternak.getText().toString().trim());
+                                db.addAlarm(al);
+                                AlarmScheduler as = new AlarmScheduler();
+                                as.setAlarm(al,getApplicationContext());
+                                Log.d("id_sapi2",al.getId_sapi());
+
+                                db.TurnOffAlarmByIdSapi(al.getId_sapi());
+
                                 sweetAlertDialog.dismiss();
                                 new SweetAlertDialog(AddMelahirkan.this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Tambah Ternak Melahirkan")

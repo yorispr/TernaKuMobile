@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -39,6 +41,7 @@ import android.widget.Toast;
 import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Main.MainActivity;
 import com.fintech.ternaku.R;
+import com.fintech.ternaku.Setting.Bluetooth;
 import com.fintech.ternaku.UrlList;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -67,6 +70,10 @@ public class InsertTernak extends AppCompatActivity {
     private RadioGroup radioKelaminGroup;
     private RadioButton radioKelamin;
     private DialogPlus dialog_picker_berat;
+
+
+    private Bluetooth bt;
+    public final String TAG = "AddInseminasi";
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -202,7 +209,45 @@ public class InsertTernak extends AppCompatActivity {
                 })
                 .show();
 
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+
+
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bt = new Bluetooth(this, mHandler);
+        bt.start();
+        bt.connectDevice("HC-06");
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    Log.d(TAG, "MESSAGE_READ : "+msg.obj.toString());
+                    txtRFID.setText(msg.obj.toString().trim());
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME "+msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST "+msg);
+
+                    break;
+            }
+        }
+    };
 
     private class CheckRFID extends AsyncTask<String,Integer,String>{
         SweetAlertDialog pDialog = new SweetAlertDialog(InsertTernak.this, SweetAlertDialog.PROGRESS_TYPE);
@@ -233,7 +278,6 @@ public class InsertTernak extends AppCompatActivity {
                         +"&namaternak=" + txtNama.getText().toString()
                         +"&jeniskelamin=" + radioKelamin.getText().toString()
                         +"&tanggallahirternak=" + txtTgl.getText().toString()
-                        +"&beratbadan=" + txtBrt.getText().toString()
                         +"&rfidcode=" + txtRFID.getText().toString();
                 new insertTernakTask().execute(url.getUrl_InsertTernak(), urlParameters);
             }else{
