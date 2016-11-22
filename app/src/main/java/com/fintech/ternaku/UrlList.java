@@ -23,6 +23,9 @@ public class UrlList {
     private String Url_GetListJabatan = Url_Utama + "C_Pengguna/getListRole";
     private String Url_GetPakan = Url_Utama + "C_HistoryMakan/getDataPakan";
     private String Url_GetIdRFID = Url_Utama + "C_Ternak/getidTernakByRFID";
+    private String Url_GetBatasBBByID = Url_Utama + "C_Pedaging/getBatasBB";
+
+
 
     //Login========================================
     private String Url_Login = Url_Utama + "C_Pengguna/cekLogin";
@@ -90,6 +93,10 @@ public class UrlList {
     //Tambah Culling-----------
     private String UrlInsertCulling = Url_Utama + "C_HistoryKesehatan/UpdateCulling";
 
+    //Tambah Batas Berat
+    private String UrlInsertBB = Url_Utama + "C_Pedaging/insertBatasBB";
+    private String UrlUpdatetBB = Url_Utama + "C_Pedaging/updateBatasBB";
+
     //Pengingat====================================
     private String UrlInsert_Reminder = Url_Utama + "C_Fcm/send_message";
 
@@ -121,6 +128,9 @@ public class UrlList {
     private String UrlGet_KehamilanMengandung = Url_Utama + "C_Ternak/GetSemuaTernakHamilByPeternakan";
     private String UrlGet_KehamilanLainnya = Url_Utama + "C_Ternak/GetSemuaTernakTidakHamilMelahirkanMenyusuiBulanIniByPeternakan";
     private String UrlGet_SegmentList = Url_Utama + "C_Ternak/GetSemuaTernakByPeternakanOnSegment";
+
+
+
 
 
     //DetailTernak=================================
@@ -423,5 +433,29 @@ public class UrlList {
 
     public String getUrl_GetDashboardInformation() {
         return Url_GetDashboardInformation;
+    }
+
+    public String getUrlInsertBB() {
+        return UrlInsertBB;
+    }
+
+    public void setUrlInsertBB(String urlInsertBB) {
+        UrlInsertBB = urlInsertBB;
+    }
+
+    public String getUrlUpdatetBB() {
+        return UrlUpdatetBB;
+    }
+
+    public void setUrlUpdatetBB(String urlUpdatetBB) {
+        UrlUpdatetBB = urlUpdatetBB;
+    }
+
+    public String getUrl_GetBatasBBByID() {
+        return Url_GetBatasBBByID;
+    }
+
+    public void setUrl_GetBatasBBByID(String url_GetBatasBBByID) {
+        Url_GetBatasBBByID = url_GetBatasBBByID;
     }
 }

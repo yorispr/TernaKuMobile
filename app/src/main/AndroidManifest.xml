@@ -279,6 +279,10 @@
         <activity
             android:name=".Alarm.ShowCalendarActivity"
             android:label="@string/title_activity_show_calendar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TernakPedagingApp.BeratBadanActivity"
+            android:label="@string/title_activity_berat_badan"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

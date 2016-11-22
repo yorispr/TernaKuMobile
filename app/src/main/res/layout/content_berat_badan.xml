@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#e2e8e9"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        android:layout_weight="1">
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            tools:showIn="@layout/activity_add_mengandung"
+            android:background="#e2e8e9"
+            android:id="@+id/relativeLayout_addmengandung_tglperkiraan">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <LinearLayout
+                    android:layout_width="351dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="#fff"
+
+                    >
+
+                    <RadioGroup
+                        android:id="@+id/radiogroup_beratbadan_activity_insertupdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="5dp">
+                        <RadioButton
+                            android:id="@+id/radiobutton_beratbadan_activity_insert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tambah Baru"
+                            android:layout_weight="1"/>
+                        <RadioButton
+                            android:id="@+id/radiobutton_beratbadan_activity_update"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Perbarui Batas Berat"
+                            android:layout_weight="1"/>
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:elevation="5dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:id="@+id/layoutKawanan">
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Kawanan"
+                            android:id="@+id/textView44"
+                            android:textColor="@color/color_primary_produksi"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignStart="@+id/spinSesi" />
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinner_beratbadan_activity_namakawanan"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            android:spinnerMode="dropdown"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="5dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:elevation="5dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/layoutBatas">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Batas"
+                            android:id="@+id/txt_addmelahirkan_activity_kondisi"
+                            android:textColor="@color/color_primary_produksi"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_alignParentTop="true" />
+
+                        <TextView
+                            android:text="Overweight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_addmelahirkan_activity_kondisi"
+                            android:id="@+id/textView10"
+                            android:layout_alignParentStart="true" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:id="@+id/input_beratbadan_activity_overweight"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:layout_alignBaseline="@+id/input_beratbadan_activity_underweight"
+                            android:layout_alignBottom="@+id/input_beratbadan_activity_underweight"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignEnd="@+id/textView10" />
+
+                        <TextView
+                            android:text="Kenaikan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:id="@+id/textView15"
+                            android:layout_alignBaseline="@+id/textView14"
+                            android:layout_alignBottom="@+id/textView14"
+                            android:layout_alignParentEnd="true" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/input_beratbadan_activity_bataskenaikan"
+                            android:inputType="number"
+                            android:layout_below="@+id/textView15"
+                            android:layout_alignStart="@+id/textView15"
+                            android:hint="0"
+                            android:gravity="center"
+
+                            android:layout_alignEnd="@+id/textView15" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:id="@+id/input_beratbadan_activity_underweight"
+                            android:inputType="number"
+                            android:gravity="center"
+
+                            android:layout_alignBaseline="@+id/input_beratbadan_activity_bataskenaikan"
+                            android:layout_alignBottom="@+id/input_beratbadan_activity_bataskenaikan"
+                            android:layout_alignStart="@+id/textView14"
+                            android:layout_toStartOf="@+id/textView15"
+                            android:layout_alignEnd="@+id/textView14" />
+
+                        <TextView
+                            android:text="Underweight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView14"
+                            android:layout_alignBaseline="@+id/textView10"
+                            android:layout_alignBottom="@+id/textView10"
+                            android:layout_centerHorizontal="true" />
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:elevation="5dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/linearLayout_addmelahirkan_activity_jmlanak"></LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:id="@+id/button_beratbadan_activity_simpan"
+            android:textColor="#FFFFFF"
+
+            android:background="@color/color_primary_produksi"
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:elevation="10dp"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>
