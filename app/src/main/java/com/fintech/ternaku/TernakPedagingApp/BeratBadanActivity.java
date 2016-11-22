@@ -128,9 +128,6 @@ public class BeratBadanActivity extends AppCompatActivity {
             }
         });
 
-        String urlParameters = "uid=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetKawanan().execute(url.getUrl_GetKawanan(), urlParameters);
-
         button_beratbadan_activity_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,10 +191,18 @@ public class BeratBadanActivity extends AppCompatActivity {
                     clearInput();
                     setEnable(true);
                     isUpdate = false;
+                    String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                            +"&fungsi=insert";
+                    new GetKawanan().execute(url.getUrl_GetKawananBB(), urlParameters);
                 } else if(checkedId == R.id.radiobutton_beratbadan_activity_update) {
                     setEnable(true);
                     isUpdate = true;
+                    String urlParameters = "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                            +"&fungsi=update";
+                    new GetKawanan().execute(url.getUrl_GetKawananBB(), urlParameters);
                 }
+
+
             }
         });
         setEnable(false);
@@ -331,7 +336,6 @@ public class BeratBadanActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }else{
-                isUpdate = false;
                 pDialog.dismiss();
             }
         }

@@ -24,6 +24,7 @@ public class UrlList {
     private String Url_GetPakan = Url_Utama + "C_HistoryMakan/getDataPakan";
     private String Url_GetIdRFID = Url_Utama + "C_Ternak/getidTernakByRFID";
     private String Url_GetBatasBBByID = Url_Utama + "C_Pedaging/getBatasBB";
+    private String Url_GetKawananBB = Url_Utama + "C_Pedaging/GetKawananForBatasBB";
 
 
 
@@ -457,5 +458,13 @@ public class UrlList {
 
     public void setUrl_GetBatasBBByID(String url_GetBatasBBByID) {
         Url_GetBatasBBByID = url_GetBatasBBByID;
+    }
+
+    public String getUrl_GetKawananBB() {
+        return Url_GetKawananBB;
+    }
+
+    public void setUrl_GetKawananBB(String url_GetKawananBB) {
+        Url_GetKawananBB = url_GetKawananBB;
     }
 }
