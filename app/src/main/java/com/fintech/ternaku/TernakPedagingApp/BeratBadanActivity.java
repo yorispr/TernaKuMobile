@@ -113,13 +113,18 @@ public class BeratBadanActivity extends AppCompatActivity {
         spinner_beratbadan_activity_namakawanan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(isUpdate){
-                    String urlParameters2 =
-                            "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
-                                    +"&idkawanan=" + list_beratbadanactivity_idkawanan.get(selectedindex);
-                    new GetDataBB().execute(url.getUrl_GetBatasBBByID(), urlParameters2);
-                }
                 selectedindex = i;
+
+                if(isUpdate){
+                    if(selectedindex !=- 1) {
+                        String urlParameters2 =
+                                "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                                        + "&idkawanan=" + list_beratbadanactivity_idkawanan.get(selectedindex);
+                        new GetDataBB().execute(url.getUrl_GetBatasBBByID(), urlParameters2);
+                        Log.d("paramupdate",urlParameters2);
+
+                    }
+                }
             }
 
             @Override
@@ -149,7 +154,7 @@ public class BeratBadanActivity extends AppCompatActivity {
                                         sDialog.cancel();
                                         String urlParameters2;
                                         urlParameters2 =
-                                                "&idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
+                                                "idpeternakan=" + getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null)
                                                 +"&idkawanan=" + list_beratbadanactivity_idkawanan.get(selectedindex)
                                                 +"&batasoverweight="+input_beratbadan_activity_overweight.getText().toString()
                                                 +"&batasunderweight="+input_beratbadan_activity_underweight.getText().toString()
@@ -274,7 +279,7 @@ public class BeratBadanActivity extends AppCompatActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                finish();
+                                sweetAlertDialog.dismissWithAnimation();
                             }
                         })
                         .show();
@@ -336,6 +341,7 @@ public class BeratBadanActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }else{
+                clearInput();
                 pDialog.dismiss();
             }
         }
@@ -404,20 +410,18 @@ public class BeratBadanActivity extends AppCompatActivity {
     private void addKawananToList(String result){
         list_beratbadanactivity_kawanan.clear();
         list_beratbadanactivity_idkawanan.clear();
+
+
         Log.d("PET",result);
         try{
             JSONArray jArray = new JSONArray(result);
+            list_beratbadanactivity_idkawanan.add("0");
+            list_beratbadanactivity_kawanan.add("--- Pilih Kawanan ---");
             for(int i=0;i<jArray.length();i++)
             {
-                if(i==0) {
-                    list_beratbadanactivity_idkawanan.add("0");
-                    list_beratbadanactivity_kawanan.add("--- Pilih Kawanan ---");
-                }
-                else{
-                    JSONObject jObj = jArray.getJSONObject(i);
+                JSONObject jObj = jArray.getJSONObject(i);
                     list_beratbadanactivity_idkawanan.add(jObj.getString("ID_KAWANAN"));
                     list_beratbadanactivity_kawanan.add(jObj.getString("NAMA_KAWANAN"));
-                }
             }
             myAdapter.notifyDataSetChanged();
         }
