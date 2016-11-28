@@ -15,6 +15,7 @@ import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHo
 import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKawanan;
 import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
+import com.fintech.ternaku.TernakPedagingApp.BeratBadanActivity;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekPenyakit;
 import com.fintech.ternaku.Main.TambahData.Kesehatan.AddKarantina;
@@ -285,7 +286,7 @@ public class AddDataFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.button_adddata_fragment_produksi_culling :
                 Log.d("ID",String.valueOf(id));
-                i = new Intent(getActivity(),UpdateCulling.class);
+                i = new Intent(getActivity(),BeratBadanActivity.class);
                 startActivity(i);
                 break;
         }
