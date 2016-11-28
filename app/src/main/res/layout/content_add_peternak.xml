@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#e2e8e9"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fintech.ternaku.Main.NavBar.Peternak.AddPeternak"
+    tools:context=".TernakPerah.Main.NavBar.Peternak.AddPeternak"
     tools:showIn="@layout/activity_add_peternak">
 
     <LinearLayout

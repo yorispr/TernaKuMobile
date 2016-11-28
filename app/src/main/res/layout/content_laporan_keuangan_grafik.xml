@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#fff"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fintech.ternaku.Main.Laporan.Keuangan.LaporanKeuanganGrafik"
+    tools:context=".TernakPerah.Main.Laporan.Keuangan.LaporanKeuanganGrafik"
     tools:showIn="@layout/activity_laporan_keuangan_grafik">
 
 

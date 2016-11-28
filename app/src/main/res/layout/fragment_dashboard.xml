@@ -11,7 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.fintech.ternaku.Main.Dashboard.DashboardFragment"
+        tools:context=".TernakPerah.Main.Dashboard.DashboardFragment"
         android:orientation="vertical"
         android:background="#80FFFFFF">
 
@@ -141,7 +141,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
-                            <com.fintech.ternaku.Main.Dashboard.GaugeView
+                            <com.fintech.ternaku.TernakPerah.Main.Dashboard.GaugeView
                                 android:id="@+id/gauge_dashboard_fragment_produksisusuhariini"
                                 android:layout_width="160dp"
                                 android:layout_height="130dp"

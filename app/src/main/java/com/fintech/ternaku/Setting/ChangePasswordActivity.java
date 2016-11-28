@@ -20,12 +20,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
-import com.fintech.ternaku.LoginAndRegister.LoginActivity;
-import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekKesehatan;
+import com.fintech.ternaku.TernakPerah.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
-
-import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

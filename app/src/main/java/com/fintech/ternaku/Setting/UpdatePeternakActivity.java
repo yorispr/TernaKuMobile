@@ -2,7 +2,6 @@ package com.fintech.ternaku.Setting;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fintech.ternaku.Connection;
-import com.fintech.ternaku.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.R;
 import com.fintech.ternaku.UrlList;
 

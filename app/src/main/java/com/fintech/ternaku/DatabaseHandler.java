@@ -9,10 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.fintech.ternaku.Alarm.Alarm;
-import com.fintech.ternaku.Main.Pengingat.ReminderModel;
-import com.fintech.ternaku.Main.Scheduler.AlarmReceiver;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ModelAddProtokolInjeksi;
+import com.fintech.ternaku.TernakPerah.Alarm.Alarm;
+import com.fintech.ternaku.TernakPerah.Main.Pengingat.ReminderModel;
+import com.fintech.ternaku.TernakPerah.Main.Scheduler.AlarmReceiver;
 
 import java.util.ArrayList;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fintech.ternaku.Main.NavBar.CalendarToDoList.CalendarCellView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fintech.ternaku.TernakPerah.Main.NavBar.CalendarToDoList.CalendarCellView xmlns:android="http://schemas.android.com/apk/res/android"
     android:textSize="14sp"
     android:gravity="center"
     android:background="@drawable/cell_view_bg"

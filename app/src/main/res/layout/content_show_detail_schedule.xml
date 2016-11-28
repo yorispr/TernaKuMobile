@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fintech.ternaku.Main.Scheduler.ShowDetailScheduleAct"
+    tools:context=".TernakPerah.Main.Scheduler.ShowDetailScheduleAct"
     tools:showIn="@layout/activity_show_detail_schedule">
 
 </RelativeLayout>

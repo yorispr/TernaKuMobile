@@ -75,7 +75,8 @@
     <string name="title_activity_bluetooth">BluetoothActivity</string>
     <string name="title_activity_show_alarm">ShowAlarmActivity</string>
     <string name="title_activity_show_calendar">ShowCalendarActivity</string>
-    <string name="title_activity_berat_badan">BeratBadanActivity</string>
+    <string name="title_activity_sapi_potong_add_komposisi_pakan">SapiPotongAddKomposisiPakan
+    </string>
 
 
 </resources>

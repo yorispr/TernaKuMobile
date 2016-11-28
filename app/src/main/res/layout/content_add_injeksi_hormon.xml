@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#e2e8e9"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
+    tools:context=".TernakPerah.Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
     tools:showIn="@layout/activity_add_injeksi_hormon">
 
     <LinearLayout

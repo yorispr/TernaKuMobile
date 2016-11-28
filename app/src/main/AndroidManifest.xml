@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name=".Handler.MyApp"
+        android:name=".TernakPerah.Handler.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:theme">
         <activity
-            android:name=".LoginAndRegister.LoginActivity"
+            android:name=".TernakPerah.LoginAndRegister.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
@@ -28,177 +28,177 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginAndRegister.RegisterActivity"
+            android:name=".TernakPerah.LoginAndRegister.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.MainActivity"
+            android:name=".TernakPerah.Main.MainActivity"
             android:label="TernaKu"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Produksi.UpdateWeightActivity"
+            android:name=".TernakPerah.Main.TambahData.Produksi.UpdateWeightActivity"
             android:label="@string/title_activity_update_weight"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".DetailTernak.DetailTernakMain"
+            android:name=".TernakPerah.DetailTernak.DetailTernakMain"
             android:label="@string/title_activity_detail_ternak_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".ListDetailTernak.ListDetailTernakMain"
+            android:name=".TernakPerah.ListDetailTernak.ListDetailTernakMain"
             android:label="@string/title_activity_list_detail_ternak_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.Pakan.AddPakanTernak"
+            android:name=".TernakPerah.Main.NavBar.Pakan.AddPakanTernak"
             android:label="@string/title_activity_add_pakan_ternak"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.Keuangan.AddKeuangan"
+            android:name=".TernakPerah.Main.NavBar.Keuangan.AddKeuangan"
             android:label="@string/title_activity_add_keuangan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.BatasProduksiSusu.AddBatasProduksi"
+            android:name=".TernakPerah.Main.NavBar.BatasProduksiSusu.AddBatasProduksi"
             android:label="@string/title_activity_add_batas_produksi"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan"
+            android:name=".TernakPerah.Main.Laporan.PenggunaanPakan.LaporanPenggunaanPakan"
             android:label="@string/title_activity_laporan_penggunaan_pakan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik"
+            android:name=".TernakPerah.Main.Laporan.ProduksiSusu.LaporanProduksiSusuGrafik"
             android:label="@string/title_activity_laporan_produksi_susu_grafik"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.PindahTernak.PindahTernak"
+            android:name=".TernakPerah.Main.TambahData.PindahTernak.PindahTernak"
             android:label="@string/title_activity_pindah_ternak"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddMengandung"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddMengandung"
             android:label="@string/title_activity_add_mengandung"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddInseminasi"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddInseminasi"
             android:label="@string/title_activity_add_inseminasi"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddPemeriksaanReproduksi"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddPemeriksaanReproduksi"
             android:label="@string/title_activity_add_pemeriksaan_subur"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddMasaSubur"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddMasaSubur"
             android:label="@string/title_activity_add_masa_subur"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddMelahirkan"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddMelahirkan"
             android:label="@string/title_activity_add_melahirkan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.AddMenyusui"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.AddMenyusui"
             android:label="@string/title_activity_add_menyusui"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Produksi.UpdateCulling"
+            android:name=".TernakPerah.Main.TambahData.Produksi.UpdateCulling"
             android:label="@string/title_activity_update_culling"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Produksi.UpdateMasaKering"
+            android:name=".TernakPerah.Main.TambahData.Produksi.UpdateMasaKering"
             android:label="@string/title_activity_update_masa_kering"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.AddVaksinasi"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.AddVaksinasi"
             android:label="@string/title_activity_add_vaksinasi"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.AddKarantina"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.AddKarantina"
             android:label="@string/title_activity_add_karantina"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.AddCekPenyakit"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.AddCekPenyakit"
             android:label="@string/title_activity_add_cek_penyakit"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.AddCekKesehatan"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.AddCekKesehatan"
             android:label="@string/title_activity_add_cek_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.InjeksiHormon.AddInjeksiHormon"
             android:label="@string/title_activity_add_injeksi_hormon"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon"
+            android:name=".TernakPerah.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon"
             android:label="@string/title_activity_show_injeksi_hormon"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan"
             android:label="@string/title_activity_show_protokol_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.Kesehatan.ProtocolKesehatan.AddProtokolKesehatan"
+            android:name=".TernakPerah.Main.TambahData.Kesehatan.ProtocolKesehatan.AddProtokolKesehatan"
             android:label="@string/title_activity_add_protokol_kesehatan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.ProduksiSusu.AddProduksiSusu"
+            android:name=".TernakPerah.Main.NavBar.ProduksiSusu.AddProduksiSusu"
             android:label="@string/title_activity_add_produksi_susu"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Laporan.Keuangan.LaporanKeuangan"
+            android:name=".TernakPerah.Main.Laporan.Keuangan.LaporanKeuangan"
             android:label="@string/title_activity_laporan_keuangan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.Peternak.AddPeternak"
+            android:name=".TernakPerah.Main.NavBar.Peternak.AddPeternak"
             android:label="@string/title_activity_add_peternak"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.NavBar.Ternak.InsertTernak"
+            android:name=".TernakPerah.Main.NavBar.Ternak.InsertTernak"
             android:label="@string/title_activity_insert_ternak"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.PindahTernak.AddKandang"
+            android:name=".TernakPerah.Main.TambahData.PindahTernak.AddKandang"
             android:label="@string/title_activity_add_kandang"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.TambahData.PindahTernak.AddKawanan"
+            android:name=".TernakPerah.Main.TambahData.PindahTernak.AddKawanan"
             android:label="@string/title_activity_add_kawanan"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Pengingat.AddReminderActivity"
+            android:name=".TernakPerah.Main.Pengingat.AddReminderActivity"
             android:label="Add Reminder"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Pengingat.ViewReminderActivity"
+            android:name=".TernakPerah.Main.Pengingat.ViewReminderActivity"
             android:label="View Reminder"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -221,15 +221,15 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Main.Laporan.Keuangan.LaporanKeuanganGrafik"
+            android:name=".TernakPerah.Main.Laporan.Keuangan.LaporanKeuanganGrafik"
             android:label="@string/title_activity_laporan_keuangan_grafik"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Main.NavBar.CalendarToDoList.CalendarToDoActivity"
+            android:name=".TernakPerah.Main.NavBar.CalendarToDoList.CalendarToDoActivity"
             android:label="@string/title_activity_calendar_to_do"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DetailTernak.Task.AddTaskTernak"
+            android:name=".TernakPerah.DetailTernak.Task.AddTaskTernak"
             android:label="@string/title_activity_add_task_ternak"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -237,18 +237,18 @@
             android:label="Request Pembayaran"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".FCM.MyFirebaseMessagingService">
+        <service android:name=".TernakPerah.FCM.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".FCM.MyFirebaseInstanceIDService">
+        <service android:name=".TernakPerah.FCM.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".Main.Scheduler.AlarmService"
+            android:name=".TernakPerah.Main.Scheduler.AlarmService"
             android:enabled="true"
             android:exported="true" />
 
@@ -258,11 +258,11 @@
             android:label="@string/title_activity_splashscreen"
             android:theme="@style/FullscreenTheme" />
         <activity
-            android:name=".Main.Scheduler.AddScheduleActivity"
+            android:name=".TernakPerah.Main.Scheduler.AddScheduleActivity"
             android:label="@string/title_activity_add_schedule"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver android:name=".Main.Scheduler.AlarmReceiver" />
+        <receiver android:name=".TernakPerah.Main.Scheduler.AlarmReceiver" />
 
         <activity
             android:name=".Setting.BluetoothActivity"
@@ -273,16 +273,16 @@
             android:label="@string/title_activity_bluetooth"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Alarm.ShowAlarmActivity"
+            android:name=".TernakPerah.Alarm.ShowAlarmActivity"
             android:label="@string/title_activity_show_alarm"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Alarm.ShowCalendarActivity"
+            android:name=".TernakPerah.Alarm.ShowCalendarActivity"
             android:label="@string/title_activity_show_calendar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".TernakPedagingApp.BeratBadanActivity"
-            android:label="@string/title_activity_berat_badan"
+            android:name=".TernakPotong.SapiPotongAddKomposisiPakan"
+            android:label="@string/title_activity_sapi_potong_add_komposisi_pakan"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
