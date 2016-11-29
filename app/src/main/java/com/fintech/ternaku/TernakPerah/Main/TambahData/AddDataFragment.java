@@ -1,4 +1,4 @@
-package com.fintech.ternaku.Main.TambahData;
+package com.fintech.ternaku.TernakPerah.Main.TambahData;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,26 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekKesehatan;
-import com.fintech.ternaku.Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon;
-import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKandang;
-import com.fintech.ternaku.Main.TambahData.PindahTernak.AddKawanan;
-import com.fintech.ternaku.Main.TambahData.PindahTernak.PindahTernak;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesehatan.AddCekKesehatan;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesehatan.AddCekPenyakit;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesehatan.AddKarantina;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesehatan.AddVaksinasi;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesehatan.ProtocolKesehatan.ShowProtokolKesehatan;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddInseminasi;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddMasaSubur;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddMelahirkan;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddMengandung;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddMenyusui;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddPemeriksaanReproduksi;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.PindahTernak.AddKandang;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.PindahTernak.AddKawanan;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.PindahTernak.PindahTernak;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Produksi.UpdateMasaKering;
+import com.fintech.ternaku.TernakPerah.Main.TambahData.Produksi.UpdateWeightActivity;
 import com.fintech.ternaku.TernakPotong.BeratBadanActivity;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
-import com.fintech.ternaku.Main.TambahData.Kesehatan.AddCekPenyakit;
-import com.fintech.ternaku.Main.TambahData.Kesehatan.AddKarantina;
-import com.fintech.ternaku.Main.TambahData.Kesehatan.AddVaksinasi;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddInseminasi;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddMasaSubur;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddMelahirkan;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddMengandung;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddMenyusui;
-import com.fintech.ternaku.Main.TambahData.Kesuburan.AddPemeriksaanReproduksi;
-import com.fintech.ternaku.Main.TambahData.Produksi.UpdateCulling;
-import com.fintech.ternaku.Main.TambahData.Produksi.UpdateMasaKering;
-import com.fintech.ternaku.Main.TambahData.Produksi.UpdateWeightActivity;
 import com.fintech.ternaku.R;
 
 public class AddDataFragment extends Fragment implements View.OnClickListener {

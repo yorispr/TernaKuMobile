@@ -23,10 +23,6 @@ public class UrlList {
     private String Url_GetListJabatan = Url_Utama + "C_Pengguna/getListRole";
     private String Url_GetPakan = Url_Utama + "C_HistoryMakan/getDataPakan";
     private String Url_GetIdRFID = Url_Utama + "C_Ternak/getidTernakByRFID";
-    private String Url_GetBatasBBByID = Url_Utama + "C_Pedaging/getBatasBB";
-    private String Url_GetKawananBB = Url_Utama + "C_Pedaging/GetKawananForBatasBB";
-
-
 
     //Login========================================
     private String Url_Login = Url_Utama + "C_Pengguna/cekLogin";
@@ -130,10 +126,6 @@ public class UrlList {
     private String UrlGet_KehamilanLainnya = Url_Utama + "C_Ternak/GetSemuaTernakTidakHamilMelahirkanMenyusuiBulanIniByPeternakan";
     private String UrlGet_SegmentList = Url_Utama + "C_Ternak/GetSemuaTernakByPeternakanOnSegment";
 
-
-
-
-
     //DetailTernak=================================
     //Profile+++++++++++++++++++++
     private String UrlGet_TernakProfile = Url_Utama + "C_Ternak/GetTernakUmum";
@@ -148,8 +140,18 @@ public class UrlList {
     private String UrlGet_RFIDCek = Url_Utama + "C_Handling/cekRFIdTerdaftar";
 
 
+    //Pedaging||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+    private String Url_GetBatasBBByID = Url_Utama + "C_Pedaging/getBatasBB";
+    private String Url_GetKawananBB = Url_Utama + "C_Pedaging/GetKawananForBatasBB";
+    private String Url_GetAdg = Url_Utama + "C_Pedaging/getADGTernak";
+
+
     public UrlList(){
 
+    }
+
+    public String getUrl_GetAdg() {
+        return Url_GetAdg;
     }
 
     public String getUrlGetlaporanAll() {

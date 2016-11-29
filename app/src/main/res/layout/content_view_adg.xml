@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_view_adg"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.fintech.ternaku.TernakPotong.ADG.ViewADG"
+    tools:showIn="@layout/activity_view_adg">
+
+
+    <me.wangyuwei.loadingview.LoadingView
+        android:id="@+id/loading_view_adg"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:visibility="gone"
+        app:lv_duration="3"
+        app:lv_start_color="#e67e22"
+        app:lv_end_color="#e67e22"
+        app:lv_internal_radius="5dp"
+        app:lv_external_radius="30dp" />
+    <ListView
+        android:id="@+id/list_adg_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
+</LinearLayout>
