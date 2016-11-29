@@ -37,6 +37,7 @@ import com.fintech.ternaku.TernakPerah.Main.Scheduler.AddScheduleActivity;
 import com.fintech.ternaku.RequestTransactionActivity;
 import com.fintech.ternaku.Setting.SetPrefs;
 import com.fintech.ternaku.TernakPotong.ADG.ViewADG;
+import com.fintech.ternaku.TernakPotong.KompisisiPakan.KomposisiPakanActivity;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.fintech.ternaku.TernakPerah.LoginAndRegister.LoginActivity;
@@ -297,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this,SetPrefs.class));
         }else if(id == R.id.nav_view_adg){
             startActivity(new Intent(MainActivity.this,ViewADG.class));
+        }else if(id == R.id.nav_komposisi_pakan){
+            startActivity(new Intent(MainActivity.this,KomposisiPakanActivity.class));
         }else if(id == R.id.nav_log_out){
             FirebaseMessaging.getInstance().unsubscribeFromTopic(getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null));
             SharedPreferences preferences = getSharedPreferences(getString(R.string.userpref), 0);

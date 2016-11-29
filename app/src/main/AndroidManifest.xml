@@ -291,6 +291,10 @@
         <activity
             android:name=".TernakPotong.ADG.ViewADG"
             android:label="@string/title_activity_view_adg"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TernakPotong.KompisisiPakan.KomposisiPakanActivity"
+            android:label="@string/title_activity_komposisi_pakan"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -78,6 +78,7 @@
     <string name="title_activity_sapi_potong_add_komposisi_pakan">SapiPotongAddKomposisiPakan
     </string>
     <string name="title_activity_view_adg">ViewADG</string>
+    <string name="title_activity_komposisi_pakan">KomposisiPakanActivity</string>
 
 
 </resources>
