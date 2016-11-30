@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int opentabs = 0;
     private boolean flag_log_out=false;
     NavigationTabBar navigationTabBar;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         //new LongOperation().execute();
+
+        sharedpreferences = getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean("isPause",false);
+        editor.apply();
 
         //Set Toolbar Floating Button-----------------------------
         navigationTabBar = (NavigationTabBar) findViewById(R.id.navigation_main_activity);
@@ -281,7 +287,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationTabBar.deselect();
 
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        sharedpreferences = getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean("isPause",true);
+        editor.apply();
+
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -319,13 +334,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        /*sharedpreferences = getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean("isPause",false);
+        editor.apply();*/
+
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DashboardFragment(), "FARMBOARD");
         adapter.addFrag(new AddDataFragment(), "TAMBAH DATA");
         adapter.addFrag(new ShowReminderFragment(), "PENGINGAT");
         adapter.addFrag(new LaporanFragment(), "LAPORAN");
 
+
         viewPager.setAdapter(adapter);
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0){
+                    sharedpreferences = getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+                    if(!sharedpreferences.getBoolean("isPause",false)){
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putBoolean("isPause",true);
+                        editor.apply();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

@@ -3,11 +3,13 @@ package com.fintech.ternaku.TernakPerah.Main.Dashboard;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fintech.ternaku.DatabaseHandler;
 import com.fintech.ternaku.TernakPerah.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.TernakPerah.Main.MainActivity;
 import com.fintech.ternaku.UrlList;
@@ -38,6 +41,7 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,6 +63,7 @@ public class DashboardFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    SharedPreferences sharedpreferences;
 
     //Get Url Link---------------------------------------------------------
     UrlList url = new UrlList();
@@ -152,6 +157,9 @@ public class DashboardFragment extends Fragment {
     RelativeLayout relativeLayout_dashboard_fragment;
     View view;
 
+
+    DatabaseHandler db ;
+
     //Loading------------------------------------------------------------
     private LoadingView loading_view_dashboard;
 
@@ -172,7 +180,8 @@ public class DashboardFragment extends Fragment {
 
         //Initiate-----------------------------------------------------------
         InitiateFragment();
-
+        db = new DatabaseHandler(getContext());
+        //db.ClearReminder();
         //Set Expander--------------------------------------------------------
         buttonexpander_dashboard_fragment_produksisusu=(LinearLayout)view.findViewById(R.id.buttonexpander_dashboard_fragment_produksisusu);
         expanderlayout_dashboard_fragment_produsisusu = (ExpandableRelativeLayout) view.findViewById(R.id.expanderlayout_dashboard_fragment_produsisusu);
@@ -267,8 +276,8 @@ public class DashboardFragment extends Fragment {
 
         //Set Spinner Peternakan------------------------------------
         spinner_dashboard_fragment_namapeternakan = (Spinner) view.findViewById(R.id.spinner_dashboard_fragment_namapeternakan);
-        String urlParameter_get_spinner_peternakan = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
-        new GetPeternakan().execute(url.getUrl_GetPeternakan(), urlParameter_get_spinner_peternakan);
+
+
 
         //Set Gauge Produksi Susu Hari Ini--------------------------
         txt_dashboard_fragment_produksisusuhariini = (TextView)view.findViewById(R.id.txt_dashboard_fragment_produksisusuhariini);
@@ -461,8 +470,6 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-
-
         //Set Gauge Pembelian Pakan----------------------------------
         txt_dashboard_fragment_jumlahpakan = (TextView)view.findViewById(R.id.txt_dashboard_fragment_jumlahpakan);
         txt_dashboard_fragment_biayapakan = (TextView)view.findViewById(R.id.txt_dashboard_fragment_biayapakan);
@@ -472,6 +479,38 @@ public class DashboardFragment extends Fragment {
         values.add(new ChartData(65f));
         values.add(new ChartData(55f));
         gauge_dashboard_fragment_pembelianpakan = (CustomGauge) view.findViewById(R.id.gauge_dashboard_fragment_pembelianpakan);
+
+        String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
+
+        sharedpreferences = getActivity().getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+        Boolean ispause = sharedpreferences.getBoolean("isPause",false);
+        Log.d("isPause",ispause.toString());
+        if(!ispause) {
+            String urlParameter_get_spinner_peternakan = "uid=" + getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+            new GetPeternakan().execute(url.getUrl_GetPeternakan(), urlParameter_get_spinner_peternakan);
+
+            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
+            final String refresh_time = SP.getString("refresh_range", "300");
+
+            if(!refresh_time.equals("0")) {
+                Log.d("sharedpref", refresh_time);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        String urlParameter_get_spinner_peternakan = "uid=" + getContext().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPengguna", null);
+                        new GetPeternakan().execute(url.getUrl_GetPeternakan(), urlParameter_get_spinner_peternakan);
+                        handler.postDelayed(this, Integer.parseInt(refresh_time) * 1000);
+                    }
+                }, Integer.parseInt(refresh_time) * 1000);
+            }
+
+        }else{
+            SetDataDashboardOffline();
+        }
+
+
 
         return view;
     }
@@ -503,11 +542,49 @@ public class DashboardFragment extends Fragment {
         }
 
         protected void onPostExecute(String result2) {
+            Log.d("dashboard",result2);
             temp_result = result2;
             SetDataDashboard();
             loading_view_dashboard.stop();
             RefreshFragment();
-
+            try {
+                JSONArray jArray = new JSONArray(temp_result);
+                for (int i = 0; i < jArray.length(); i++) {
+                    JSONObject jObj = jArray.getJSONObject(i);
+                    ModelDashboard md = new ModelDashboard();
+                    md.setDate(new Date().toString());
+                    if(nullHandle(jObj,"produksi_susu")==1){
+                        md.setProduksi_susu(jObj.getLong("produksi_susu"));
+                    }else{
+                        md.setProduksi_susu(0.0f);
+                    }
+                    if(nullHandle(jObj,"harga")==1){
+                        md.setHarga(jObj.getLong("harga"));
+                    }else{
+                        md.setHarga(0.0f);
+                    }
+                    if(nullHandle(jObj,"jumlah_pakan")==1){
+                        md.setJumlah_pakan(jObj.getLong("jumlah_pakan"));
+                    }else{
+                        md.setJumlah_pakan(0.0f);
+                    }
+                    md.setJumlah_bbbagus(jObj.getInt("jumlah_bbbagus"));
+                    md.setJumlah_bblainnya(jObj.getInt("jumlah_bblainnya"));
+                    md.setJumlah_bbkurang(jObj.getInt("jumlah_bbkurang"));
+                    md.setJumlah_bbsedang(jObj.getInt("jumlah_bbsedang"));
+                    md.setJumlah_bbsempurna(jObj.getInt("jumlah_bbsempurna"));
+                    md.setJumlah_calv(jObj.getInt("jumlah_calv"));
+                    md.setJumlah_dewasa(jObj.getInt("jumlah_dewasa"));
+                    md.setJumlah_heifers(jObj.getInt("jumlah_heifers"));
+                    md.setJumlah_sehat(jObj.getInt("jumlah_sehat"));
+                    md.setJumlah_ternakhamil(jObj.getInt("jumlah_ternakhamil"));
+                    md.setJumlah_ternakmelahirkan(jObj.getInt("jumlah_ternakmelahirkan"));
+                    md.setJumlah_tidakhamilmenyusuimelahirkan(jObj.getInt("jumlah_tidakhamilmenyusuimelahirkan"));
+                    md.setPeriksa(jObj.getInt("periksa"));
+                    md.setTotal_sapi(jObj.getInt("total_sapi"));
+                    db.AddDashboardData(md);
+                }
+            }catch(JSONException e){e.printStackTrace();}
         }
     }
 
@@ -560,8 +637,11 @@ public class DashboardFragment extends Fragment {
             }
             //Execute Dashboard Data-------------------------------------------
             String urlParameters = "idpeternakan="+getActivity().getSharedPreferences(getString(R.string.userpref), Context.MODE_PRIVATE).getString("keyIdPeternakan", null).trim();
-            new GetDashboardData().execute(url.getUrl_GetDashboardInformation(),urlParameters);
-            Log.d("IDP",url.getUrl_GetDashboardInformation());
+            sharedpreferences = getActivity().getSharedPreferences("FragPref", Context.MODE_PRIVATE);
+            Boolean ispause = sharedpreferences.getBoolean("isPause",false);
+            Log.d("isPause",ispause.toString());
+                new GetDashboardData().execute(url.getUrl_GetDashboardInformation(), urlParameters);
+
         }
         catch (JSONException e){e.printStackTrace();}
     }
@@ -822,6 +902,263 @@ public class DashboardFragment extends Fragment {
         chart_dashboard_fragment_datakawanan.setPieChartData(data_dashboard_fragment_datakawanan);
         chart_dashboard_fragment_bodyscore.setPieChartData(data_dashboard_fragment_bodyscore);
 
+    }
+    private void SetDataDashboardOffline(){
+        InitiateFragment();
+        ModelDashboard modelDashboard = new ModelDashboard();
+        modelDashboard = db.GetDashboardData();
+
+        int numValues = 6;
+        value_dashboard_fragment_kesehatan = new ArrayList<SliceValue>();
+        value_dashboard_fragment_pemeriksaanhariini = new ArrayList<SliceValue>();
+        value_dashboard_fragment_sedangdalammasasubur = new ArrayList<SliceValue>();
+        value_dashboard_fragment_datakehamilan = new ArrayList<SliceValue>();
+        value_dashboard_fragment_datakawanan = new ArrayList<SliceValue>();
+        value_dashboard_fragment_bodyscore = new ArrayList<SliceValue>();
+
+        value_dashboard_fragment_kesehatan.clear();
+        value_dashboard_fragment_pemeriksaanhariini.clear();
+        value_dashboard_fragment_sedangdalammasasubur.clear();
+        value_dashboard_fragment_datakehamilan.clear();
+        value_dashboard_fragment_datakawanan.clear();
+        value_dashboard_fragment_bodyscore.clear();
+
+
+
+                //Get Data Gauge Produksi Susu------------------------------------------
+                if(modelDashboard.getProduksi_susu() == 0.0f){
+                    totalsusu = 0;
+                }else {
+                    totalsusu = modelDashboard.getProduksi_susu();
+                }
+                txtbtn_dashboard_fragment_produksisusu.setText(String.valueOf(totalsusu) + " Liter ");
+
+                //Get Data Kesehatan Hari ini----------------------------------------------
+                SliceValue valueSehat = new SliceValue(modelDashboard.getJumlah_sehat(), Color.parseColor("#2ecc71"));
+                int tidaksehat = modelDashboard.getTotal_sapi() - modelDashboard.getJumlah_sehat();
+                SliceValue valueTidakSehat = new SliceValue(tidaksehat, Color.parseColor("#e74c3c"));
+                jumlahsehat = modelDashboard.getJumlah_sehat();
+                totsapi = modelDashboard.getTotal_sapi();
+                value_dashboard_fragment_kesehatan.add(valueSehat);
+                value_dashboard_fragment_kesehatan.add(valueTidakSehat);
+                txtbtn_dashboard_fragment_tidaksakit.setText(String.valueOf(modelDashboard.getJumlah_sehat())+" ");
+                txtbtn_dashboard_fragment_sakit.setText(String.valueOf(tidaksehat)+" ");
+
+                //Get Data Periksa Hari ini----------------------------------------------
+                SliceValue valuePeriksaHariIni = new SliceValue(modelDashboard.getPeriksa(), Color.parseColor("#2ecc71"));
+                int belumperiksa = modelDashboard.getTotal_sapi() - modelDashboard.getPeriksa();
+                SliceValue valueBelumPeriksa = new SliceValue(belumperiksa, Color.parseColor("#e74c3c"));
+                jumlahperiksa = modelDashboard.getPeriksa();
+                totsapi = modelDashboard.getTotal_sapi();
+                value_dashboard_fragment_pemeriksaanhariini.add(valuePeriksaHariIni);
+                value_dashboard_fragment_pemeriksaanhariini.add(valueBelumPeriksa);
+                txtbtn_dashboard_fragment_sudahperiksa.setText(String.valueOf(modelDashboard.getPeriksa())+" ");
+                txtbtn_dashboard_fragment_belumperiksa.setText(String.valueOf(belumperiksa)+" ");
+
+                //Get Data Sapi dalam Masa Subur----------------------------------------------
+                SliceValue valueSubur = new SliceValue(modelDashboard.getSubur(), Color.parseColor("#ff9ad7"));
+                int belumSubur = modelDashboard.getSapi_dewasa() - modelDashboard.getSubur();
+                SliceValue valueBelumSubur = new SliceValue(belumSubur, Color.parseColor("#9cb6c1"));
+                jumlahSubur = modelDashboard.getSubur();
+                totDewasa = modelDashboard.getSapi_dewasa();
+                value_dashboard_fragment_sedangdalammasasubur.add(valueSubur);
+                value_dashboard_fragment_sedangdalammasasubur.add(valueBelumSubur);
+                txtbtn_dashboard_fragment_sedangbirahi.setText(String.valueOf(modelDashboard.getSubur())+" ");
+                txtbtn_dashboard_fragment_tidakbirahi.setText(String.valueOf(belumSubur)+" ");
+
+                //Set Data Pakan---------------------------------------------------------------
+               // if (modelDashboard.getJumlah_pakan() == 0.0f) {
+                    jumlahpakan = (int)modelDashboard.getJumlah_pakan();
+                //}
+                //if (!jObj.isNull("harga")) {
+                    jumlahbiaya = (int)modelDashboard.getHarga();
+                //}
+
+                //Get Data Kehamilan----------------------------------------------------------
+                SliceValue valuehamil = new SliceValue(modelDashboard.getJumlah_ternakhamil(), Color.parseColor("#d280f0"));
+                SliceValue valuemelahirkan = new SliceValue(modelDashboard.getJumlah_ternakmelahirkan(), Color.parseColor("#8bdafc"));
+                SliceValue valuemenyusui = new SliceValue(modelDashboard.getJumlah_ternakmenyusui(), Color.parseColor("#2ecc71"));
+                int lainnya = modelDashboard.getJumlah_tidakhamilmenyusuimelahirkan();
+                SliceValue valueLainnya = new SliceValue(lainnya, Color.parseColor("#bdc3c7"));
+                value_dashboard_fragment_datakehamilan.add(valuehamil);
+                value_dashboard_fragment_datakehamilan.add(valuemelahirkan);
+                value_dashboard_fragment_datakehamilan.add(valuemenyusui);
+                value_dashboard_fragment_datakehamilan.add(valueLainnya);
+                txtbtn_dashboard_fragment_hamilmenyusui.setText(String.valueOf(modelDashboard.getJumlah_ternakmenyusui())+" ");
+                txtbtn_dashboard_fragment_hamilmelahirkan.setText(String.valueOf(modelDashboard.getJumlah_ternakmelahirkan())+" ");
+                txtbtn_dashboard_fragment_hamilmendangdung.setText(String.valueOf(modelDashboard.getJumlah_ternakhamil())+" ");
+                txtbtn_dashboard_fragment_hamillainnya.setText(String.valueOf(lainnya)+" ");
+
+                //Get Data Kawanan----------------------------------------------------------
+                SliceValue valuedewasa = new SliceValue(modelDashboard.getJumlah_dewasa(), Color.parseColor("#4183D7"));
+                SliceValue valueanak = new SliceValue(modelDashboard.getJumlah_heifers(), Color.parseColor("#59ABE3"));
+                SliceValue valuebayi = new SliceValue(modelDashboard.getJumlah_calv(), Color.parseColor("#8bdafc"));
+                int lainnya2 = totsapi - modelDashboard.getJumlah_dewasa()-modelDashboard.getJumlah_heifers()-modelDashboard.getJumlah_calv();
+                SliceValue valuelainnya2 = new SliceValue(lainnya2, Color.parseColor("#bdc3c7"));
+                value_dashboard_fragment_datakawanan.add(valuedewasa);
+                value_dashboard_fragment_datakawanan.add(valueanak);
+                value_dashboard_fragment_datakawanan.add(valuebayi);
+                value_dashboard_fragment_datakawanan.add(valuelainnya2);
+                txtbtn_dashboard_fragment_kawanandewasa.setText(String.valueOf(modelDashboard.getJumlah_dewasa())+" ");
+                txtbtn_dashboard_fragment_kawananmuda.setText(String.valueOf(modelDashboard.getJumlah_heifers())+" ");
+                txtbtn_dashboard_fragment_kawananbayi.setText(String.valueOf(modelDashboard.getJumlah_calv())+" ");
+                txtbtn_dashboard_fragment_kawananlainnya.setText(String.valueOf(lainnya2)+" ");
+
+
+                //Get Data Berat
+                SliceValue valuesempurna = new SliceValue(modelDashboard.getJumlah_bbsempurna(), Color.parseColor("#2ecc71"));
+                SliceValue valuebagus = new SliceValue(modelDashboard.getJumlah_bbbagus(), Color.parseColor("#3498db"));
+                SliceValue valuesedang = new SliceValue(modelDashboard.getJumlah_bbsedang(), Color.parseColor("#f1c40f"));
+                SliceValue valuekurang = new SliceValue(modelDashboard.getJumlah_bbkurang(), Color.parseColor("#e74c3c"));
+                SliceValue valuelainnya = new SliceValue(modelDashboard.getJumlah_bblainnya(), Color.parseColor("#95a5a6"));
+                value_dashboard_fragment_bodyscore.add(valuesempurna);
+                value_dashboard_fragment_bodyscore.add(valuebagus);
+                value_dashboard_fragment_bodyscore.add(valuesedang);
+                value_dashboard_fragment_bodyscore.add(valuekurang);
+                value_dashboard_fragment_bodyscore.add(valuelainnya);
+                txtbtn_dashboard_fragment_kondisisempurna.setText(String.valueOf(modelDashboard.getJumlah_bbsempurna())+" ");
+                txtbtn_dashboard_fragment_kondisibagus.setText(String.valueOf(modelDashboard.getJumlah_bbbagus())+" ");
+                txtbtn_dashboard_fragment_kondisisedang.setText(String.valueOf(modelDashboard.getJumlah_bbsedang())+" ");
+                txtbtn_dashboard_fragment_kondisikurang.setText(String.valueOf(modelDashboard.getJumlah_bbkurang())+" ");
+                txtbtn_dashboard_fragment_kondisilainnya.setText(String.valueOf(modelDashboard.getJumlah_bblainnya())+" ");
+
+            //Start Gauge Produksi Susu-------------------------------------------
+            startRunning(-255+(totalsusu*(float)15.1));
+            txt_dashboard_fragment_produksisusuhariini.setText(String.valueOf((totalsusu)));
+
+        new Thread() {
+            public void run() {
+                for (i = 0; i <= jumlahpakan; i++) {
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                gauge_dashboard_fragment_pembelianpakan.setValue(i);
+                            }
+                        });
+                        Thread.sleep(70);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
+        String currencyCode = "IDR";
+        Currency currency = Currency.getInstance(currencyCode);
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.ROOT);
+        format.setMaximumFractionDigits(0);
+        format.setGroupingUsed(true);
+        format.setCurrency(currency);
+        String formattedAmount = format.format(jumlahbiaya);
+        animateTextView(0, jumlahpakan, txt_dashboard_fragment_jumlahpakan);
+        txt_dashboard_fragment_biayapakan.setText(""+formattedAmount);
+        txtbtn_dashboard_fragment_pakanjumlah.setText(String.valueOf(jumlahbiaya)+ " Kg ");
+        txtbtn_dashboard_fragment_pakanharga.setText("" + formattedAmount + " ");
+
+        //Set Data Kesehatan Hari Ini--------------------------------------------
+        data_dashboard_fragment_kesehatan = new PieChartData(value_dashboard_fragment_kesehatan);
+        data_dashboard_fragment_kesehatan.setHasLabels(hasLabels);
+        data_dashboard_fragment_kesehatan.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_kesehatan.setHasLabelsOutside(hasLabelsOutside);
+        data_dashboard_fragment_kesehatan.setHasCenterCircle(hasCenterCircle);
+
+        data_dashboard_fragment_kesehatan.setCenterText1(String.valueOf(jumlahsehat));
+        data_dashboard_fragment_kesehatan.setCenterText2("Sapi Sehat");
+        data_dashboard_fragment_kesehatan.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+        //Set Data Pemeriksaan Hari Ini--------------------------------------------
+        data_dashboard_fragment_pemeriksaanhariinia = new PieChartData(value_dashboard_fragment_pemeriksaanhariini);
+        data_dashboard_fragment_pemeriksaanhariinia.setHasLabels(hasLabels);
+        data_dashboard_fragment_pemeriksaanhariinia.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_pemeriksaanhariinia.setHasLabelsOutside(hasLabelsOutside);
+        data_dashboard_fragment_pemeriksaanhariinia.setHasCenterCircle(hasCenterCircle);
+
+        data_dashboard_fragment_pemeriksaanhariinia.setCenterText1(String.valueOf(jumlahperiksa));
+        data_dashboard_fragment_pemeriksaanhariinia.setCenterText2("Sudah diperiksa");
+        data_dashboard_fragment_pemeriksaanhariinia.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+
+        //Set Data dalam masa subur-----------------------------------------------
+        data_dashboard_fragment_sedangdalammasasubur = new PieChartData(value_dashboard_fragment_sedangdalammasasubur);
+        data_dashboard_fragment_sedangdalammasasubur.setHasLabels(hasLabels);
+        data_dashboard_fragment_sedangdalammasasubur.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_sedangdalammasasubur.setHasLabelsOutside(hasLabelsOutside);
+        data_dashboard_fragment_sedangdalammasasubur.setHasCenterCircle(hasCenterCircle);
+
+        data_dashboard_fragment_sedangdalammasasubur.setCenterText1(String.valueOf(jumlahSubur));
+        data_dashboard_fragment_sedangdalammasasubur.setCenterText2("Sedang Heat");
+        data_dashboard_fragment_sedangdalammasasubur.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+        //Set Data Kehamilan-----------------------------------------------
+        data_dashboard_fragment_datakehamilan = new PieChartData(value_dashboard_fragment_datakehamilan);
+        data_dashboard_fragment_datakehamilan.setHasLabels(hasLabels);
+        data_dashboard_fragment_datakehamilan.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_datakehamilan.setHasLabelsOutside(hasLabelsOutside);
+
+        data_dashboard_fragment_datakehamilan.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+        //Set Data Kawanan-----------------------------------------------
+        data_dashboard_fragment_datakawanan = new PieChartData(value_dashboard_fragment_datakawanan);
+        data_dashboard_fragment_datakawanan.setHasLabels(hasLabels);
+        data_dashboard_fragment_datakawanan.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_datakawanan.setHasLabelsOutside(hasLabelsOutside);
+
+        data_dashboard_fragment_datakawanan.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+
+        //Set Data Berat-----------------------------------------------
+        data_dashboard_fragment_bodyscore= new PieChartData(value_dashboard_fragment_bodyscore);
+        data_dashboard_fragment_bodyscore.setHasLabels(hasLabels);
+        data_dashboard_fragment_bodyscore.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        data_dashboard_fragment_bodyscore.setHasLabelsOutside(hasLabelsOutside);
+
+        data_dashboard_fragment_bodyscore.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+
+
+
+        if (isExploded) {
+            data_dashboard_fragment_pemeriksaanhariinia.setSlicesSpacing(24);
+        }
+
+        if (hasCenterText1) {
+            //data.setCenterText1("Hello!");
+            // Get roboto-italic font.
+            //Typeface tf = Typeface.createFromAsset(MainActivity.this.getAssets(), "Roboto-Italic.ttf");
+            //data.setCenterText1Typeface(tf);
+
+            // Get font size from dimens.xml and convert it to sp(library uses sp values).
+            data_dashboard_fragment_pemeriksaanhariinia.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                    (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
+            data_dashboard_fragment_sedangdalammasasubur.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                    (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
+        }
+
+        if (hasCenterText2) {
+            //data.setCenterText2("Charts (Roboto Italic)");
+
+            Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
+
+            data_dashboard_fragment_pemeriksaanhariinia.setCenterText2Typeface(tf);
+            data_dashboard_fragment_pemeriksaanhariinia.setCenterText2FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+                    (int) getResources().getDimension(R.dimen.pie_chart_text2_size)));
+        }
+
+        //Set Chart To View---------------------------------------
+        chart_dashboard_fragment_kesehatan.setPieChartData(data_dashboard_fragment_kesehatan);
+        chart_dashboard_fragment_pemeriksaanhariini.setPieChartData(data_dashboard_fragment_pemeriksaanhariinia);
+        chart_dashboard_fragment_sedangdalammasasubur.setPieChartData(data_dashboard_fragment_sedangdalammasasubur);
+        chart_dashboard_fragment_datakehamilan.setPieChartData(data_dashboard_fragment_datakehamilan);
+        chart_dashboard_fragment_datakawanan.setPieChartData(data_dashboard_fragment_datakawanan);
+        chart_dashboard_fragment_bodyscore.setPieChartData(data_dashboard_fragment_bodyscore);
+        loading_view_dashboard.stop();
+        RefreshFragment();
     }
 
     public static int nullHandle(JSONObject json, String key) throws JSONException {

@@ -1,5 +1,20 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen android:title="Umum"
+        android:icon="@drawable/ic_settings_24"
+        >
+
+        <ListPreference
+            android:title="Auto Refresh"
+            android:summary="%s"
+            android:showDefault="true"
+
+            android:key="refresh_range"
+            android:defaultValue="300"
+            android:entries="@array/listTitle"
+            android:entryValues="@array/listData" />
+
+    </PreferenceScreen>
 
     <Preference
         android:key="change_peternakan"
