@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_calendar_month"/>
+        <NumberPicker
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/numberPicker_laporan_bulan"
+            android:scaleX="1.0"
+            android:layout_weight="3"
+            android:layout_gravity="center_horizontal"
+            android:divider="@color/colorPrimary"/>
+        <NumberPicker
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="30dp"
+            android:id="@+id/numberPicker_laporan_tahun"
+            android:scaleX="1.0"
+            android:layout_weight="3"
+            android:layout_gravity="center_horizontal"
+            android:divider="@color/colorPrimary" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_calendar_month"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_date_picker_laporan"
+            android:text="SET"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="5dp"
+            android:id="@+id/button_laporan_fragment_pickerset" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selector_date_picker_laporan"
+            android:text="CANCEL"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="5dp"
+            android:id="@+id/button_laporan_fragment_pickercancel"/>
+    </LinearLayout>
+</LinearLayout>

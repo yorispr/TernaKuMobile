@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        android:layout_weight="1">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/content_komposisi_pakan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:background="#e2e8e9"
+
+            tools:context="com.fintech.ternaku.TernakPedagingApp.KomposisiPakanActivity"
+            tools:showIn="@layout/activity_komposisi_pakan">
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:background="#FFFFFF"
+                android:elevation="10dp"
+
+                android:layout_margin="7dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp">
+
+                <RadioGroup
+                    android:id="@+id/radiogroup_komposisipakan_activity_insertupdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginBottom="5dp">
+                    <RadioButton
+                        android:id="@+id/radiobutton_komposisipakan_activity_insert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tambah Konsentrat Baru"
+                        android:textColor="#7f8c8d"
+
+                        android:layout_weight="1"/>
+                    <RadioButton
+                        android:id="@+id/radiobutton_komposisipakan_activity_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perbarui Konsentrat"
+                        android:textColor="#7f8c8d"
+
+                        android:layout_weight="1"/>
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_komposisipakan_form"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/linearlayout_komposisi_activity_konsentrat"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:background="#FFFFFF"
+                    android:elevation="10dp"
+                    android:visibility="gone"
+                    android:layout_margin="7dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Konsentrat"
+                        android:id="@+id/textView44"
+                        android:textColor="@color/color_primary_produksi"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignStart="@+id/spinner_komposisi_activity_konsentrat" />
+
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner_komposisi_activity_konsentrat"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:spinnerMode="dropdown"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:background="#FFFFFF"
+                    android:elevation="10dp"
+
+                    android:layout_margin="7dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
+
+
+                    <TextView
+                        android:text="Umur Ternak"
+                        android:id="@+id/textView20"
+                        android:layout_weight="0.29"
+                        android:textColor="#7f8c8d"
+
+                        android:layout_width="100dp"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:layout_height="75dp" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_primary_produksi"
+                        android:layout_marginRight="10dp" />
+                    <EditText
+                        android:inputType="number"
+                        android:ems="10"
+                        android:hint="0"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="center_vertical|center"
+                        android:id="@+id/input_komposisi_activity_umurmin"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="45dp"
+                        android:layout_width="80dp" />
+
+                    <TextView
+                        android:text="-"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView21"
+                        android:layout_weight="0.33"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:gravity="center" />
+
+                    <EditText
+                        android:inputType="number"
+                        android:ems="10"
+                        android:background="@drawable/edittext_selector"
+
+                        android:id="@+id/input_komposisi_activity_umurmax"
+                        android:gravity="center_vertical|center"
+                        android:hint="0"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="45dp"
+                        android:layout_width="80dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:elevation="10dp"
+
+                    android:layout_margin="7dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
+
+                    <TextView
+                        android:text="Hijauan"
+                        android:id="@+id/textView22"
+                        android:textColor="#7f8c8d"
+
+                        android:gravity="center"
+                        android:layout_width="71dp"
+                        android:textSize="16sp"
+                        android:layout_height="75dp" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_primary_produksi"
+                        android:layout_marginRight="3dp" />
+                    <TextView
+                        android:text="Jumlah"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView27"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:textSize="10sp"
+                        android:gravity="top|center" />
+
+                    <EditText
+                        android:layout_height="45dp"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/input_komposisi_activity_hijauanjumlah"
+                        android:hint="0"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="center_vertical|center"
+                        android:layout_width="50dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp" />
+
+                    <TextView
+                        android:text="Kg"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView25"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:textSize="10sp"
+                        android:gravity="bottom"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="Biaya :"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView26"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:textSize="10sp"
+                        android:gravity="top|center" />
+
+                    <EditText
+                        android:layout_height="45dp"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/input_komposisi_activity_hijauanbiaya"
+                        android:hint="0"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="center_vertical|center"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="2dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:elevation="10dp"
+                    android:layout_margin="7dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
+
+                    <TextView
+                        android:text="Konsentrat"
+                        android:layout_width="71dp"
+                        android:textColor="#7f8c8d"
+
+                        android:id="@+id/textView29"
+                        android:gravity="center"
+                        android:layout_height="75dp" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_primary_produksi"
+                        android:layout_marginRight="3dp" />
+
+                    <TextView
+                        android:text="Jumlah"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:id="@+id/textView31"
+                        android:textSize="10sp"
+                        android:gravity="top|center" />
+
+                    <EditText
+                        android:layout_height="45dp"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/input_komposisi_activity_konsentratjumlah"
+                        android:layout_width="50dp"
+                        android:hint="0"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="center_vertical|center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp" />
+
+                    <TextView
+                        android:text="Kg"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView34"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:textSize="10sp"
+                        android:gravity="bottom"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="Biaya :"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView35"
+                        android:layout_weight="0.00"
+                        android:textColor="@color/color_primary_produksi"
+
+                        android:textSize="10sp"
+                        android:gravity="top|center" />
+
+                    <EditText
+                        android:layout_height="45dp"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/input_komposisi_activity_konsentratbiaya"
+                        android:hint="0"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="center_vertical|center"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="2dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:elevation="10dp"
+                    android:layout_margin="7dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
+
+                    <TextView
+                        android:text="Jenis Ternak"
+                        android:layout_width="71dp"
+                        android:textColor="#7f8c8d"
+
+                        android:id="@+id/textView30"
+                        android:gravity="center"
+                        android:layout_height="75dp" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_primary_produksi"
+                        android:layout_marginRight="3dp" />
+
+
+                    <EditText
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:id="@+id/input_komposisi_activity_jenissapi"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/edittext_selector"
+
+                        android:gravity="left|center_vertical|center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="cth : limousin"
+                        android:inputType="text" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Simpan"
+                android:id="@+id/button_komposisipakan_activity_simpan"
+                android:textColor="#FFFFFF"
+
+                android:background="@color/color_primary_produksi"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="10dp"
+
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:elevation="10dp"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

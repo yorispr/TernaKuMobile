@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_calendar"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".TernakPerah.Main.NavBar.Calendar.Calendar"
+    tools:showIn="@layout/activity_calendar">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:weightSum="7"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_calendar_prevmonth"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/button_calendar_activity_prevmonth"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="Oktober 2016"
+            android:textColor="@color/colorPrimary"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textAlignment="center"
+            android:id="@+id/txt_calendar_activity_choosemonth" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_calendar_nextmonth"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/button_calendar_activity_nextmonth"/>
+    </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:measureAllChildren="false"
+        android:layout_marginTop="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout_calendar_activity_allday">
+
+            <!-- Layout Senin -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Senin"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <!-- Layout Senin Row 1 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_senin_1">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_senin_1_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_1_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_1_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Senin Row 2 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_senin_2">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_senin_2_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_2_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_2_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Senin Row 3 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_senin_3">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_senin_3_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_3_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_3_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Senin Row 4 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_senin_4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_senin_4_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_4_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_4_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Senin Row 5 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_senin_5">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_senin_5_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_5_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_senin_5_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Selasa -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Selasa"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <!-- Layout Selasa Row 1 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_selasa_1">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_selasa_1_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_1_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_1_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Selasa Row 2 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_selasa_2">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_selasa_2_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_2_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_2_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Selasa Row 3 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_selasa_3">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_selasa_3_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_3_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_3_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Selasa Row 4 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_selasa_4">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_selasa_4_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_4_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_4_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- Layout Selasa Row 5 -->
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6"
+                        android:id="@+id/linearLayout_calendar_activity_selasa_5">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1  "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:id="@+id/txt_calendar_activity_selasa_5_tgl" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Rutinitas"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_5_rutinitas" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 Acara"
+                            android:background="#fff"
+                            android:textAlignment="textStart"
+                            android:id="@+id/txt_calendar_activity_selasa_5_acara" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Rabu -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Rabu"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="3 "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:text="5 Penting"
+                            android:background="#fff"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Kamis -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Kamis"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="4 "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:text="5 Penting"
+                            android:background="#fff"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Jumat -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Jumat"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="5 "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:text="5 Penting"
+                            android:background="#fff"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Sabtu -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Sabtu"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="6 "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:text="5 Penting"
+                            android:background="#fff"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Layout Minggu -->
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:weightSum="16"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Minggu"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:weightSum="6">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
+                            android:text="1 "
+                            android:textColor="#fff"
+                            android:background="@drawable/curved_corner"
+                            android:gravity="center_vertical"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:text="5 Penting"
+                            android:background="#fff"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#ecf0f1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="5dp"
+        android:background="#ecf0f1"
+        android:orientation="vertical"
+        android:layout_height="70dp"
+        android:id="@+id/relativeLayout2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:weightSum="10">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:elevation="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#fff"
+            android:layout_weight="1">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:hint="Judul Reminder"
+                android:layout_marginRight="10dp"
+                android:background="#FFFFFF"
+                android:textStyle="bold"
+                android:id="@+id/txtJudul"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:elevation="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#fff"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:id="@+id/linearLayout_addreminder_fragment_tglkegiatan">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:hint="Masukkan Taggal Kegiatan"
+                android:drawableLeft="@drawable/ic_action_calendar_month"
+                android:layout_marginRight="10dp"
+                android:background="#FFFFFF"
+                android:textStyle="bold"
+                android:id="@+id/txtTgl"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:elevation="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical"
+            android:layout_weight="8">
+            <CheckBox
+                android:text="Pesan Penting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chkImportant"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/edtIsi"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:hint="Isi"
+                android:background="#FFFFFF"
+                android:maxLines="100"
+                android:minLines="1"
+                android:gravity="left"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

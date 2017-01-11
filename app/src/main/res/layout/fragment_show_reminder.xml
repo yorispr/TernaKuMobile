@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".TernakPerah.Main.TambahData.Kesuburan.InjeksiHormon.ShowInjeksiHormon"
+    android:background="#80FFFFFF">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_selector_reminder"
+        android:text="TAMBAH PENGINGAT BARU"
+        android:drawableRight="@drawable/ic_action_add_black"
+        android:textColor="#000"
+        android:layout_margin="15dp"
+        android:id="@+id/btnTambahProtokol" />
+    <me.wangyuwei.loadingview.LoadingView
+        android:id="@+id/loading_view_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="#fff"
+        android:visibility="gone"
+        app:lv_duration="3"
+        app:lv_start_color="#e67e22"
+        app:lv_end_color="#e67e22"
+        app:lv_internal_radius="5dp"
+        app:lv_external_radius="30dp" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reminder_list"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        android:background="#fff"></ListView>
+
+</LinearLayout>

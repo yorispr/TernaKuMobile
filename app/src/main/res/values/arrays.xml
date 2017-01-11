@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_preview">
+        <item>#fa6900</item>
+        <item>#ffffff</item>
+    </string-array>
+</resources>

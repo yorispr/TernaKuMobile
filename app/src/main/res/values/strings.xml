@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">Ternaku</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Login Activity -->
+    <string name="btn_login">MASUK</string>
+    <string name="btn_link_to_register">Belum terdaftar? Daftar sekarang!</string>
+    <string name="hint_email">Nama Pengguna</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Fullname</string>
+    <string name="userpref">UserPref</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+
+    <!-- Register Activity -->
+    <string name="hint_email_register">Email Pengguna</string>
+    <string name="hint_nama_panjang">Nama Lengkap Pengguna</string>
+    <string name="hint_username">Nama Pengguna</string>
+    <string name="hint_nomor_telepon_pengguna">Nomor Telepon Pengguna</string>
+    <string name="hint_alamat_pengguna">Alamat Pengguna</string>
+    <string name="btn_register">DAFTAR</string>
+    <string name="btn_link_to_login">Sudah terdaftar? Silahkan login.</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="btn_logout">Keluar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_update_weight">UpdateWeightActivity</string>
+    <string name="title_activity_detail_ternak_main">DetailTernakMain</string>
+    <string name="title_activity_list_detail_ternak_main">ListDetailTernakMain</string>
+    <string name="title_activity_add_pakan_ternak">AddPakanTernak</string>
+    <string name="title_activity_add_keuangan">AddKeuangan</string>
+    <string name="title_activity_add_batas_produksi">AddBatasProduksi</string>
+    <string name="title_activity_laporan_penggunaan_pakan">LaporanPenggunaanPakan</string>
+    <string name="title_activity_laporan_produksi_susu_grafik">LaporanProduksiSusuGrafik</string>
+    <string name="title_activity_pindah_ternak">PindahTernak</string>
+    <string name="title_activity_add_mengandung">AddMengandung</string>
+    <string name="title_activity_add_inseminasi">AddInseminasi</string>
+    <string name="title_activity_add_pemeriksaan_subur">AddPemeriksaanSubur</string>
+    <string name="title_activity_add_masa_subur">AddMasaSubur</string>
+    <string name="title_activity_add_injeksi_hormon">AddInjeksiHormon</string>
+    <string name="title_activity_add_melahirkan">AddMelahirkan</string>
+    <string name="title_activity_add_menyusui">AddMenyusui</string>
+    <string name="title_activity_update_culling">UpdateCulling</string>
+    <string name="title_activity_update_masa_kering">UpdateMasaKering</string>
+    <string name="title_activity_add_vaksinasi">AddVaksinasi</string>
+    <string name="title_activity_add_karantina">AddKarantina</string>
+    <string name="title_activity_add_cek_penyakit">AddCekPenyakit</string>
+    <string name="title_activity_add_cek_kesehatan">AddCekKesehatan</string>
+    <string name="title_activity_add_protokol">AddProtokol</string>
+    <string name="title_activity_show_protocol">ShowProtocol</string>
+    <string name="title_activity_show_injeksi_hormon">ShowInjeksiHormon</string>
+    <string name="title_activity_show_protokol_kesehatan">ShowProtokolKesehatan</string>
+    <string name="title_activity_add_protokol_kesehatan">AddProtokolKesehatan</string>
+    <string name="title_activity_add_produksi_susu">AddProduksiSusu</string>
+    <string name="title_activity_laporan_keuangan">LaporanKeuangan</string>
+    <string name="title_activity_add_peternak">AddPeternak</string>
+    <string name="title_activity_insert_ternak">InsertTernak</string>
+    <string name="title_activity_add_kandang">AddKandang</string>
+    <string name="title_activity_add_kawanan">AddKawanan</string>
+    <string name="title_activity_laporan_keuangan_grafik">LaporanKeuanganGrafik</string>
+    <string name="title_activity_calendar_to_do">CalendarToDoActivity</string>
+    <string name="title_activity_add_task_ternak">AddTaskTernak</string>
+
+    <string name="title_activity_splashscreen">SplashscreenActivity</string>
+    <string name="title_activity_add_schedule">AddScheduleActivity</string>
+    <string name="title_activity_show_detail_schedule">ShowDetailScheduleAct</string>
+    <string name="title_activity_bluetooth">BluetoothActivity</string>
+    <string name="title_activity_show_alarm">ShowAlarmActivity</string>
+    <string name="title_activity_show_calendar">ShowCalendarActivity</string>
+    <string name="title_activity_sapi_potong_add_komposisi_pakan">SapiPotongAddKomposisiPakan
+    </string>
+    <string name="title_activity_view_adg">ViewADG</string>
+    <string name="title_activity_komposisi_pakan">KomposisiPakanActivity</string>
+    <string name="title_activity_add_pakan_pedaging">AddPakanPedaging</string>
+
+
+</resources>

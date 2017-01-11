@@ -1,0 +1,852 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.fintech.ternaku.ProfileFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+
+
+        <Button
+            android:id="@+id/btnFertility"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#ba1f04"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="Kesuburan"
+            android:textColor="#fff"
+            android:layout_marginTop="20dp"
+
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:elevation="20dp"
+            android:textAlignment="textStart" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/fertilityLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#e74c3c"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="linearOutSlowIn"
+            app:ael_orientation="vertical"
+            android:layout_alignStart="@+id/btnProduction"
+            android:layout_below="@+id/btnFertility"
+            android:layout_alignEnd="@+id/btnProduction"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="On Progress"/>
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <Button
+            android:id="@+id/btnProduction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#f1c40f"
+            android:drawableLeft="@drawable/ic_action_line_chart_white"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="Produksi"
+            android:textColor="#fff"
+            android:layout_below="@+id/fertilityLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textAlignment="textStart" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/productionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#90ba1f04"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="linearOutSlowIn"
+            app:ael_orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_alignStart="@+id/btnProduction"
+            android:layout_below="@+id/btnProduction"
+            android:layout_alignEnd="@+id/btnProduction">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="On Progress"/>
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <Button
+            android:id="@+id/btnHealth"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#16a085"
+            android:drawableLeft="@drawable/ic_action_heart_white"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="Kesehatan"
+            android:textColor="#fff"
+            android:layout_below="@+id/productionLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textAlignment="textStart" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/healthLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:padding="0dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="linearOutSlowIn"
+            app:ael_orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_alignStart="@+id/btnHealth"
+            android:layout_below="@+id/btnHealth"
+            android:layout_alignEnd="@+id/btnHealth"
+            android:elevation="15dp">
+
+            <!-- Layout Health Expand -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="10dp">
+                <LinearLayout
+                    android:id="@+id/linear_layout_withold"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_milkwithhold_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_withold"
+                    android:layout_below="@+id/linear_layout_withold"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Status Pemerahan"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_health_status"
+                    android:layout_below="@+id/linear_layout_ket_withold"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_status_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_diagnosisterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_health_status"
+                    android:layout_below="@+id/linear_layout_health_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Status Kesehatan"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:id="@+id/textView6" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Diagnosis Terakhir"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_judul_health_check"
+                    android:layout_below="@+id/linear_layout_ket_health_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pemeriksaan Kesehatan"
+                        android:layout_gravity="left"
+                        android:textColor="#16a085"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txtStatus_menyusui_health_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="3dp"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textStyle="italic"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_health_check"
+                    android:layout_below="@+id/linear_layout_ket_judul_health_check"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp" >
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahcekkesehatan_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tglperiksakesehatanterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahharicekkesehatanterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_health_check"
+                    android:layout_below="@+id/linear_layout_health_check"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Jumlah"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Terakhir"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Lama Menderita"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_judul_mastitis"
+                    android:layout_below="@+id/linear_layout_ket_health_check"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Diagnosis Mastitis"
+                        android:layout_gravity="left"
+                        android:textColor="#16a085"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txtStatus_menyusui_mastitis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="3dp"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textStyle="italic"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_mastitis"
+                    android:layout_below="@+id/linear_layout_ket_judul_mastitis"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahcekmastitis_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tglperiksamastitisterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahharicekmastitisterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_mastitis"
+                    android:layout_below="@+id/linear_layout_mastitis"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Jumlah"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Terakhir"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Lama Menderita"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_judul_lameness"
+                    android:layout_below="@+id/linear_layout_ket_mastitis"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Diagnosis Lameness"
+                        android:layout_gravity="left"
+                        android:textColor="#16a085"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txtStatus_menyusui_lameness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="3dp"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textStyle="italic"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_lameness"
+                    android:layout_below="@+id/linear_layout_ket_judul_lameness"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahceklameness_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tglperiksalamenessterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahhariceklamenessterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_lameness"
+                    android:layout_below="@+id/linear_layout_lameness"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Jumlah"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Terakhir"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Lama Menderita"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_judul_pemotongan_kuku"
+                    android:layout_below="@+id/linear_layout_ket_lameness"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pemotongan Kuku"
+                        android:layout_gravity="left"
+                        android:textColor="#16a085"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txtStatus_menyusui_pemotongan_kuku"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="3dp"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textStyle="italic"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_pemotongan_kuku"
+                    android:layout_below="@+id/linear_layout_ket_judul_pemotongan_kuku"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahcekpotongkuku_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tglperiksapotongkukuterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_jumlahharicekpotongkukuterakhir_kesehatan"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="N/A"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_pemotongan_kuku"
+                    android:layout_below="@+id/linear_layout_pemotongan_kuku"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Jumlah"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Terakhir"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Lama Menderita"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <!-- Layout Health Expand -->
+
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <Button
+            android:id="@+id/btnGeneral"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#e67e22"
+            android:drawableLeft="@drawable/ic_cow_white"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="Umum"
+            android:textColor="#fff"
+            android:layout_below="@+id/healthLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textAlignment="textStart" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/generalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:padding="0dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="linearOutSlowIn"
+            app:ael_orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_alignStart="@+id/btnGeneral"
+            android:layout_below="@+id/btnGeneral"
+            android:layout_alignEnd="@+id/btnGeneral"
+            android:elevation="15dp">
+
+            <!-- Layout General Expand -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="10dp">
+                <LinearLayout
+                    android:id="@+id/linear_layout_umur"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp" >
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_umur_general"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tgllahir_general"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="right"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_umur"
+                    android:layout_below="@+id/linear_layout_umur"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Umur"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Tanggal Lahir"
+                        android:layout_gravity="right"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_kandang_kawanan"
+                    android:layout_below="@+id/linear_layout_ket_umur"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_namakandang_general"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_namakawanan_general"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="right"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_kandang_kawanan"
+                    android:layout_below="@+id/linear_layout_kandang_kawanan"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Kandang"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Kawanan"
+                        android:layout_gravity="right"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_pengelompokan"
+                    android:layout_below="@+id/linear_layout_ket_kandang_kawanan"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/txt_detailternak_activity_tglpengelompokan_general"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:layout_gravity="left"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:textColor="#000000"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_ket_pengelompokan"
+                    android:layout_below="@+id/linear_layout_pengelompokan"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Tgl Pengelompokan"
+                        android:layout_gravity="left"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout_qr_code"
+                    android:layout_below="@+id/linear_layout_ket_pengelompokan"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QR CODE"
+                        android:textColor="@color/btn_login"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textStyle="bold|italic"
+                        android:visibility="gone"/>
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/linear_layout_ket_qr_code"
+                    android:layout_below="@+id/linear_layout_qr_code"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_centerHorizontal="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imgQrCode_general"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+            </RelativeLayout>
+            <!-- Layout General Expand -->
+
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

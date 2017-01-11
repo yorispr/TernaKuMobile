@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_add_peternak"
+            android:icon="@drawable/ic_action_user_black"
+            android:title="Tambah Peternak" />
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_tambah_pambayaran"
+            android:icon="@drawable/ic_attach_money"
+            android:title="Pembayaran" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_applications"
+            android:title="Pengaturan" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/ic_power_settings_new"
+            android:title="Ganti Pengguna" />
+
+    </group>
+
+</menu>
