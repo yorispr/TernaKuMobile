@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.fintech.ternaku.TernakPerah.Alarm.Alarm;
+import com.fintech.ternaku.TernakPerah.Main.Dashboard.ModelDashboard;
 import com.fintech.ternaku.TernakPerah.Main.Pengingat.ReminderModel;
 import com.fintech.ternaku.TernakPerah.Main.Scheduler.AlarmReceiver;
 
@@ -34,8 +35,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TBL_REMINDER = "CREATE TABLE TBL_REMINDER (ID_REMINDER TEXT , JUDUL TEXT, ISI TEXT, ISIMPORTANT INTEGER, CREATOR_ID TEXT, CREATOR TEXT, TIMESTAMP TEXT, ISREAD INTEGER, SCHEDULETIME TEXT)";
         String CREATE_TBL_ALARM = "CREATE TABLE TBL_ALARM(ID INTEGER AUTO INCREMENT , ID_ALARM TEXT, JENIS_ALARM TEXT,CREATED_DATE TEXT, ALARM_DATE TEXT, ID_SAPI TEXT)";
-
+        String CREATE_TBL_DASHBOARD = "CREATE TABLE TBL_DASHBOARD(ID INTEGER AUTO INCREMENT , PERIKSA INTEGER,  SUBUR INTEGER,  SAPI_DEWASA INTEGER,  TOTAL_SAPI INTEGER,  JUMLAH_HEIFERS INTEGER,  JUMLAH_DEWASA INTEGER,  JUMLAH_CALV INTEGER,  JUMLAH_TERNAKMELAHIRKAN INTEGER,  JUMLAH_TERNAKHAMIL INTEGER,  JUMLAH_TERNAKMENYUSUI INTEGER,  JUMLAH_TIDAKHAMILMENYUSUIMELAHIRKAN INTEGER,  JUMLAH_SEHAT INTEGER,  JUMLAH_BBSEMPURNA INTEGER,  JUMLAH_BBBAGUS INTEGER,  JUMLAH_BBSEDANG INTEGER,  JUMLAH_BBKURANG INTEGER,  JUMLAH_BBLAINNYA INTEGER,  JUMLAH_PAKAN REAL,  HARGA REAL,  PRODUKSI_SUSU REAL,  DATE TEXT)";
         db.execSQL(CREATE_TBL_ALARM);
+        db.execSQL(CREATE_TBL_DASHBOARD);
         db.execSQL(CREATE_TBL_REMINDER);
     }
 
@@ -43,9 +45,87 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + "TBL_REMINDER");
         db.execSQL("DROP TABLE IF EXISTS " + "TBL_ALARM");
+        db.execSQL("DROP TABLE IF EXISTS " + "TBL_DASHBOARD");
 
         onCreate(db);
     }
+
+    public void AddDashboardData(ModelDashboard dashboard) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.setForeignKeyConstraintsEnabled(false);
+        ContentValues values = new ContentValues();
+        values.put("PERIKSA",dashboard.getPeriksa());
+        values.put("SUBUR",dashboard.getSubur());
+        values.put("SAPI_DEWASA",dashboard.getSapi_dewasa());
+        values.put("TOTAL_SAPI",dashboard.getTotal_sapi());
+        values.put("JUMLAH_HEIFERS",dashboard.getJumlah_heifers());
+        values.put("JUMLAH_DEWASA",dashboard.getJumlah_dewasa());
+        values.put("JUMLAH_CALV",dashboard.getJumlah_calv());
+        values.put("JUMLAH_TERNAKMELAHIRKAN",dashboard.getJumlah_ternakmelahirkan());
+        values.put("JUMLAH_TERNAKHAMIL",dashboard.getJumlah_ternakhamil());
+        values.put("JUMLAH_TERNAKMENYUSUI",dashboard.getJumlah_ternakmenyusui());
+        values.put("JUMLAH_TIDAKHAMILMENYUSUIMELAHIRKAN",dashboard.getJumlah_tidakhamilmenyusuimelahirkan());
+        values.put("JUMLAH_SEHAT",dashboard.getJumlah_sehat());
+        values.put("JUMLAH_BBSEMPURNA",dashboard.getJumlah_bbsempurna());
+        values.put("JUMLAH_BBBAGUS",dashboard.getJumlah_bbbagus());
+        values.put("JUMLAH_BBSEDANG",dashboard.getJumlah_bbsedang());
+        values.put("JUMLAH_BBKURANG",dashboard.getJumlah_bbkurang());
+        values.put("JUMLAH_BBLAINNYA",dashboard.getJumlah_bblainnya());
+        values.put("JUMLAH_PAKAN",dashboard.getJumlah_pakan());
+        values.put("HARGA",dashboard.getHarga());
+        values.put("PRODUKSI_SUSU",dashboard.getProduksi_susu());
+        values.put("DATE",dashboard.getDate());
+        // Inserting Row
+        db.insert("TBL_DASHBOARD", null, values);
+        db.close(); // Closing database connection
+    }
+
+    public ModelDashboard GetDashboardData() {
+        ArrayList<ModelDashboard> dashboardList = new ArrayList<ModelDashboard>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM TBL_DASHBOARD ORDER BY DATE DESC LIMIT 1";
+        Log.d("QUERY", selectQuery);
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        ModelDashboard d = new ModelDashboard();
+
+        if (cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    d.setPeriksa(cursor.getInt(cursor.getColumnIndex("PERIKSA")));
+                    d.setSubur(cursor.getInt(cursor.getColumnIndex("SUBUR")));
+                    d.setSapi_dewasa(cursor.getInt(cursor.getColumnIndex("SAPI_DEWASA")));
+                    d.setTotal_sapi(cursor.getInt(cursor.getColumnIndex("TOTAL_SAPI")));
+                    d.setJumlah_heifers(cursor.getInt(cursor.getColumnIndex("JUMLAH_HEIFERS")));
+                    d.setJumlah_dewasa(cursor.getInt(cursor.getColumnIndex("JUMLAH_DEWASA")));
+                    d.setJumlah_calv(cursor.getInt(cursor.getColumnIndex("JUMLAH_CALV")));
+                    d.setJumlah_ternakmelahirkan(cursor.getInt(cursor.getColumnIndex("JUMLAH_TERNAKMELAHIRKAN")));
+                    d.setJumlah_ternakhamil(cursor.getInt(cursor.getColumnIndex("JUMLAH_TERNAKHAMIL")));
+                    d.setJumlah_ternakmenyusui(cursor.getInt(cursor.getColumnIndex("JUMLAH_TERNAKMENYUSUI")));
+                    d.setJumlah_tidakhamilmenyusuimelahirkan(cursor.getInt(cursor.getColumnIndex("JUMLAH_TIDAKHAMILMENYUSUIMELAHIRKAN")));
+                    d.setJumlah_sehat(cursor.getInt(cursor.getColumnIndex("JUMLAH_SEHAT")));
+                    d.setJumlah_bbsempurna(cursor.getInt(cursor.getColumnIndex("JUMLAH_BBSEMPURNA")));
+                    d.setJumlah_bbbagus(cursor.getInt(cursor.getColumnIndex("JUMLAH_BBBAGUS")));
+                    d.setJumlah_bbsedang(cursor.getInt(cursor.getColumnIndex("JUMLAH_BBSEDANG")));
+                    d.setJumlah_bbkurang(cursor.getInt(cursor.getColumnIndex("JUMLAH_BBKURANG")));
+                    d.setJumlah_bblainnya(cursor.getInt(cursor.getColumnIndex("JUMLAH_BBLAINNYA")));
+                    d.setJumlah_pakan(cursor.getFloat(cursor.getColumnIndex("JUMLAH_PAKAN")));
+                    d.setHarga(cursor.getFloat(cursor.getColumnIndex("HARGA")));
+                    d.setProduksi_susu(cursor.getFloat(cursor.getColumnIndex("PRODUKSI_SUSU")));
+                    d.setDate(cursor.getString(cursor.getColumnIndex("DATE")));
+
+                    Log.d("DASHBOARDDATA", cursor.getString(cursor.getColumnIndex("DATE")));
+
+                    // Adding contact to list
+                    dashboardList.add(d);
+                } while (cursor.moveToNext());
+            }
+        }
+        db.close();
+        return d;
+    }
+
 
     public void addReminder(ReminderModel reminder) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -87,6 +167,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert("TBL_ALARM", null, values);
         db.close(); // Closing database connection
     }
+
 
 
     public Alarm getAlarmBirahiById(String id_alarm) {
@@ -220,12 +301,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void DropTable() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE TBL_REMINDER");
+        //db.execSQL("DROP TABLE TBL_REMINDER");
+        db.execSQL("DROP TABLE TBL_DASHBOARD");
     }
 
     public void ClearReminder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM TBL_REMINDER");
+        db.execSQL("DELETE FROM TBL_DASHBOARD");
     }
 
     public void updateRead(String id) {

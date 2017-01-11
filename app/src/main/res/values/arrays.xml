@@ -4,4 +4,29 @@
         <item>#fa6900</item>
         <item>#ffffff</item>
     </string-array>
+
+
+
+    <string-array name="listTitle">
+        <item>Refresh Manual</item>
+
+        <item>1 Menit</item>
+        <item>3 Menit</item>
+        <item>5 Menit</item>
+        <item>7 Menit</item>
+        <item>10 Menit</item>
+        <item>15 Menit</item>
+    </string-array>
+
+    <string-array name="listData">
+        <item>0</item>
+
+        <item>60</item>
+        <item>180</item>
+        <item>300</item>
+        <item>420</item>
+        <item>600</item>
+        <item>900</item>
+    </string-array>
 </resources>
+
