@@ -10,4 +10,5 @@
     <!-- Dashboard Chart -->
     <dimen name="pie_chart_text1_size">25sp</dimen>
     <dimen name="pie_chart_text2_size">12dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

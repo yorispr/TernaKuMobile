@@ -27,6 +27,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fintech.ternaku.Konsentrat.InsertKonsetratPerSapi;
+import com.fintech.ternaku.Market.MarketMainActivity;
 import com.fintech.ternaku.TernakPerah.ListDetailTernak.ListDetailTernakMain;
 import com.fintech.ternaku.TernakPerah.Main.NavBar.BatasProduksiSusu.AddBatasProduksi;
 import com.fintech.ternaku.TernakPerah.Main.NavBar.Peternak.AddPeternak;
@@ -152,7 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
-                i = new Intent(MainActivity.this,AddPakanPedaging.class);
+                //i = new Intent(MainActivity.this,AddPakanPedaging.class);
+                i = new Intent(MainActivity.this,InsertKonsetratPerSapi.class);
+
                 startActivity(i);
             }
         });
@@ -430,7 +434,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
+        }else if(id == R.id.nav_market){
+            startActivity(new Intent(MainActivity.this,MarketMainActivity.class));
         }
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

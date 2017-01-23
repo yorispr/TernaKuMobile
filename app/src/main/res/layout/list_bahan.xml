@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="@drawable/bg_selector_date_picker_laporan"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        >
+
+    <TextView
+        android:text="Jumlah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtJumlah"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/txtBahan"
+        android:layout_marginStart="14dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="Satuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/txtJumlah"
+        android:id="@+id/txtSatuan"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="Biaya"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtBiaya"
+        android:layout_below="@+id/txtBahan"
+        android:layout_alignParentStart="true"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="normal|bold|italic"
+        android:layout_toStartOf="@+id/button5" />
+
+    <TextView
+        android:text="Bahan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtBahan"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp" />
+
+        <Button
+            android:layout_margin="8dp"
+            android:text="Hapus"
+            android:textColor="#FF0000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_selector_date_picker_laporan"
+            android:id="@+id/btnHapus" />
+    </RelativeLayout>
+</RelativeLayout>

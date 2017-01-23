@@ -81,6 +81,9 @@
     <string name="title_activity_komposisi_pakan">KomposisiPakanActivity</string>
     <string name="title_activity_add_pakan_pedaging">AddPakanPedaging</string>
     <string name="title_activity_edit_ternak">EditTernakActivity</string>
+    <string name="title_activity_insert_konsetrat_per_sapi">InsertKonsetratPerSapi</string>
+
+    <string name="title_activity_market_main">MarketMainActivity</string>
 
 
 </resources>

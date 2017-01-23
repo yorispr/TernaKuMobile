@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Konsentrat.InsertKonsetratPerSapi"
+            android:label="@string/title_activity_insert_konsetrat_per_sapi"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".TernakPerah.LoginAndRegister.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar"
@@ -304,7 +308,13 @@
             android:name=".Setting.EditTernakActivity"
             android:label="@string/title_activity_edit_ternak"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".Market.MarketMainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_market_main"
+
+            android:theme="@style/AppTheme.NoActionBar"
             />
     </application>
 
