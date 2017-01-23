@@ -7,9 +7,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -17,14 +19,25 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.TernakPerah.Alarm.ShowCalendarActivity;
 import com.fintech.ternaku.DatabaseHandler;
+import com.fintech.ternaku.TernakPerah.LoginAndRegister.LoginActivity;
 import com.fintech.ternaku.TernakPerah.Main.MainActivity;
 import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddInseminasi;
 import com.fintech.ternaku.TernakPerah.Main.TambahData.Kesuburan.AddMelahirkan;
 import com.fintech.ternaku.TernakPerah.Main.TambahData.PindahTernak.PindahTernak;
 import com.fintech.ternaku.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AlarmService extends Service {
     private NotificationManager mManager;
@@ -69,7 +82,6 @@ public class AlarmService extends Service {
                     final int _id = (int) System.currentTimeMillis();
                     Intent intent2 = new Intent(this, MainActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, _id, intent2, PendingIntent.FLAG_ONE_SHOT);
-
                     ShowNotification(b,pendingIntent);
                 }
                 else if (intent.hasExtra("heat")){
@@ -160,6 +172,9 @@ public class AlarmService extends Service {
         notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
+
+        String urlParameters = "message=" + judul + "\n\n" +isi;
+        new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
     }
 
 
@@ -196,6 +211,9 @@ public class AlarmService extends Service {
         notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
+
+        String urlParameters = "message=" + judul + "\n\n" +isi;
+        new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
     }
 
     private void ShowNotificationAlarmInseminasi(String id_alarm, String judul, String isi, String id_sapi, PendingIntent pendingIntent){
@@ -222,6 +240,9 @@ public class AlarmService extends Service {
         notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
+
+        String urlParameters = "message=" + judul + "\n\n" +isi;
+        new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
     }
 
     private void ShowNotificationAlarmHeat(String id_alarm, String judul, String isi, PendingIntent pendingIntent){
@@ -252,6 +273,9 @@ public class AlarmService extends Service {
         notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
+
+        String urlParameters = "message=" + judul + "\n\n" +isi;
+        new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
     }
 
     private void ShowNotification(Bundle b, PendingIntent pendingIntent){
@@ -271,6 +295,9 @@ public class AlarmService extends Service {
         notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
+
+        String urlParameters =  "message=" + b.getString("judul") + "\n\n" + b.getString("judul");
+        new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
     }
 
     private void hideDialog(){
@@ -279,6 +306,35 @@ public class AlarmService extends Service {
             mView = null;
         }
     }
+
+
+    private class SendSMS extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(urls[0],urls[1]);
+            return json;
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            if (result.trim().equals("1701")) {
+                Log.d("Sukses : ",result);
+            }
+            else{
+                Log.d("Error : ",result);
+            }
+
+        }
+
+    }
+
 
     @Override
     public void onDestroy() {

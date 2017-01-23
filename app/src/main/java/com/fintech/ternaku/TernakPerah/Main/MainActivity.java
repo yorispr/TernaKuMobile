@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fintech.ternaku.Connection;
 import com.fintech.ternaku.Konsentrat.InsertKonsetratPerSapi;
 import com.fintech.ternaku.Market.MarketMainActivity;
 import com.fintech.ternaku.TernakPerah.ListDetailTernak.ListDetailTernakMain;
@@ -40,6 +42,7 @@ import com.fintech.ternaku.TernakPerah.Main.Pengingat.ShowReminderFragment;
 import com.fintech.ternaku.TernakPerah.Main.Scheduler.AddScheduleActivity;
 import com.fintech.ternaku.RequestTransactionActivity;
 import com.fintech.ternaku.Setting.SetPrefs;
+import com.fintech.ternaku.TernakPerah.Main.Scheduler.AlarmService;
 import com.fintech.ternaku.TernakPotong.ADG.ViewADG;
 import com.fintech.ternaku.TernakPotong.AddPakan.AddPakanPedaging;
 import com.fintech.ternaku.TernakPotong.KompisisiPakan.KomposisiPakanActivity;
@@ -435,7 +438,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }else if(id == R.id.nav_market){
-            startActivity(new Intent(MainActivity.this,MarketMainActivity.class));
+
+            String urlParameters =  "message=" + "hahahaha" +"\n\n"+  "hehehehe";
+            Log.d("param",urlParameters);
+            new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
+
+            //startActivity(new Intent(MainActivity.this,MarketMainActivity.class));
         }
 
 
@@ -445,6 +453,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private class SendSMS extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            Connection c = new Connection();
+            String json = c.GetJSONfromURL(urls[0],urls[1]);
+            return json;
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d("RES",result);
+            if (result.trim().equals("1701")) {
+                Log.d("Sukses : ",result);
+            }
+            else{
+                Log.d("Error : ",result);
+            }
+
+        }
+
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
