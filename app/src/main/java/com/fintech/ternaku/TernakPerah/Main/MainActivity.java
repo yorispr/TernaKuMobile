@@ -439,11 +439,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
         }else if(id == R.id.nav_market){
 
+            /*
             String urlParameters =  "message=" + "hahahaha" +"\n\n"+  "hehehehe";
             Log.d("param",urlParameters);
             new SendSMS().execute("http://sms.ternaku.com/sms.php", urlParameters);
+            */
 
-            //startActivity(new Intent(MainActivity.this,MarketMainActivity.class));
+            startActivity(new Intent(MainActivity.this,MarketMainActivity.class));
         }
 
 
